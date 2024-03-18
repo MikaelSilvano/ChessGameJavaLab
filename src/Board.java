@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.*;import java.awt.*;import java.awt.*;import java.awt.*;
 
 public class Board extends JFrame{
     private JPanel chessBoardPanel;
