@@ -35,6 +35,5 @@ public class Board extends JFrame{
             }
         }
         add(chessBoardPanel);
-        add(chessBoardPanel);
     }
 }
