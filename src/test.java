@@ -13,6 +13,7 @@ public class test {
             // If Nimbus is not available, you can set the GUI to another look and feel.
         }
         new Board();
+        new Board();
     }
 
 }
