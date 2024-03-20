@@ -12,8 +12,9 @@ public class Main extends JFrame {
         JFrame frame = new JFrame("Master Chess");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setBackground(Color.BLACK);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setResizable(false); // Disable resizing
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); //agar tidak bablas sizenya
+        //frame.setUndecorated(true); //agar tidak ada windows di atas
+        frame.setResizable(false);
 
         // Menggunakan ImageIcon untuk menampilkan gambar
         try {
