@@ -6,28 +6,29 @@ import java.util.Objects;
 
 //set color sekitar jadi black, continue ke next frame, ganti judul class, ganti tombol play, connect sama board lama
 
-public class ImageAdder extends JFrame {
+public class Main extends JFrame {
 
-    JFrame frame;
-    JLabel displayField;
-    ImageIcon image;
-
-    public ImageAdder() {
-
-        frame = new JFrame("Game");
+    public Main() {
+        JFrame frame = new JFrame("Master Chess");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setBackground(Color.BLACK);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setResizable(false); // Disable resizing
 
         // Menggunakan ImageIcon untuk menampilkan gambar
         try {
-            image = new ImageIcon(Objects.requireNonNull(getClass().getResource("Background_Menu.png")));
-            displayField = new JLabel(image);
+            ImageIcon image = new ImageIcon(Objects.requireNonNull(getClass().getResource("BackgroundMenu.png")));
+            JLabel displayField = new JLabel(image);
             frame.add(displayField, BorderLayout.CENTER);
         } catch (Exception e) {
             System.out.println("Image cannot be found!");
         }
 
         // Tombol "Play" menggunakan JButton
-        JButton playButton = new JButton("PLAY");
+        ImageIcon playButtonIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("PlayButton.png")));
+        JButton playButton = new JButton(playButtonIcon);
+        playButton.setSize(239, 70);
+        playButton.setBorderPainted(false); //agar tidak ada border image
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -50,20 +51,14 @@ public class ImageAdder extends JFrame {
 
         // Menambahkan tombol "Play" di bagian tengah frame menggunakan FlowLayout
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBackground(Color.BLACK);
         buttonPanel.add(playButton);
         frame.add(buttonPanel, BorderLayout.SOUTH);
-        frame.setSize(620, 620);
+        frame.setSize(1920, 1080);
         frame.setVisible(true);
-
     }
 
     public static void main(String[] args) {
-        // Membuat objek ImageAdder saat program dimulai
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new ImageAdder();
-            }
-        });
+        new Main();
     }
 }
