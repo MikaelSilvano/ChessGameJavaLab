@@ -17,7 +17,7 @@ public class ImageAdder extends JFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         try {
-            backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("BackgroundMenu.png")));
+            backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("Background_Menu.png")));
             displayOptions = new ImageIcon(Objects.requireNonNull(getClass().getResource("singleplayer_icon.png")));
             displayDifficultyOptions = new ImageIcon(Objects.requireNonNull(getClass().getResource("normal_icon.png")));
 
@@ -64,8 +64,8 @@ public class ImageAdder extends JFrame {
             }
         });
 
-        JButton multiPlayerButton = new JButton("Multiplayer", displayOptions);
-        multiPlayerButton.addActionListener(new ActionListener() {
+        JButton multiplayerButton = new JButton("Multiplayer", displayOptions);
+        multiplayerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 startGame(false, "Normal");
@@ -74,7 +74,7 @@ public class ImageAdder extends JFrame {
 
         JPanel optionsPanel = new JPanel(new GridLayout(2, 1, 10, 10));
         optionsPanel.add(singlePlayerButton);
-        optionsPanel.add(multiPlayerButton);
+        optionsPanel.add(multiplayerButton);
         frame.add(optionsPanel, BorderLayout.CENTER);
 
         frame.revalidate();

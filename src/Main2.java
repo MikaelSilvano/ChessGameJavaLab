@@ -4,14 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Objects;
 
-public class Main extends JFrame {
+public class Main2 extends JFrame {
     JFrame frame = new JFrame("Master Chess");
     JLabel displayField;
     ImageIcon backgroundImage;
     ImageIcon displayOptions;
     ImageIcon displayDifficultyOptions;
 
-    public Main() {
+    public Main2() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setBackground(Color.BLACK);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -45,7 +45,8 @@ public class Main extends JFrame {
                 } catch (Exception e1) {
                     // If Nimbus is not available, you can set the GUI to another look and feel.
                 }
-                displayOptions();
+                new Board();
+                frame.dispose();
             }
         });
 
@@ -56,62 +57,7 @@ public class Main extends JFrame {
         frame.setSize(1920, 1080);
         frame.setVisible(true);
     }
-
-    private void displayOptions() {
-        frame.getContentPane().removeAll();
-        frame.repaint();
-
-        JButton singlePlayerButton = new JButton("Single Player", displayOptions);
-        singlePlayerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                displayDifficultyOptions(true);
-            }
-        });
-
-        JPanel optionsPanel = new JPanel(new GridLayout(1, 1));
-        optionsPanel.add(singlePlayerButton);
-        frame.add(optionsPanel, BorderLayout.CENTER);
-
-        frame.revalidate();
-    }
-
-    private void displayDifficultyOptions(boolean isSinglePlayer) {
-        frame.getContentPane().removeAll();
-        frame.repaint();
-
-        JButton normalButton = new JButton("Normal", displayDifficultyOptions);
-        normalButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                startGame(true, "Normal");
-            }
-        });
-
-        JButton hardButton = new JButton("Hard", displayDifficultyOptions);
-        hardButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                startGame(true, "Hard");
-            }
-        });
-
-        JPanel difficultyPanel = new JPanel(new GridLayout(2, 1, 10, 10));
-        difficultyPanel.add(normalButton);
-        difficultyPanel.add(hardButton);
-        frame.add(difficultyPanel, BorderLayout.CENTER);
-
-        frame.revalidate();
-    }
-
-    private void startGame(boolean isSinglePlayer, String difficulty) {
-        Board board = new Board();
-        board.setDifficulty(difficulty);
-        board.setSinglePlayer(isSinglePlayer);
-        frame.dispose();
-    }
-
     public static void main(String[] args) {
-        new Main();
+        new Main2();
     }
 }
