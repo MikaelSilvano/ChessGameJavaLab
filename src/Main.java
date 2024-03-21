@@ -61,7 +61,7 @@ public class Main extends JFrame {
         frame.getContentPane().removeAll();
         frame.repaint();
 
-        JButton singlePlayerButton = new JButton("Single Player", displayOptions);
+        JButton singlePlayerButton = new JButton("", displayOptions);
         singlePlayerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -80,7 +80,7 @@ public class Main extends JFrame {
         frame.getContentPane().removeAll();
         frame.repaint();
 
-        JButton normalButton = new JButton("Normal", displayDifficultyOptions);
+        JButton normalButton = new JButton("", displayDifficultyOptions);
         normalButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
