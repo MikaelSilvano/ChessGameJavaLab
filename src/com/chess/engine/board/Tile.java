@@ -1,6 +1,6 @@
 package com.chess.engine.board;
 import com.chess.engine.pieces.Piece;
-import com.google.common.collect.ImmutableMap;
+//import com.google.common.collect.ImmutableMap;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +15,7 @@ public abstract class Tile { //abstract = we cannot instantiate this class (new)
         for(int i = 0; i < BoardUtils.NUM_TILES; i++) {
             emptyTileMap.put(i, new EmptyTile(i));
         }
-        return ImmutableMap.copyOf(emptyTileMap); //map is a container. after construct the empty tile map, jangan ada yang ganti. every possible tile is created at front so we dont need to make it anymore later
+        return null;//ImmutableMap.copyOf(emptyTileMap); //map is a container. after construct the empty tile map, jangan ada yang ganti. every possible tile is created at front so we dont need to make it anymore later
     }
 
     private Tile(final int tileCoordinate) { //constructor

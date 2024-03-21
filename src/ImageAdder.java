@@ -9,17 +9,21 @@ public class ImageAdder extends JFrame {
     JFrame frame;
     JLabel displayField;
     ImageIcon backgroundImage;
-    ImageIcon  displayOptions;
-    ImageIcon displayDifficultyOptions;
+    ImageIcon singleplayerIcon;
+    ImageIcon multiplayerIcon;
+    ImageIcon normalIcon;
+    ImageIcon HardIcon;
 
     public ImageAdder() {
         frame = new JFrame("Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         try {
-            backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("Background_Menu.png")));
-            displayOptions = new ImageIcon(Objects.requireNonNull(getClass().getResource("singleplayer_icon.png")));
-            displayDifficultyOptions = new ImageIcon(Objects.requireNonNull(getClass().getResource("normal_icon.png")));
+            backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("BackgroundMenu.png")));
+            singleplayerIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("Singleplayer_Icon.png")));
+            multiplayerIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("Multiplayer_Icon.png")));
+            normalIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("Normal_Icon.png")));
+            HardIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("Hard_Icon.png")));
 
             displayField = new JLabel(backgroundImage);
             frame.add(displayField, BorderLayout.CENTER);
@@ -48,7 +52,7 @@ public class ImageAdder extends JFrame {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.add(playButton);
         frame.add(buttonPanel, BorderLayout.SOUTH);
-        frame.setSize(620, 620);
+        frame.setSize(650, 650);
         frame.setVisible(true);
     }
 
@@ -56,7 +60,7 @@ public class ImageAdder extends JFrame {
         frame.getContentPane().removeAll();
         frame.repaint();
 
-        JButton singlePlayerButton = new JButton("Single Player", displayOptions);
+        JButton singlePlayerButton = new JButton("",singleplayerIcon);
         singlePlayerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -64,15 +68,15 @@ public class ImageAdder extends JFrame {
             }
         });
 
-        JButton multiplayerButton = new JButton("Multiplayer", displayOptions);
+        JButton multiplayerButton = new JButton("", multiplayerIcon);
         multiplayerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                startGame(false, "Normal");
+                startGame(false, "");
             }
         });
 
-        JPanel optionsPanel = new JPanel(new GridLayout(2, 1, 10, 10));
+        JPanel optionsPanel = new JPanel(new GridLayout(2, 2, 10, 10));
         optionsPanel.add(singlePlayerButton);
         optionsPanel.add(multiplayerButton);
         frame.add(optionsPanel, BorderLayout.CENTER);
@@ -84,7 +88,9 @@ public class ImageAdder extends JFrame {
         frame.getContentPane().removeAll();
         frame.repaint();
 
-        JButton normalButton = new JButton("Normal", displayDifficultyOptions);
+        JButton normalButton = new JButton("", normalIcon );
+        frame.setVisible(false);
+        normalButton.setSize(100, 100);
         normalButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -92,7 +98,8 @@ public class ImageAdder extends JFrame {
             }
         });
 
-        JButton hardButton = new JButton("Hard", displayDifficultyOptions);
+        JButton hardButton = new JButton("", HardIcon );
+        frame.setVisible(false);
         hardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -100,7 +107,7 @@ public class ImageAdder extends JFrame {
             }
         });
 
-        JPanel difficultyPanel = new JPanel(new GridLayout(2, 1, 10, 10));
+        JPanel difficultyPanel = new JPanel(new GridLayout(2, 2, 10, 10));
         difficultyPanel.add(normalButton);
         difficultyPanel.add(hardButton);
         frame.add(difficultyPanel, BorderLayout.CENTER);
