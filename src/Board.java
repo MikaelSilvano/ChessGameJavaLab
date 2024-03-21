@@ -36,4 +36,10 @@ public class Board extends JFrame{
         }
         add(chessBoardPanel);
     }
+
+    public void setDifficulty(String difficulty) {
+    }
+
+    public void setSinglePlayer(boolean isSinglePlayer) {
+    }
 }
