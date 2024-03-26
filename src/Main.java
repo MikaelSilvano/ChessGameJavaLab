@@ -19,8 +19,8 @@ public class Main extends JFrame {
 
         try {
             backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("BackgroundMenu.png")));
-            displayOptions = new ImageIcon(Objects.requireNonNull(getClass().getResource("singleplayer_icon.png")));
-            displayDifficultyOptions = new ImageIcon(Objects.requireNonNull(getClass().getResource("normal_icon.png")));
+            displayOptions = new ImageIcon(Objects.requireNonNull(getClass().getResource("singleplayer_Icon.png")));
+            displayDifficultyOptions = new ImageIcon(Objects.requireNonNull(getClass().getResource("normal_Icon.png")));
 
             displayField = new JLabel(backgroundImage);
             frame.add(displayField, BorderLayout.CENTER);
