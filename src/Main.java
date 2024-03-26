@@ -110,8 +110,4 @@ public class Main extends JFrame {
         board.setSinglePlayer(isSinglePlayer);
         frame.dispose();
     }
-
-    public static void main(String[] args) {
-        new Main();
-    }
 }
