@@ -43,7 +43,7 @@ public class Board extends JFrame{
         }
         add(chessBoardPanel);
 
-        
+
         //button yang dikanan
         JPanel buttonPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
