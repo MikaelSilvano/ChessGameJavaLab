@@ -65,7 +65,7 @@ public class Board extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose(); //menutup board
-                new Main(); //back to menu
+                new Menu(); //back to menu
             }
         });
 

@@ -205,4 +205,10 @@ public class Board3 extends JPanel {
             piece.paint(g2d);
         }
     }
+
+    public void setDifficulty(String difficulty) {
+    }
+
+    public void setSinglePlayer(boolean isSinglePlayer) {
+    }
 }
