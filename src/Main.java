@@ -18,9 +18,9 @@ public class Main extends JFrame {
         frame.setResizable(false);
 
         try {
-            backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("BackgroundMenu.png")));
-            displayOptions = new ImageIcon(Objects.requireNonNull(getClass().getResource("singleplayer_Icon.png")));
-            displayDifficultyOptions = new ImageIcon(Objects.requireNonNull(getClass().getResource("normal_Icon.png")));
+            backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("res/BackgroundMenu.png")));
+            displayOptions = new ImageIcon(Objects.requireNonNull(getClass().getResource("res/Singleplayer_Icon.png")));
+            displayDifficultyOptions = new ImageIcon(Objects.requireNonNull(getClass().getResource("res/Normal_Icon.png")));
 
             displayField = new JLabel(backgroundImage);
             frame.add(displayField, BorderLayout.CENTER);
@@ -28,7 +28,7 @@ public class Main extends JFrame {
             e.printStackTrace();
         }
 
-        ImageIcon playButtonIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("PlayButton.png")));
+        ImageIcon playButtonIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("res/PlayButton.png")));
         JButton playButton = new JButton(playButtonIcon);
         playButton.setSize(239, 70);
         playButton.setBorderPainted(false);
