@@ -1,3 +1,4 @@
+//board
 package main;
 
 import pieces.*;
@@ -45,14 +46,14 @@ public class Board3 extends JPanel {
             moveKing(move);
         }
 
-            move.piece.col = move.newCol;
-            move.piece.row = move.newRow;
-            move.piece.xPos = move.newCol * tileSize;
-            move.piece.yPos = move.newRow * tileSize;
+        move.piece.col = move.newCol;
+        move.piece.row = move.newRow;
+        move.piece.xPos = move.newCol * tileSize;
+        move.piece.yPos = move.newRow * tileSize;
 
-            move.piece.isFirstMove = false;
+        move.piece.isFirstMove = false;
 
-            capture(move.capture);
+        capture(move.capture);
     }
 
     private void moveKing(Move move) {

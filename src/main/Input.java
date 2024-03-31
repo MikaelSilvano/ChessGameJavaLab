@@ -1,3 +1,4 @@
+//input 
 package main;
 
 import pieces.Piece;

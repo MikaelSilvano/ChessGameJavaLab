@@ -1,3 +1,4 @@
+//homepage
 package main;
 
 import main.ChessPage;
@@ -23,11 +24,11 @@ public class HomePage extends JFrame {
         frame.setResizable(false);
 
         try {
-            backgroundImage = new ImageIcon(HomePage.class.getResource("/BackgroundMenu.png"));
-            playButtonIcon = new ImageIcon(HomePage.class.getResource("/PlayButton.png"));
-            singlePlayerIcon = new ImageIcon(HomePage.class.getResource("/Singleplayer_Icon.png"));
-            normalDifficultyIcon = new ImageIcon(HomePage.class.getResource("/Normal_Icon.png"));
-            hardDifficultyIcon = new ImageIcon(HomePage.class.getResource("/Hard_Icon.png"));
+            backgroundImage = new ImageIcon("src/res/Background.png");
+            playButtonIcon = new ImageIcon("src/res/PlayButton.png");
+            singlePlayerIcon = new ImageIcon("src/res/SinglePlayer.png");
+            normalDifficultyIcon = new ImageIcon("src/res/ComputerEasy.png");
+            hardDifficultyIcon = new ImageIcon("src/res/ComputerHard.png");
         } catch (Exception e) {
             e.printStackTrace();
         }

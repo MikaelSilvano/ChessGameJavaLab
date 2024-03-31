@@ -1,3 +1,4 @@
+//CheckScanner
 package main;
 
 import pieces.Piece;
@@ -42,12 +43,12 @@ public class CheckScanner {
             }
 
             Piece piece = board.getPiece(kingCol + (i * colVal), kingRow + (i * rowVal));
-                if(piece != null && piece != board.selectedPiece) {
-                    if(!board.sameTeam(piece, king) && (piece.name.equals("Rook") || piece.name.equals("Queen"))) {
-                        return true;
-                    }
-                    break;
+            if(piece != null && piece != board.selectedPiece) {
+                if(!board.sameTeam(piece, king) && (piece.name.equals("Rook") || piece.name.equals("Queen"))) {
+                    return true;
                 }
+                break;
+            }
         }
         return false;
     }
@@ -59,12 +60,12 @@ public class CheckScanner {
             }
 
             Piece piece = board.getPiece(kingCol - (i * colVal), kingRow - (i * rowVal));
-                if(piece != null && piece != board.selectedPiece) {
-                    if(!board.sameTeam(piece, king) && (piece.name.equals("Bishop") || piece.name.equals("Queen"))) {
-                        return true;
-                    }
-                    break;
+            if(piece != null && piece != board.selectedPiece) {
+                if(!board.sameTeam(piece, king) && (piece.name.equals("Bishop") || piece.name.equals("Queen"))) {
+                    return true;
                 }
+                break;
+            }
         }
         return false;
     }
@@ -72,11 +73,11 @@ public class CheckScanner {
     private boolean hitByKnight(int col, int row, Piece king, int kingCol, int kingRow) {
         return checkKnight(board.getPiece(kingCol - 1, kingRow - 2), king, col, row) ||
                 checkKnight(board.getPiece(kingCol + 1, kingRow - 2), king, col, row) ||
-        checkKnight(board.getPiece(kingCol + 2, kingRow - 1), king, col, row) ||
-        checkKnight(board.getPiece(kingCol + 2, kingRow + 1), king, col, row) ||
-        checkKnight(board.getPiece(kingCol + 1, kingRow + 2), king, col, row) ||
-        checkKnight(board.getPiece(kingCol - 1, kingRow + 2), king, col, row) ||
-        checkKnight(board.getPiece(kingCol - 2, kingRow + 1), king, col, row) ||
+                checkKnight(board.getPiece(kingCol + 2, kingRow - 1), king, col, row) ||
+                checkKnight(board.getPiece(kingCol + 2, kingRow + 1), king, col, row) ||
+                checkKnight(board.getPiece(kingCol + 1, kingRow + 2), king, col, row) ||
+                checkKnight(board.getPiece(kingCol - 1, kingRow + 2), king, col, row) ||
+                checkKnight(board.getPiece(kingCol - 2, kingRow + 1), king, col, row) ||
                 checkKnight(board.getPiece(kingCol - 2, kingRow - 1), king, col, row);
     }
 

@@ -1,3 +1,4 @@
+//king
 package pieces;
 
 import main.Board3;
@@ -30,12 +31,12 @@ public class King extends Piece {
                     return board.getPiece(5, row) == null && board.getPiece(6, row) == null && !board.checkScanner.isKingChecked(new Move(board, this, 5, row));
                 }
             } else if (col == 2) {
-                    Piece rook = board.getPiece(0, row);
-                    if(rook != null && rook.isFirstMove && isFirstMove) {
-                        return board.getPiece(3, row) == null && board.getPiece(2, row) == null && board.getPiece(1, row) == null && !board.checkScanner.isKingChecked(new Move(board, this, 3, row));
-                    }
+                Piece rook = board.getPiece(0, row);
+                if(rook != null && rook.isFirstMove && isFirstMove) {
+                    return board.getPiece(3, row) == null && board.getPiece(2, row) == null && board.getPiece(1, row) == null && !board.checkScanner.isKingChecked(new Move(board, this, 3, row));
                 }
             }
+        }
         return false;
     }
 }

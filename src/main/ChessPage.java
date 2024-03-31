@@ -1,3 +1,4 @@
+//ChessPage
 package main;
 
 import javax.swing.*;
