@@ -9,6 +9,7 @@ public class Main3 {
             public void run() {
                 new HomePage();
             }
-        });
+        }
+        );
     }
 }
