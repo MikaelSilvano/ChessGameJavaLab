@@ -1,4 +1,3 @@
-//homepage
 package main;
 
 import main.ChessPage;
@@ -15,6 +14,7 @@ public class HomePage extends JFrame {
     ImageIcon singlePlayerIcon;
     ImageIcon normalDifficultyIcon;
     ImageIcon hardDifficultyIcon;
+    InputAudio clickSound;
 
     public HomePage() {
         frame = new JFrame("Master Chess");
@@ -33,11 +33,16 @@ public class HomePage extends JFrame {
             e.printStackTrace();
         }
 
+        // Initialize InputAudio for button click sound
+        clickSound = new InputAudio("ButtonClick.wav");
+
         JButton playButton = new JButton(playButtonIcon);
         playButton.setBorderPainted(false);
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Play click sound
+                clickSound.play();
                 displayOptions();
             }
         });
@@ -47,6 +52,7 @@ public class HomePage extends JFrame {
         buttonPanel.add(playButton);
         frame.add(buttonPanel, BorderLayout.SOUTH);
         frame.setVisible(true);
+
     }
 
     private void displayOptions() {
@@ -57,6 +63,8 @@ public class HomePage extends JFrame {
         singlePlayerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Play click sound
+                clickSound.play();
                 displayDifficultyOptions(true);
             }
         });
@@ -76,6 +84,8 @@ public class HomePage extends JFrame {
         normalButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Play click sound
+                clickSound.play();
                 startGame(true, "Normal");
             }
         });
@@ -84,6 +94,8 @@ public class HomePage extends JFrame {
         hardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Play click sound
+                clickSound.play();
                 startGame(true, "Hard");
             }
         });
