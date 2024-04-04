@@ -1,7 +1,5 @@
 package main;
 
-import main.ChessPage;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,7 +10,8 @@ public class HomePage extends JFrame {
     ImageIcon backgroundImage;
     ImageIcon playButtonIcon;
     ImageIcon singlePlayerIcon;
-    ImageIcon normalDifficultyIcon;
+    ImageIcon multiPlayerIcon;
+    ImageIcon easyDifficultyIcon;
     ImageIcon hardDifficultyIcon;
     InputAudio clickSound;
 
@@ -27,7 +26,8 @@ public class HomePage extends JFrame {
             backgroundImage = new ImageIcon("src/res/Background.png");
             playButtonIcon = new ImageIcon("src/res/PlayButton.png");
             singlePlayerIcon = new ImageIcon("src/res/SinglePlayer.png");
-            normalDifficultyIcon = new ImageIcon("src/res/ComputerEasy.png");
+            multiPlayerIcon = new ImageIcon("src/res/MultiplayerOffline.png");
+            easyDifficultyIcon = new ImageIcon("src/res/ComputerEasy.png");
             hardDifficultyIcon = new ImageIcon("src/res/ComputerHard.png");
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,7 +50,6 @@ public class HomePage extends JFrame {
         buttonPanel.add(playButton);
         frame.add(buttonPanel, BorderLayout.SOUTH);
         frame.setVisible(true);
-
     }
 
     private void displayOptions() {
@@ -66,10 +65,19 @@ public class HomePage extends JFrame {
             }
         });
 
-        JPanel optionsPanel = new JPanel(new GridLayout(1, 1));
-        optionsPanel.add(singlePlayerButton);
-        frame.add(optionsPanel, BorderLayout.CENTER);
+        JButton multiplayerOfflineButton = new JButton(multiPlayerIcon);
+       multiplayerOfflineButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clickSound.play();
+                startGameMultiplayerOffline(false);
+            }
+        });
 
+        JPanel difficultyPanel = new JPanel(new GridLayout(1, 1));
+        difficultyPanel.add(singlePlayerButton);
+        difficultyPanel.add(multiplayerOfflineButton);
+        frame.add(difficultyPanel, BorderLayout.CENTER);
         frame.revalidate();
     }
 
@@ -77,12 +85,12 @@ public class HomePage extends JFrame {
         frame.getContentPane().removeAll();
         frame.repaint();
 
-        JButton normalButton = new JButton(normalDifficultyIcon);
-        normalButton.addActionListener(new ActionListener() {
+        JButton easyButton = new JButton(easyDifficultyIcon);
+        easyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 clickSound.play();
-                startGame(true, "Normal");
+                //startGameSingleplayer(true, "Normal");
             }
         });
 
@@ -91,19 +99,23 @@ public class HomePage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 clickSound.play();
-                startGame(true, "Hard");
+                //startGameSingleplayer(true, "Hard");
             }
         });
 
         JPanel difficultyPanel = new JPanel(new GridLayout(2, 1, 10, 10));
-        difficultyPanel.add(normalButton);
+        difficultyPanel.add(easyButton);
         difficultyPanel.add(hardButton);
         frame.add(difficultyPanel, BorderLayout.CENTER);
 
         frame.revalidate();
     }
 
-    private void startGame(boolean isSinglePlayer, String difficulty) {
+    private void startGameMultiplayerOffline(boolean isSinglePlayer) {
+        new ChessPage();
+        frame.dispose();
+    }
+    private void startGameSingleplayer(boolean isSinglePlayer, String difficulty) {
         new ChessPage();
         frame.dispose();
     }
