@@ -15,7 +15,8 @@ public class ChessPage {
         frame = new JFrame();
         frame.getContentPane().setBackground(Color.black);
         frame.setLayout(new GridBagLayout());
-        frame.setMinimumSize(new Dimension(1000, 1000));
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setResizable(false);
         frame.setLocationRelativeTo(null);
 
         Board3 board = new Board3();
@@ -32,9 +33,9 @@ public class ChessPage {
         gbc.insets = new Insets(5, 5, 5, 5); //untuk merapihkan button yang disebelah kanan
 
         menuButton = new JButton("Menu");
-        menuButton.setPreferredSize(new Dimension(100, 50));
+        menuButton.setPreferredSize(new Dimension(200, 100));
         exitButton = new JButton("Exit");
-        exitButton.setPreferredSize(new Dimension(100, 50));
+        exitButton.setPreferredSize(new Dimension(200, 100));
         buttonPanel.add(menuButton, gbc);
 
         gbc.gridy = 1;

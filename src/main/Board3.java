@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Board3 extends JPanel {
-    public int tileSize = 85;
+    public int tileSize = 105;
 
     int cols = 8;
     int rows = 8;
