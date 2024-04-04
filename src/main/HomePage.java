@@ -33,7 +33,6 @@ public class HomePage extends JFrame {
             e.printStackTrace();
         }
 
-        // Initialize InputAudio for button click sound
         clickSound = new InputAudio("ButtonClick.wav");
 
         JButton playButton = new JButton(playButtonIcon);
@@ -41,7 +40,6 @@ public class HomePage extends JFrame {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Play click sound
                 clickSound.play();
                 displayOptions();
             }
@@ -63,7 +61,6 @@ public class HomePage extends JFrame {
         singlePlayerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Play click sound
                 clickSound.play();
                 displayDifficultyOptions(true);
             }
@@ -84,7 +81,6 @@ public class HomePage extends JFrame {
         normalButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Play click sound
                 clickSound.play();
                 startGame(true, "Normal");
             }
@@ -94,7 +90,6 @@ public class HomePage extends JFrame {
         hardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Play click sound
                 clickSound.play();
                 startGame(true, "Hard");
             }
