@@ -40,7 +40,7 @@ public class HomePage extends JFrame {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                clickSound.play();
+                clickSound.ButtonClickSound();
                 displayOptions();
             }
         });
@@ -61,7 +61,7 @@ public class HomePage extends JFrame {
         singlePlayerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                clickSound.play();
+                clickSound.ButtonClickSound();
                 displayDifficultyOptions(true);
             }
         });
@@ -81,7 +81,7 @@ public class HomePage extends JFrame {
         normalButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                clickSound.play();
+                clickSound.ButtonClickSound();
                 startGame(true, "Normal");
             }
         });
@@ -90,7 +90,7 @@ public class HomePage extends JFrame {
         hardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                clickSound.play();
+                clickSound.ButtonClickSound();
                 startGame(true, "Hard");
             }
         });

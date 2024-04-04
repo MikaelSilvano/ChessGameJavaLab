@@ -5,22 +5,37 @@ import java.io.File;
 import java.io.IOException;
 
 public class InputAudio {
-    private File soundFile;
+    private File ButtonClick;
+    private File PutPiece;
 
     public InputAudio(String s) {
 
-        soundFile = new File("ButtonClick.wav");
+        ButtonClick = new File("ButtonClick.wav");
+        PutPiece = new File ("PutPiece.wav");
     }
 
-    public void play() {
+    public void ButtonClickSound() {
         try {
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
+            AudioInputStream buttonClickAudio = AudioSystem.getAudioInputStream(ButtonClick);
 
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioIn);
+            Clip buttonClickClip = AudioSystem.getClip();
+            buttonClickClip.open(buttonClickAudio);
 
-            clip.start();
-            
+            buttonClickClip.start();
+
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
+    }
+    public void PutPieceSound() {
+        try {
+            AudioInputStream putPieceAudio = AudioSystem.getAudioInputStream(PutPiece);
+
+            Clip putPieceClip = AudioSystem.getClip();
+            putPieceClip.open(putPieceAudio);
+
+            putPieceClip.start();
+
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
         }

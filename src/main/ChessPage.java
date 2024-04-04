@@ -46,7 +46,7 @@ public class ChessPage {
         menuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                clickSound.play();
+                clickSound.ButtonClickSound();
                 frame.dispose(); //menutup board
                 new HomePage(); //back to menu
             }
@@ -55,7 +55,7 @@ public class ChessPage {
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                clickSound.play();
+                clickSound.ButtonClickSound();
                 System.exit(0); //exit button
             }
         });
