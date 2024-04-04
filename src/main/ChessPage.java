@@ -10,6 +10,7 @@ public class ChessPage {
     JFrame frame;
     private JButton menuButton;
     private JButton exitButton;
+    InputAudio clickSound;
 
     public ChessPage() {
         frame = new JFrame();
@@ -18,6 +19,7 @@ public class ChessPage {
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
+        clickSound = new InputAudio("ButtonClick.wav");
 
         Board3 board = new Board3();
         frame.add(board);
@@ -44,6 +46,7 @@ public class ChessPage {
         menuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                clickSound.play();
                 frame.dispose(); //menutup board
                 new HomePage(); //back to menu
             }
@@ -52,6 +55,7 @@ public class ChessPage {
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                clickSound.play();
                 System.exit(0); //exit button
             }
         });
