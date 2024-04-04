@@ -13,15 +13,13 @@ public class InputAudio {
 
     public void play() {
         try {
-            // Get an AudioInputStream from the sound file
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
 
-            // Get a Clip to play the audio
             Clip clip = AudioSystem.getClip();
             clip.open(audioIn);
 
-            // Start playing the audio
             clip.start();
+            
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
         }
