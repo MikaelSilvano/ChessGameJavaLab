@@ -8,6 +8,7 @@ public class InputAudio {
     private File soundFile;
 
     public InputAudio(String s) {
+
         soundFile = new File("ButtonClick.wav");
     }
 
