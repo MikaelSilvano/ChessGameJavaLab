@@ -25,7 +25,7 @@ public class Bishop extends Piece {
     }
 
     public boolean isValidMovement(int col, int row) {
-        if(Math.abs(this.col - col) == Math.abs(this.row - row)) {
+        if(Math.abs(this.col - col) == Math.abs(this.row - row)) { //agar row dan col dari old ke new target itu same (pastikan bahwa bishop bergerak secara diagonal)
             return true;
         } else {
             return false;
@@ -36,7 +36,7 @@ public class Bishop extends Piece {
         //up left
         if(this.col > col && this.row > row) {
             for(int i = 1; i < Math.abs(this.col - col); i++) {
-                if(board.getPiece(this.col - i, this.row - i) != null) {
+                if(board.getPiece(this.col - i, this.row - i) != null) { //kalau null, ada piece yang halangin
                     return true;
                 }
             }
@@ -45,7 +45,7 @@ public class Bishop extends Piece {
         //up right
         if(this.col < col && this.row > row) {
             for(int i = 1; i < Math.abs(this.col - col); i++) {
-                if(board.getPiece(this.col + i, this.row - i) != null) {
+                if(board.getPiece(this.col + i, this.row - i) != null) { //kalau null, ada piece yang halangin
                     return true;
                 }
             }
@@ -54,7 +54,7 @@ public class Bishop extends Piece {
         //down left
         if(this.col > col && this.row < row) {
             for(int i = 1; i < Math.abs(this.col - col); i++) {
-                if(board.getPiece(this.col - i, this.row + i) != null) {
+                if(board.getPiece(this.col - i, this.row + i) != null) {//kalau null, ada piece yang halangin
                     return true;
                 }
             }
@@ -63,7 +63,7 @@ public class Bishop extends Piece {
         //down right
         if(this.col < col && this.row < row) {
             for(int i = 1; i < Math.abs(this.col - col); i++) {
-                if(board.getPiece(this.col + i, this.row + i) != null) {
+                if(board.getPiece(this.col + i, this.row + i) != null) { //kalau null, ada piece yang halangin
                     return true;
                 }
             }

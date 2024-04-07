@@ -25,7 +25,7 @@ public class Knight extends Piece {
     }
 
     public boolean isValidMovement(int col, int row) {
-        if(Math.abs(col - this.col) * Math.abs(row - this.row) == 2) {
+        if(Math.abs(col - this.col) * Math.abs(row - this.row) == 2) { //hanya gerak dalam bentuk L
             return true;
         } else {
             return false;

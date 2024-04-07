@@ -33,12 +33,12 @@ public class Pawn extends Piece {
         }
 
         //pawn maju 1
-        if(this.col == col && row == this.row - colorIndex && board.getPiece(col, row) == null) { //straight line
+        if(this.col == col && row == this.row - colorIndex && board.getPiece(col, row) == null) { //garis lurus
             return true;
         }
 
         //pawn maju 2
-        if(isFirstMove && this.col == col && row == this.row - colorIndex * 2 && board.getPiece(col, row) == null &&  board.getPiece(col, row + colorIndex) == null) { //straight line
+        if(isFirstMove && this.col == col && row == this.row - colorIndex * 2 && board.getPiece(col, row) == null &&  board.getPiece(col, row + colorIndex) == null) { //garis lurus
             return true;
         }
 

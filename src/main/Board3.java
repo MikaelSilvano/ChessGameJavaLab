@@ -13,7 +13,7 @@ public class Board3 extends JPanel {
     int cols = 8;
     int rows = 8;
 
-    ArrayList<Piece> pieceList = new ArrayList<>(); //buat list semua pieces
+    ArrayList<Piece> pieceList = new ArrayList<>(); //buat list yang berisi semua pieces
 
     public Piece selectedPiece; //piece yang mau digerakan
 
@@ -35,9 +35,10 @@ public class Board3 extends JPanel {
     }
 
     public Piece getPiece(int col, int row) {
-        for(Piece piece: pieceList) {
-            if(piece.col == col && piece.row == row) {
-                return piece; //digunakan untuk dapetin piece di board dan input
+        for (int i = 0; i < pieceList.size(); i++) {
+            Piece piece = pieceList.get(i);
+            if (piece.col == col && piece.row == row) {
+                return piece; //digunakan untuk dapetin suatu piece di board dan input
             }
         }
         return null;
@@ -45,9 +46,9 @@ public class Board3 extends JPanel {
 
     public void makeMove(Move move) {
         if(move.piece.name.equals("Pawn")) {
-            movePawn(move);
+            movePawn(move); //khusus movepawn
         } else if(move.piece.name.equals("King")) {
-            moveKing(move);
+            moveKing(move); //khusus moveking
         }
         move.piece.col = move.newCol;
         move.piece.row = move.newRow;
@@ -64,7 +65,7 @@ public class Board3 extends JPanel {
     }
 
     private void moveKing(Move move) {
-        if(Math.abs(move.piece.col - move.newCol) == 2) {
+        if(Math.abs(move.piece.col - move.newCol) == 2) { //handling castling
             Piece rook;
             if(move.piece.col < move.newCol) {
                 rook = getPiece(7, move.piece.row);
@@ -115,12 +116,12 @@ public class Board3 extends JPanel {
     }
 
     public void capture(Piece piece) {
-        pieceList.remove(piece);
+        pieceList.remove(piece); //kalau ada yang ke capture, yang piece tersebut di remove dari pieceList
     }
 
     public boolean isValidMove(Move move) {
         if(sameTeam(move.piece, move.capture)) {
-            return false; //tidak bisa capture team yang sama
+            return false; //tidak bisa capture dari team yang sama
         }
 
         if(!move.piece.isValidMovement(move.newCol, move.newRow)) {
@@ -147,7 +148,6 @@ public class Board3 extends JPanel {
         else {
             return false;
         }
-
     }
 
     public int getTileNum(int col, int row) {

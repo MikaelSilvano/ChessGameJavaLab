@@ -12,7 +12,7 @@ public class CheckScanner {
 
     public boolean isKingChecked(Move move) {
         Piece king = board.findKing(move.piece.isWhite);
-        assert king != null;
+        assert king != null; //cek apakah king itu tidak null
 
         int kingCol = king.col;
         int kingRow = king.row;
