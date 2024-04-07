@@ -5,17 +5,23 @@ import java.io.File;
 import java.io.IOException;
 
 public class InputAudio {
-    private File ButtonClick;
-    private File PickPiece;
-    private File PutPiece;
-    private File EatPiece;
+    private final File ButtonClick;
+    private final File PickPiece;
+    private final File PutPiece;
+    private final File EatPiece;
+    private final File PawnPromotion;
+    private final File WinChess;
+
 
     public InputAudio(String s) {
 
         ButtonClick = new File("src/res/ButtonClick.wav");
         PickPiece = new File("src/res/PickUpPieces.wav");
         PutPiece = new File ("src/res/PutPieces.wav");
-        EatPiece = new File("src/resEatPieces.wav");
+        EatPiece = new File("src/res/EatPieces.wav");
+        PawnPromotion = new File("src/res/PawnPromotion.wav");
+        WinChess = new File("src/res/WinChess.wav");
+
     }
 
     public void ButtonClickSound() {
@@ -48,6 +54,45 @@ public class InputAudio {
     public void PutPieceSound() {
         try {
             AudioInputStream putPieceAudio = AudioSystem.getAudioInputStream(PutPiece);
+
+            Clip putPieceClip = AudioSystem.getClip();
+            putPieceClip.open(putPieceAudio);
+
+            putPieceClip.start();
+
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
+    }
+    public void EatPieceSound() {
+        try {
+            AudioInputStream putPieceAudio = AudioSystem.getAudioInputStream(EatPiece);
+
+            Clip putPieceClip = AudioSystem.getClip();
+            putPieceClip.open(putPieceAudio);
+
+            putPieceClip.start();
+
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
+    }
+    public void PawnPromotionSound() {
+        try {
+            AudioInputStream putPieceAudio = AudioSystem.getAudioInputStream(PawnPromotion);
+
+            Clip putPieceClip = AudioSystem.getClip();
+            putPieceClip.open(putPieceAudio);
+
+            putPieceClip.start();
+
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
+    }
+    public void WinChessSound() {
+        try {
+            AudioInputStream putPieceAudio = AudioSystem.getAudioInputStream(WinChess);
 
             Clip putPieceClip = AudioSystem.getClip();
             putPieceClip.open(putPieceAudio);

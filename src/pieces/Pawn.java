@@ -15,11 +15,22 @@ public class Pawn extends Piece {
         this.isWhite = isWhite;
         this.name = "Pawn";
 
-        this.sprite = sheet.getSubimage(5 * sheetScale, isWhite ? 0 : sheetScale, sheetScale, sheetScale).getScaledInstance(board.tileSize, board.tileSize, BufferedImage.SCALE_SMOOTH);
+        int yPos;
+        if (isWhite) {
+            yPos = 0;
+        } else {
+            yPos = sheetScale;
+        }
+        this.sprite = sheet.getSubimage(5 * sheetScale, yPos, sheetScale, sheetScale).getScaledInstance(board.tileSize, board.tileSize, BufferedImage.SCALE_SMOOTH);
     }
 
     public boolean isValidMovement(int col, int row) {
-        int colorIndex = isWhite ? 1 : -1;
+        int colorIndex;
+        if(isWhite) {
+            colorIndex = 1;
+        } else {
+            colorIndex = -1;
+        }
 
         //pawn maju 1
         if(this.col == col && row == this.row - colorIndex && board.getPiece(col, row) == null) { //straight line

@@ -15,7 +15,13 @@ public class Rook extends Piece {
         this.isWhite = isWhite;
         this.name = "Rook";
 
-        this.sprite = sheet.getSubimage(4 * sheetScale, isWhite ? 0 : sheetScale, sheetScale, sheetScale).getScaledInstance(board.tileSize, board.tileSize, BufferedImage.SCALE_SMOOTH);
+        int yPos;
+        if (isWhite) {
+            yPos = 0;
+        } else {
+            yPos = sheetScale;
+        }
+        this.sprite = sheet.getSubimage(4 * sheetScale, yPos, sheetScale, sheetScale).getScaledInstance(board.tileSize, board.tileSize, BufferedImage.SCALE_SMOOTH);
     }
 
     public boolean isValidMovement(int col, int row) {
@@ -62,7 +68,6 @@ public class Rook extends Piece {
                 }
             }
         }
-
         return false;
     }
 }

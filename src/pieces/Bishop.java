@@ -15,7 +15,13 @@ public class Bishop extends Piece {
         this.isWhite = isWhite;
         this.name = "Bishop";
 
-        this.sprite = sheet.getSubimage(2 * sheetScale, isWhite ? 0 : sheetScale, sheetScale, sheetScale).getScaledInstance(board.tileSize, board.tileSize, BufferedImage.SCALE_SMOOTH);
+        int yPos;
+        if (isWhite) {
+            yPos = 0;
+        } else {
+            yPos = sheetScale;
+        }
+        this.sprite = sheet.getSubimage(2 * sheetScale, yPos, sheetScale, sheetScale).getScaledInstance(board.tileSize, board.tileSize, BufferedImage.SCALE_SMOOTH);
     }
 
     public boolean isValidMovement(int col, int row) {

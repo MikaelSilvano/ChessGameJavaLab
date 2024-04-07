@@ -22,11 +22,15 @@ public class Board3 extends JPanel {
     public CheckScanner checkScanner = new CheckScanner(this);
 
     public int enPassantTile = -1;
+    InputAudio promotionSound;
+    InputAudio eatSound;
 
     public Board3() {
         this.setPreferredSize(new Dimension(cols * tileSize, rows * tileSize));
         this.addMouseListener(input);
         this.addMouseMotionListener(input);
+        promotionSound = new InputAudio("src/res/PawnPromotion.wav");
+        eatSound = new InputAudio("src/res/EatPieces.wav");
         addPieces();
     }
 
@@ -45,13 +49,16 @@ public class Board3 extends JPanel {
         } else if(move.piece.name.equals("King")) {
             moveKing(move);
         }
-
         move.piece.col = move.newCol;
         move.piece.row = move.newRow;
         move.piece.xPos = move.newCol * tileSize;
         move.piece.yPos = move.newRow * tileSize;
 
         move.piece.isFirstMove = false;
+
+        if (move.capture != null) {
+            eatSound.EatPieceSound();
+        }
 
         capture(move.capture);
     }
@@ -98,6 +105,7 @@ public class Board3 extends JPanel {
         }
         if(move.newRow == colorIndex) {
             promotePawn(move);
+            promotionSound.PawnPromotionSound();
         }
     }
 
