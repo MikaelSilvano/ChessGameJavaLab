@@ -60,6 +60,6 @@ public class ChessPage {
             }
         });
 
-        frame.add(buttonPanel, BorderLayout.EAST);
+        frame.add(buttonPanel);
     }
 }
