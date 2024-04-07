@@ -19,10 +19,10 @@ public class Piece {
 
     public boolean isFirstMove = true;
 
-    BufferedImage sheet;
+    BufferedImage sheet; //dapetin image dari gambar chess
     {
         try {
-            sheet = ImageIO.read(ClassLoader.getSystemResourceAsStream("PiecesImages.png"));
+            sheet = ImageIO.read(ClassLoader.getSystemResourceAsStream("PiecesImages2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

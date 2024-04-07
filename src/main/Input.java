@@ -10,8 +10,12 @@ import java.awt.event.MouseMotionListener;
 
 public class Input extends MouseAdapter {
     Board3 board;
+    InputAudio putSound;
+    InputAudio pickSound;
     public Input(Board3 board) {
         this.board = board;
+        pickSound = new InputAudio("src/res/PickUpPieces.wav");
+        putSound = new InputAudio("src/res/PutPieces.wav");
     }
     @Override
     public void mousePressed(MouseEvent e) {
@@ -21,6 +25,7 @@ public class Input extends MouseAdapter {
         Piece pieceXY = board.getPiece(col, row); //to get piece at that location
         if(pieceXY != null) {
             board.selectedPiece = pieceXY; //kita mendapatkan piecenya
+            pickSound.PickPieceSound();
         }
     }
     @Override
@@ -47,5 +52,6 @@ public class Input extends MouseAdapter {
         }
         board.selectedPiece = null;
         board.repaint();
+        putSound.PutPieceSound();
     }
 }

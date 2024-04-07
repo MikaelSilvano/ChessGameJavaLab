@@ -19,7 +19,7 @@ public class ChessPage {
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-        clickSound = new InputAudio("ButtonClick.wav");
+        clickSound = new InputAudio("src/res/ButtonClick.wav");
 
         Board3 board = new Board3();
         frame.add(board);

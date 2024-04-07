@@ -72,8 +72,13 @@ public class Board3 extends JPanel {
 
     private void movePawn(Move move) {
         //en passant
-
-        int colorIndex = move.piece.isWhite ? 1 : -1;
+        int colorIndex;
+        if(move.piece.isWhite) {
+            colorIndex = 1;
+        }
+        else {
+            colorIndex = -1;
+        }
         if(getTileNum(move.newCol, move.newRow) == enPassantTile) {
             move.capture = getPiece(move.newCol, move.newRow + colorIndex);
         }
@@ -85,7 +90,12 @@ public class Board3 extends JPanel {
         }
 
         //promotions
-        colorIndex = move.piece.isWhite ? 0 : 7;
+        if(move.piece.isWhite) {
+            colorIndex = 0;
+        }
+        else {
+            colorIndex = 7;
+        }
         if(move.newRow == colorIndex) {
             promotePawn(move);
         }
@@ -123,7 +133,13 @@ public class Board3 extends JPanel {
         if(piece1 == null || piece2 == null) {
             return false;
         }
-        return piece1.isWhite == piece2.isWhite;
+        if(piece1.isWhite == piece2.isWhite) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
     }
 
     public int getTileNum(int col, int row) {
@@ -131,8 +147,9 @@ public class Board3 extends JPanel {
     }
 
     Piece findKing(boolean isWhite) {
-        for(Piece piece : pieceList) {
-            if(isWhite == piece.isWhite && piece.name.equals("King")) {
+        for (int i = 0; i < pieceList.size(); i++) {
+            Piece piece = pieceList.get(i);
+            if (isWhite == piece.isWhite && piece.name.equals("King")) {
                 return piece;
             }
         }
@@ -178,7 +195,7 @@ public class Board3 extends JPanel {
     }
 
     public void paintComponent(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g; //cast g to g2d
+        Graphics2D g2d = (Graphics2D) g; //cast g ke g2d
 
         for(int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
@@ -202,8 +219,9 @@ public class Board3 extends JPanel {
                 }
             }
 
-        for(Piece piece : pieceList) { //untuk semua piece yang ada di piece list, kita tambahkan ke board (paint)
-            piece.paint(g2d);
+        for (int i = 0; i < pieceList.size(); i++) {
+            Piece piece = pieceList.get(i);
+            piece.paint(g2d); //untuk semua piece yang ada di piece list, kita tambahkan ke board (paint)
         }
     }
 

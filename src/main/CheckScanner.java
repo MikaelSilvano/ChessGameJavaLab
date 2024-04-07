@@ -97,16 +97,28 @@ public class CheckScanner {
     }
 
     private boolean checkKing(Piece p, Piece k) {
-        return p != null && !board.sameTeam(p, k) && p.name.equals("King");
+        if(p != null && !board.sameTeam(p, k) && p.name.equals("King")) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     private boolean hitByPawn(int col, int row, Piece king, int kingCol, int kingRow) {
         int colorVal = king.isWhite ? - 1 : 1;
-        return checkPawn(board.getPiece(kingCol + 1, kingRow + colorVal), king, col, row) ||
-                checkPawn(board.getPiece(kingCol - 1, kingRow + colorVal), king, col, row);
+        if(checkPawn(board.getPiece(kingCol + 1, kingRow + colorVal), king, col, row) || checkPawn(board.getPiece(kingCol - 1, kingRow + colorVal), king, col, row)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private boolean checkPawn(Piece p, Piece k, int col, int row) {
-        return p != null && !board.sameTeam(p, k) && p.name.equals("Pawn") && !(p.col == col && p.row == row);
+        if(p != null && !board.sameTeam(p, k) && p.name.equals("Pawn") && !(p.col == col && p.row == row)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

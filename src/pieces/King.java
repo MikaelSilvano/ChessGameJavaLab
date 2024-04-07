@@ -20,7 +20,11 @@ public class King extends Piece {
     }
 
     public boolean isValidMovement(int col, int row) {
-        return Math.abs((col - this.col) * (row - this.row)) == 1 || Math.abs(col - this.col) + Math.abs(row - this.row) == 1 || canCastle(col, row);
+        if(Math.abs((col - this.col) * (row - this.row)) == 1 || Math.abs(col - this.col) + Math.abs(row - this.row) == 1 || canCastle(col, row)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean canCastle(int col, int row) {
@@ -28,12 +32,20 @@ public class King extends Piece {
             if(col == 6) {
                 Piece rook = board.getPiece(7, row);
                 if(rook != null && rook.isFirstMove && isFirstMove) {
-                    return board.getPiece(5, row) == null && board.getPiece(6, row) == null && !board.checkScanner.isKingChecked(new Move(board, this, 5, row));
+                    if(board.getPiece(5, row) == null && board.getPiece(6, row) == null && !board.checkScanner.isKingChecked(new Move(board, this, 5, row))) {
+                        return true;
+                    } else {
+                        return false;
+                    }
                 }
             } else if (col == 2) {
                 Piece rook = board.getPiece(0, row);
                 if(rook != null && rook.isFirstMove && isFirstMove) {
-                    return board.getPiece(3, row) == null && board.getPiece(2, row) == null && board.getPiece(1, row) == null && !board.checkScanner.isKingChecked(new Move(board, this, 3, row));
+                    if(board.getPiece(3, row) == null && board.getPiece(2, row) == null && board.getPiece(1, row) == null && !board.checkScanner.isKingChecked(new Move(board, this, 3, row))) {
+                        return true;
+                    } else {
+                        return false;
+                    }
                 }
             }
         }

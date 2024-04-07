@@ -19,7 +19,11 @@ public class Queen extends Piece {
     }
 
     public boolean isValidMovement(int col, int row) {
-        return this.col == col || this.row == row || Math.abs(this.col - col) == Math.abs(this.row - row);
+        if(this.col == col || this.row == row || Math.abs(this.col - col) == Math.abs(this.row - row)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean moveCollidesWithPiece(int col, int row) {
