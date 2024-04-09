@@ -1,27 +1,20 @@
 //board
 package main;
-
 import pieces.*;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
 public class Board3 extends JPanel {
     public int tileSize = 105;
-
     int cols = 8;
     int rows = 8;
-
     ArrayList<Piece> pieceList = new ArrayList<>(); //buat list yang berisi semua pieces
-
     public Piece selectedPiece; //piece yang mau digerakan
-
     Input input = new Input(this);
-
     public CheckScanner checkScanner = new CheckScanner(this);
-
     public int enPassantTile = -1;
+    public boolean isWhiteTurn = true;
     InputAudio promotionSound;
     InputAudio eatSound;
 
@@ -45,16 +38,15 @@ public class Board3 extends JPanel {
     }
 
     public void makeMove(Move move) {
-        if(move.piece.name.equals("Pawn")) {
+        if (move.piece.name.equals("Pawn")) {
             movePawn(move); //khusus movepawn
-        } else if(move.piece.name.equals("King")) {
+        } else if (move.piece.name.equals("King")) {
             moveKing(move); //khusus moveking
         }
         move.piece.col = move.newCol;
         move.piece.row = move.newRow;
         move.piece.xPos = move.newCol * tileSize;
         move.piece.yPos = move.newRow * tileSize;
-
         move.piece.isFirstMove = false;
 
         if (move.capture != null) {
@@ -65,9 +57,9 @@ public class Board3 extends JPanel {
     }
 
     private void moveKing(Move move) {
-        if(Math.abs(move.piece.col - move.newCol) == 2) { //handling castling
+        if (Math.abs(move.piece.col - move.newCol) == 2) { //handling castling
             Piece rook;
-            if(move.piece.col < move.newCol) {
+            if (move.piece.col < move.newCol) {
                 rook = getPiece(7, move.piece.row);
                 rook.col = 5;
             } else {
@@ -81,30 +73,27 @@ public class Board3 extends JPanel {
     private void movePawn(Move move) {
         //en passant
         int colorIndex;
-        if(move.piece.isWhite) {
+        if (move.piece.isWhite) {
             colorIndex = 1;
-        }
-        else {
+        } else {
             colorIndex = -1;
         }
-        if(getTileNum(move.newCol, move.newRow) == enPassantTile) {
+        if (getTileNum(move.newCol, move.newRow) == enPassantTile) {
             move.capture = getPiece(move.newCol, move.newRow + colorIndex);
         }
-        if(Math.abs(move.piece.row - move.newRow) == 2) {
+        if (Math.abs(move.piece.row - move.newRow) == 2) {
             enPassantTile = getTileNum(move.newCol, move.newRow + colorIndex);
-        }
-        else {
+        } else {
             enPassantTile = -1;
         }
 
         //promotions
-        if(move.piece.isWhite) {
+        if (move.piece.isWhite) {
             colorIndex = 0;
-        }
-        else {
+        } else {
             colorIndex = 7;
         }
-        if(move.newRow == colorIndex) {
+        if (move.newRow == colorIndex) {
             promotePawn(move);
             promotionSound.PawnPromotionSound();
         }
@@ -120,18 +109,18 @@ public class Board3 extends JPanel {
     }
 
     public boolean isValidMove(Move move) {
-        if(sameTeam(move.piece, move.capture)) {
+        if (sameTeam(move.piece, move.capture)) {
             return false; //tidak bisa capture dari team yang sama
         }
 
-        if(!move.piece.isValidMovement(move.newCol, move.newRow)) {
+        if (!move.piece.isValidMovement(move.newCol, move.newRow)) {
             return false;
         }
 
-        if(move.piece.moveCollidesWithPiece(move.newCol, move.newRow)) {
+        if (move.piece.moveCollidesWithPiece(move.newCol, move.newRow)) {
             return false;
         }
-        if(checkScanner.isKingChecked(move)) {
+        if (checkScanner.isKingChecked(move)) {
             return false;
         }
 
@@ -139,13 +128,12 @@ public class Board3 extends JPanel {
     }
 
     public boolean sameTeam(Piece piece1, Piece piece2) {
-        if(piece1 == null || piece2 == null) {
+        if (piece1 == null || piece2 == null) {
             return false;
         }
-        if(piece1.isWhite == piece2.isWhite) {
+        if (piece1.isWhite == piece2.isWhite) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -204,8 +192,7 @@ public class Board3 extends JPanel {
 
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g; //cast g ke g2d
-
-        for(int i = 0; i < rows; i++) {
+        for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if ((i + j) % 2 == 0) {
                     g2d.setColor(new Color(240, 217, 181));
@@ -217,8 +204,8 @@ public class Board3 extends JPanel {
             }
         }
 
-        if(selectedPiece != null)
-            for(int i = 0; i < rows; i++) {
+        if (selectedPiece != null)
+            for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
                     if (isValidMove(new Move(this, selectedPiece, i, j))) {
                         g2d.setColor(new Color(39, 215, 34, 171)); //ngecek apakah piece itu bisa bergerak (valid) (di loop)

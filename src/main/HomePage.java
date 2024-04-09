@@ -1,5 +1,4 @@
 package main;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -55,7 +54,6 @@ public class HomePage extends JFrame {
     private void displayOptions() {
         frame.getContentPane().removeAll();
         frame.repaint();
-
         JButton singlePlayerButton = new JButton(singlePlayerIcon);
         singlePlayerButton.addActionListener(new ActionListener() {
             @Override
@@ -84,7 +82,6 @@ public class HomePage extends JFrame {
     private void displayDifficultyOptions(boolean isSinglePlayer) {
         frame.getContentPane().removeAll();
         frame.repaint();
-
         JButton easyButton = new JButton(easyDifficultyIcon);
         easyButton.addActionListener(new ActionListener() {
             @Override
@@ -107,7 +104,6 @@ public class HomePage extends JFrame {
         difficultyPanel.add(easyButton);
         difficultyPanel.add(hardButton);
         frame.add(difficultyPanel, BorderLayout.CENTER);
-
         frame.revalidate();
     }
 

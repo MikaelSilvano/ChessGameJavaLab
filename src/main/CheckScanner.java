@@ -1,11 +1,10 @@
+
 //CheckScanner
 package main;
-
 import pieces.Piece;
 
 public class CheckScanner {
     Board3 board;
-
     public CheckScanner(Board3 board) {
         this.board = board;
     }
@@ -41,7 +40,6 @@ public class CheckScanner {
             if(kingCol + (i * colVal) == col && kingRow + (i * rowVal) == row) {
                 break;
             }
-
             Piece piece = board.getPiece(kingCol + (i * colVal), kingRow + (i * rowVal));
             if(piece != null && piece != board.selectedPiece) {
                 if(!board.sameTeam(piece, king) && (piece.name.equals("Rook") || piece.name.equals("Queen"))) {
@@ -58,7 +56,6 @@ public class CheckScanner {
             if(kingCol - (i * colVal) == col && kingRow - (i * rowVal) == row) {
                 break;
             }
-
             Piece piece = board.getPiece(kingCol - (i * colVal), kingRow - (i * rowVal));
             if(piece != null && piece != board.selectedPiece) {
                 if(!board.sameTeam(piece, king) && (piece.name.equals("Bishop") || piece.name.equals("Queen"))) {
@@ -84,7 +81,6 @@ public class CheckScanner {
     private boolean checkKnight(Piece p, Piece k, int col, int row) {
         return p != null && !board.sameTeam(p, k) && p.name.equals("Knight") && !(p.col == col && p.row == row);
     }
-
     private boolean hitByKing(Piece king, int kingCol, int kingRow) {
         return checkKing(board.getPiece(kingCol - 1, kingRow - 1), king) ||
                 checkKing(board.getPiece(kingCol + 1, kingRow - 1), king) ||
