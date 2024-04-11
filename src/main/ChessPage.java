@@ -11,6 +11,9 @@ public class ChessPage {
     private JButton menuButton;
     private JButton exitButton;
     private JLabel turnLabel;
+    private JLabel timerLabel;
+    private int timeRemainingInSeconds = 300;
+    private Timer gameTimer;
     InputAudio clickSound;
 
     public ChessPage() {
@@ -35,6 +38,28 @@ public class ChessPage {
         gbc.gridx = 1;
         gbc.gridy = 0;
         frame.add(turnLabel, gbc);
+
+        timerLabel = new JLabel();
+        timerLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        timerLabel.setForeground(Color.WHITE);
+        updateTimerLabel();
+        gbc.gridy = 1;
+        frame.add(timerLabel, gbc);
+
+        gameTimer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                timeRemainingInSeconds--; // Decrement time
+                updateTimerLabel(); // Update timer label
+
+                if (timeRemainingInSeconds <= 0) {
+                    gameTimer.stop(); // Stop timer when time runs out
+                    JOptionPane.showMessageDialog(frame, "Time's up!");
+                    // Perform game over or timeout actions here...
+                }
+            }
+        });
+        gameTimer.start(); // Start the timer
 
         frame.setVisible(true);
 
@@ -74,6 +99,7 @@ public class ChessPage {
 
         frame.add(buttonPanel);
     }
+
     public void updateTurnLabel(boolean isWhiteTurn) {
         if (isWhiteTurn) {
             turnLabel.setText("White's Turn");
@@ -82,5 +108,11 @@ public class ChessPage {
             turnLabel.setText("Black's Turn");
             turnLabel.setForeground(Color.WHITE);
         }
+    }
+
+    private void updateTimerLabel() {
+        int minutes = timeRemainingInSeconds / 60;
+        int seconds = timeRemainingInSeconds % 60;
+        timerLabel.setText(String.format("Time: %02d:%02d", minutes, seconds));
     }
 }
