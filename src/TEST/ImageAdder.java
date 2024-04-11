@@ -4,23 +4,26 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Objects;
 
-public class Main extends JFrame {
-    JFrame frame = new JFrame("Master Chess");
+public class ImageAdder extends JFrame {
+
+    JFrame frame;
     JLabel displayField;
     ImageIcon backgroundImage;
-    ImageIcon displayOptions;
-    ImageIcon displayDifficultyOptions;
+    ImageIcon singleplayerIcon;
+    ImageIcon multiplayerIcon;
+    ImageIcon normalIcon;
+    ImageIcon HardIcon;
 
-    public Main() {
+    public ImageAdder() {
+        frame = new JFrame("Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setBackground(Color.BLACK);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setResizable(false);
 
         try {
-            backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("BackgroundMenu.png")));
-            displayOptions = new ImageIcon(Objects.requireNonNull(getClass().getResource("singleplayer_icon.png")));
-            displayDifficultyOptions = new ImageIcon(Objects.requireNonNull(getClass().getResource("normal_icon.png")));
+            backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("MenuBackground.png")));
+            singleplayerIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("Singleplayer_Icon.png")));
+            multiplayerIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("Multiplayer_Icon.png")));
+            normalIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("Normal_Icon.png")));
+            HardIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("Hard_Icon.png")));
 
             displayField = new JLabel(backgroundImage);
             frame.add(displayField, BorderLayout.CENTER);
@@ -28,10 +31,7 @@ public class Main extends JFrame {
             e.printStackTrace();
         }
 
-        ImageIcon playButtonIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("PlayButton.png")));
-        JButton playButton = new JButton(playButtonIcon);
-        playButton.setSize(239, 70);
-        playButton.setBorderPainted(false);
+        JButton playButton = new JButton("PLAY");
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -43,17 +43,16 @@ public class Main extends JFrame {
                         }
                     }
                 } catch (Exception e1) {
-                    // If Nimbus is not available, you can set the GUI to another look and feel.
+                    e1.printStackTrace();
                 }
                 displayOptions();
             }
         });
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel.setBackground(Color.BLACK);
         buttonPanel.add(playButton);
         frame.add(buttonPanel, BorderLayout.SOUTH);
-        frame.setSize(1920, 1080);
+        frame.setSize(650, 650);
         frame.setVisible(true);
     }
 
@@ -61,7 +60,7 @@ public class Main extends JFrame {
         frame.getContentPane().removeAll();
         frame.repaint();
 
-        JButton singlePlayerButton = new JButton("", displayOptions);
+        JButton singlePlayerButton = new JButton("",singleplayerIcon);
         singlePlayerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -69,8 +68,17 @@ public class Main extends JFrame {
             }
         });
 
-        JPanel optionsPanel = new JPanel(new GridLayout(1, 1));
+        JButton multiplayerButton = new JButton("", multiplayerIcon);
+        multiplayerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                startGame(false, "");
+            }
+        });
+
+        JPanel optionsPanel = new JPanel(new GridLayout(2, 2, 10, 10));
         optionsPanel.add(singlePlayerButton);
+        optionsPanel.add(multiplayerButton);
         frame.add(optionsPanel, BorderLayout.CENTER);
 
         frame.revalidate();
@@ -80,7 +88,8 @@ public class Main extends JFrame {
         frame.getContentPane().removeAll();
         frame.repaint();
 
-        JButton normalButton = new JButton("", displayDifficultyOptions);
+        JButton normalButton = new JButton("", normalIcon );
+        normalButton.setSize(100, 100);
         normalButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -88,7 +97,7 @@ public class Main extends JFrame {
             }
         });
 
-        JButton hardButton = new JButton("Hard", displayDifficultyOptions);
+        JButton hardButton = new JButton("", HardIcon );
         hardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -96,7 +105,7 @@ public class Main extends JFrame {
             }
         });
 
-        JPanel difficultyPanel = new JPanel(new GridLayout(2, 1, 10, 10));
+        JPanel difficultyPanel = new JPanel(new GridLayout(2, 2, 10, 10));
         difficultyPanel.add(normalButton);
         difficultyPanel.add(hardButton);
         frame.add(difficultyPanel, BorderLayout.CENTER);
@@ -112,6 +121,11 @@ public class Main extends JFrame {
     }
 
     public static void main(String[] args) {
-        new Main();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new ImageAdder();
+            }
+        });
     }
 }
