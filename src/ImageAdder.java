@@ -89,7 +89,6 @@ public class ImageAdder extends JFrame {
         frame.repaint();
 
         JButton normalButton = new JButton("", normalIcon );
-        frame.setVisible(false);
         normalButton.setSize(100, 100);
         normalButton.addActionListener(new ActionListener() {
             @Override
@@ -99,7 +98,6 @@ public class ImageAdder extends JFrame {
         });
 
         JButton hardButton = new JButton("", HardIcon );
-        frame.setVisible(false);
         hardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
