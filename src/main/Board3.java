@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Board3 extends JPanel {
-    public int tileSize = 104;
+    public int tileSize = 100;
     int cols = 8;
     int rows = 8;
     ArrayList<Piece> pieceList = new ArrayList<>(); //buat list yang berisi semua pieces

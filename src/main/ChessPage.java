@@ -49,18 +49,16 @@ public class ChessPage {
         gameTimer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                timeRemainingInSeconds--; // Decrement time
-                updateTimerLabel(); // Update timer label
+                timeRemainingInSeconds--;
+                updateTimerLabel();
 
                 if (timeRemainingInSeconds <= 0) {
-                    gameTimer.stop(); // Stop timer when time runs out
+                    gameTimer.stop();
                     JOptionPane.showMessageDialog(frame, "Time's up!");
-                    // Perform game over or timeout actions here...
                 }
             }
         });
-        gameTimer.start(); // Start the timer
-
+        gameTimer.start();
         frame.setVisible(true);
 
         //button yang dikanan
