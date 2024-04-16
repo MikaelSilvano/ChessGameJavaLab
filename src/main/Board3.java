@@ -5,6 +5,9 @@ import pieces.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class Board3 extends JPanel {
     public int tileSize = 100;
@@ -204,6 +207,15 @@ public class Board3 extends JPanel {
                 }
             }
         }
+
+        Piece king = findKing(isWhiteTurn);
+        if (king != null && checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
+            int kingX = king.col * tileSize;
+            int kingY = king.row * tileSize;
+            g2d.setColor(Color.RED);
+            g2d.fillRect(kingX, kingY, tileSize, tileSize);
+        }
+
 
         if (selectedPiece != null)
             for (int i = 0; i < rows; i++) {
