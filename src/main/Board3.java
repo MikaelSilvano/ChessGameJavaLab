@@ -208,7 +208,7 @@ public class Board3 extends JPanel {
             }
         }
 
-        Piece king = findKing(isWhiteTurn);
+        Piece king = findKing(isWhiteTurn); //kondisi jika king kena hit maka board display akan berwarna merah
         if (king != null && checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
             int kingX = king.col * tileSize;
             int kingY = king.row * tileSize;
