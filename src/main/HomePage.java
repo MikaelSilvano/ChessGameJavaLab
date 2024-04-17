@@ -32,6 +32,7 @@ public class HomePage extends JFrame {
             e.printStackTrace();
         }
 
+        frame.add(new JLabel(new ImageIcon(String.valueOf(backgroundImage))));
         clickSound = new InputAudio("ButtonClick.wav");
 
         JButton playButton = new JButton(playButtonIcon);
