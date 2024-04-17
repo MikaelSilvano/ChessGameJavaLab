@@ -1,3 +1,4 @@
+//ChessPage
 package main;
 
 import javax.swing.*;
@@ -13,23 +14,20 @@ public class ChessPage {
     private int[] playerTimeInSeconds;
     private int currentPlayerIndex;
     private Board3 board;
-
     InputAudio clickSound;
 
     public ChessPage() {
         frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setBackground(Color.BLACK);
+        frame.getContentPane().setBackground(Color.black);
         frame.setLayout(new GridBagLayout());
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setResizable(false);
-
+        frame.setLocationRelativeTo(null);
         clickSound = new InputAudio("src/res/ButtonClick.wav");
-
-        playerTimeInSeconds = new int[]{10, 10};
+        playerTimeInSeconds = new int[]{600, 600};
         currentPlayerIndex = 0;
 
-        board = new Board3(this);
+        Board3 board = new Board3(this);
         frame.add(board);
         frame.setVisible(true);
 
@@ -50,67 +48,71 @@ public class ChessPage {
         timerLabels[1].setFont(new Font("Arial", Font.PLAIN, 16));
         timerLabels[0].setForeground(Color.WHITE);
         timerLabels[1].setForeground(Color.WHITE);
+        gbc.anchor = GridBagConstraints.NORTHEAST;
         gbc.gridy = 1;
         frame.add(timerLabels[0], gbc);
         gbc.gridy = 2;
         frame.add(timerLabels[1], gbc);
 
         timers = new Timer[2];
-        for (int i = 0; i < 2; i++) {
-            final int playerIndex = i;
-            timers[i] = new Timer(1000, new ActionListener() {
+        {
+            for (int i = 0; i < 2; i++) {
+                final int playerIndex = i;
+                timers[i] = new Timer(1000, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        playerTimeInSeconds[playerIndex]--;
+                        updateTimerLabel(playerIndex);
+
+                        if (playerTimeInSeconds[playerIndex] <= 0) {
+                            timers[playerIndex].stop();
+                            JOptionPane.showMessageDialog(frame, "Player " + (playerIndex + 1) + " ran out of time!");
+                            // Game over logic here (e.g., declare the opposing player as the winner)
+                        }
+                    }
+                });
+                timers[i].setInitialDelay(0); // Start timer immediately
+            }
+            startCurrentPlayerTimer();
+            frame.setVisible(true);
+
+            //button yang dikanan
+            JPanel buttonPanel = new JPanel(new GridBagLayout());
+            buttonPanel.setBackground(Color.BLACK);
+
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.insets = new Insets(5, 5, 5, 5); //untuk merapihkan button yang disebelah kanan
+
+            JButton menuButton = new JButton("Menu");
+            menuButton.setPreferredSize(new Dimension(200, 100));
+            JButton exitButton = new JButton("Exit");
+            exitButton.setPreferredSize(new Dimension(200, 100));
+            buttonPanel.add(menuButton, gbc);
+
+            gbc.gridy = 1;
+            buttonPanel.add(exitButton, gbc);
+
+            menuButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    playerTimeInSeconds[playerIndex]--;
-                    updateTimerLabel(playerIndex);
-
-                    if (playerTimeInSeconds[playerIndex] <= 0) {
-                        timers[playerIndex].stop();
-                        JOptionPane.showMessageDialog(frame, "Player " + (playerIndex + 1) + " ran out of time!");
-                        frame.dispose();
-                        new HomePage();
-                    }
+                    clickSound.ButtonClickSound();
+                    frame.dispose(); //menutup board
+                    new HomePage(); //back to menu
                 }
             });
-            timers[i].setInitialDelay(0);
+
+            exitButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    clickSound.ButtonClickSound();
+                    System.exit(0); //exit button
+                }
+            });
+
+            frame.add(buttonPanel);
         }
-
-        startCurrentPlayerTimer();
-
-        JPanel buttonPanel = new JPanel(new GridBagLayout());
-        buttonPanel.setBackground(Color.BLACK);
-        gbc.gridy = 0;
-
-        JButton menuButton = new JButton("Menu");
-        menuButton.setPreferredSize(new Dimension(200, 50));
-        buttonPanel.add(menuButton, gbc);
-
-        JButton exitButton = new JButton("Exit");
-        exitButton.setPreferredSize(new Dimension(200, 50));
-        gbc.gridy = 1;
-        buttonPanel.add(exitButton, gbc);
-
-        menuButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                clickSound.ButtonClickSound();
-                frame.dispose();
-                new HomePage();
-            }
-        });
-
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                clickSound.ButtonClickSound();
-                System.exit(0);
-            }
-        });
-
-        frame.add(buttonPanel, gbc);
-        frame.pack();
     }
-
     private void startCurrentPlayerTimer() {
         timers[currentPlayerIndex].start();
     }
@@ -118,13 +120,11 @@ public class ChessPage {
     private void stopCurrentPlayerTimer() {
         timers[currentPlayerIndex].stop();
     }
-
     private void updateTimerLabel(int playerIndex) {
         int minutes = playerTimeInSeconds[playerIndex] / 60;
         int seconds = playerTimeInSeconds[playerIndex] % 60;
         timerLabels[playerIndex].setText(String.format("Player %d Time: %02d:%02d", playerIndex + 1, minutes, seconds));
     }
-
     public void switchTurn() {
         stopCurrentPlayerTimer();
         currentPlayerIndex = (currentPlayerIndex + 1) % 2;
@@ -141,16 +141,16 @@ public class ChessPage {
             turnLabel.setForeground(Color.WHITE);
         }
     }
-
     public void onPlayerMove() {
-        switchTurn();
+        // Called when a player makes a move on the board
+        switchTurn(); // Switch turn after a valid move
     }
 
     public void pauseTimer() {
-        stopCurrentPlayerTimer();
+            stopCurrentPlayerTimer();
     }
 
     public void resumeTimer() {
-        startCurrentPlayerTimer();
+            startCurrentPlayerTimer();
     }
 }
