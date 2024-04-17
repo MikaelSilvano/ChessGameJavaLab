@@ -10,7 +10,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 public class Board3 extends JPanel {
-    public int tileSize = 100;
+    public int tileSize = 50;
     int cols = 8;
     int rows = 8;
     ArrayList<Piece> pieceList = new ArrayList<>(); // List of all pieces
@@ -190,14 +190,8 @@ public class Board3 extends JPanel {
         // Highlight checked king
         Piece king = findKing(isWhiteTurn);
         if (king != null && checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
-
             g2d.setColor(Color.RED);
             g2d.fillRect(king.col * tileSize, king.row * tileSize, tileSize, tileSize);
-
-            int kingX = king.col * tileSize;
-            int kingY = king.row * tileSize;
-            g2d.setColor(new Color(255, 0, 0));
-            g2d.fillRect(kingX, kingY, tileSize, tileSize);
         }
 
         // Highlight valid moves for the selected piece

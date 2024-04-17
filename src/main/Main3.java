@@ -9,8 +9,6 @@ public class Main3 {
             public void run() {
                 //new HomePage();
                 new ChessPage();
-                new HomePage();
-                //new ChessPage();
             }
         }
         );

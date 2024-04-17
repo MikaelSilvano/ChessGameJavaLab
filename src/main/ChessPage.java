@@ -26,10 +26,10 @@ public class ChessPage {
 
         clickSound = new InputAudio("src/res/ButtonClick.wav");
 
-        playerTimeInSeconds = new int[]{600, 600}; // 10 minutes for each player
+        playerTimeInSeconds = new int[]{10, 10};
         currentPlayerIndex = 0;
 
-        board = new Board3(this); // Pass ChessPage reference to Board3
+        board = new Board3(this);
         frame.add(board);
         frame.setVisible(true);
 
@@ -67,11 +67,12 @@ public class ChessPage {
                     if (playerTimeInSeconds[playerIndex] <= 0) {
                         timers[playerIndex].stop();
                         JOptionPane.showMessageDialog(frame, "Player " + (playerIndex + 1) + " ran out of time!");
-                        // Game over logic here (e.g., declare the opposing player as the winner)
+                        frame.dispose();
+                        new HomePage();
                     }
                 }
             });
-            timers[i].setInitialDelay(0); // Start timer immediately
+            timers[i].setInitialDelay(0);
         }
 
         startCurrentPlayerTimer();
@@ -93,8 +94,8 @@ public class ChessPage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 clickSound.ButtonClickSound();
-                frame.dispose(); // Close the chess game
-                new HomePage(); // Return to menu
+                frame.dispose();
+                new HomePage();
             }
         });
 
@@ -102,7 +103,7 @@ public class ChessPage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 clickSound.ButtonClickSound();
-                System.exit(0); // Exit the application
+                System.exit(0);
             }
         });
 
@@ -142,8 +143,7 @@ public class ChessPage {
     }
 
     public void onPlayerMove() {
-        // Called when a player makes a move on the board
-        switchTurn(); // Switch turn after a valid move
+        switchTurn();
     }
 
     public void pauseTimer() {
