@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 import javax.swing.*;
 
-public class AlphaBetaChess {
+public class AIChessPageEasy {
 	private static JButton menuButton;
 	private static JButton exitButton;
 	private JLabel turnLabel;
@@ -14,34 +14,8 @@ public class AlphaBetaChess {
 	private int timeRemainingInSeconds = 300;
 	private Timer gameTimer;
 	static InputAudio clickSound;
-	public AlphaBetaChess() {
+	public AIChessPageEasy() {
 		clickSound = new InputAudio("src/res/ButtonClick.wav");
-	}
-	
-	//array for representation of the chess board
-	/*
-	 * color=WHITE/black
-	 * pawn=P/p
-	 * knight=K/k
-	 * rook=R/r
-	 * queen=Q/q
-	 * king=A/a	
-	*/
-	static String chessBoard[][]={
-			{"r","k","b","q","a","b","k","r"},
-	        {"p","p","p","p","p","p","p","p"},
-	        {" "," "," "," "," "," "," "," "},
-	        {" "," "," "," "," "," "," "," "},
-	        {" "," "," "," "," "," "," "," "},
-	        {" "," "," "," "," "," "," "," "},
-	        {"P","P","P","P","P","P","P","P"},
-	        {"R","K","B","Q","A","B","K","R"}};
-
-	static int kingPositionA, kingPositiona;	//white and black king's position in the array
-	static int globalDepth=4;	//depth of best move searching
-	static int playerColor=-1;	//1=player as white 0=player as black
-
-	public static void main(String[] args) {
 		//get initial position of white and black king
 		while(!"A".equals(chessBoard[kingPositionA/8][kingPositionA%8]))	kingPositionA++;
 		while(!"a".equals(chessBoard[kingPositiona/8][kingPositiona%8]))	kingPositiona++;
@@ -63,43 +37,66 @@ public class AlphaBetaChess {
 
 		menuButton = new JButton("Menu");
 		menuButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				clickSound.ButtonClickSound();
-				frame.dispose(); // menutup board
-				new HomePage(); // back to menu
+				frame.dispose(); //menutup board
+				new HomePage(); //back to menu
 			}
 		});
 
 		exitButton = new JButton("Exit");
 		exitButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				clickSound.ButtonClickSound();
-				System.exit(0); // exit button
+				System.exit(0); //exit button
 			}
 		});
 
-		// Add buttons to a panel
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.add(menuButton);
 		buttonPanel.add(exitButton);
 
-		// Add the button panel to the frame
 		frame.getContentPane().add(buttonPanel, BorderLayout.EAST);
 	}
+
+	//array for representation of the chess board
+	/*
+	 * color=WHITE/black
+	 * pawn=P/p
+	 * knight=K/k
+	 * rook=R/r
+	 * queen=Q/q
+	 * king=A/a
+	*/
+	static String chessBoard[][]={
+			{"r","k","b","q","a","b","k","r"},
+	        {"p","p","p","p","p","p","p","p"},
+	        {" "," "," "," "," "," "," "," "},
+	        {" "," "," "," "," "," "," "," "},
+	        {" "," "," "," "," "," "," "," "},
+	        {" "," "," "," "," "," "," "," "},
+	        {"P","P","P","P","P","P","P","P"},
+	        {"R","K","B","Q","A","B","K","R"}};
+
+	static int kingPositionA, kingPositiona;	//white and black king's position in the array
+	static int globalDepth=4;	//depth of best move searching
+	static int playerColor=-1;	//1=player as white 0=player as black
 
 	//returns a String with move , captured piece and a score value of that move
 	public static String alphaBeta(int depth, int beta, int alpha, String move, int player){
 		String moveList=possibleMoves();
 		if(depth==0 || moveList.length()==0)	//limiting cases if searching depth becomes 0 or no possible moves are left (eg. checkmate)
 			return move+(AIRating.rating(moveList.length(),depth)*(player*2-1));
-		
+
 		moveList=sortMoves(moveList);	//sort the moves to put the best moves in the front to improve speed
-		
+
 		player=1-player;	//1 or 0
-		
+
 		String returnedStr="";
 		int ratingValue;
-		
+
 		for(int i=0;i<moveList.length();i+=5){
 			makeMove(moveList.substring(i, i+5));
 			flipBoard();
@@ -107,20 +104,20 @@ public class AlphaBetaChess {
 			ratingValue=Integer.valueOf(returnedStr.substring(5));	//get the value of the rating from the depth
 			flipBoard();
 			undoMove(moveList.substring(i,i+5));
-			
+
 			if(player==0){
 				if(ratingValue<=beta){
 					beta=ratingValue;
 					if(depth==globalDepth)
-						move=returnedStr.substring(0,5);	
+						move=returnedStr.substring(0,5);
 				}
 			}
 			else{
 				if(ratingValue>alpha){
 					alpha=ratingValue;
 					if(depth==globalDepth)
-							move=returnedStr.substring(0,5);					
-				}					
+							move=returnedStr.substring(0,5);
+				}
 			}
 			if(alpha>=beta){
 				if(player==0){
@@ -138,7 +135,7 @@ public class AlphaBetaChess {
 			return move+alpha;
 		}
 	}
-	
+
 	//method to swap the pieces i.e. to flip the board to the 2nd player's side
 	public static void flipBoard(){
 		String temp;
@@ -165,7 +162,7 @@ public class AlphaBetaChess {
 		kingPositionA=63-kingPositiona;
 		kingPositiona=63-kingPosTemp;
 	}
-	
+
 	public static void makeMove(String move){
 		if(move.charAt(4)!='P'){
 			//old position in array
@@ -184,10 +181,10 @@ public class AlphaBetaChess {
 			int col1=Character.getNumericValue(move.charAt(0));
 			int col2=Character.getNumericValue(move.charAt(1));
 			chessBoard[1][col1]=" ";
-			chessBoard[0][col2]=String.valueOf(move.charAt(3));	//new piece value		
+			chessBoard[0][col2]=String.valueOf(move.charAt(3));	//new piece value
 		}
 	}
-	
+
 	public static String sortMoves(String list) {
         int[] score=new int [list.length()/5];
         for (int i=0;i<list.length();i+=5) {
@@ -216,7 +213,7 @@ public class AlphaBetaChess {
 			//new position in array
 			int x2=Character.getNumericValue(move.charAt(2));
 			int y2=Character.getNumericValue(move.charAt(3));
-			
+
 			chessBoard[x1][y1]=chessBoard[x2][y2];
 			chessBoard[x2][y2]=String.valueOf(move.charAt(4));	//bring back the captured piece on board
 			if("A".equals(chessBoard[x1][y1])){
@@ -227,7 +224,7 @@ public class AlphaBetaChess {
 			int col1=Character.getNumericValue(move.charAt(0));
 			int col2=Character.getNumericValue(move.charAt(1));
 			chessBoard[1][col1]="P";
-			chessBoard[0][col2]=String.valueOf(move.charAt(2));	//new piece value		
+			chessBoard[0][col2]=String.valueOf(move.charAt(2));	//new piece value
 		}
 	}
 	//returns previous position(row1,column1), current position (row2,column2) and the captured piece if any else space
@@ -255,11 +252,11 @@ public class AlphaBetaChess {
         }
 		return moveList;
 	}
-	
+
 	public static String possibleP(int i){
-		String moveList="",oldPiece;		
+		String moveList="",oldPiece;
 		int r=i/8,c=i%8;	//row and column position of the PAWN
-		
+
 		for(int j=-1;j<=1;j+=2){
 			try {	//finding possible captures diagonally
 				if(Character.isLowerCase(chessBoard[r-1][c+j].charAt(0)) && i>=16){
@@ -268,12 +265,12 @@ public class AlphaBetaChess {
 					chessBoard[r-1][c+j]="P";
 					if(kingSafe()){
 						moveList=moveList+r+c+(r-1)+(c+j)+oldPiece;
-					}					
+					}
 					chessBoard[r][c]="P";
 					chessBoard[r-1][c+j]=oldPiece;
 				}
 			}catch(Exception e){}
-			
+
 			//promotion & capture
 			try {	//finding possible captures diagonally
 				if(Character.isLowerCase(chessBoard[r-1][c+j].charAt(0)) && i<16){
@@ -285,10 +282,10 @@ public class AlphaBetaChess {
 						if(kingSafe()){
 							//old Column position, new Column position, captured piece, new piece, P(promotion)
 							moveList=moveList+c+(c+j)+oldPiece+temp[k]+"P";
-						}					
+						}
 						chessBoard[r][c]="P";
 						chessBoard[r-1][c+j]=oldPiece;
-					}					
+					}
 				}
 			}catch(Exception e){}
 		}
@@ -320,7 +317,7 @@ public class AlphaBetaChess {
                 }
             }
         } catch (Exception e) {}
-        
+
         try {//move two up
             if (" ".equals(chessBoard[r-1][c]) && " ".equals(chessBoard[r-2][c]) && i>=48) {
                 oldPiece=chessBoard[r-2][c];
@@ -335,12 +332,12 @@ public class AlphaBetaChess {
         } catch (Exception e) {}
 		return moveList;
 	}
-	
+
 	public static String possibleR(int i){
-		String moveList="",oldPiece;		
+		String moveList="",oldPiece;
 		int r=i/8,c=i%8;	//row and column position of the ROOK
 		int temp=1;
-		
+
 		//loop for checking the horizontal and vertical directions for the ROOK
 		for(int j=-1;j<=1;j+=2){
 			try {
@@ -350,7 +347,7 @@ public class AlphaBetaChess {
 					chessBoard[r][c+temp*j]="R";
 					if(kingSafe()){
 						moveList=moveList+r+c+r+(c+temp*j)+oldPiece;
-					}					
+					}
 					chessBoard[r][c]="R";
 					chessBoard[r][c+temp*j]=oldPiece;
 					temp++;
@@ -361,13 +358,13 @@ public class AlphaBetaChess {
 					chessBoard[r][c+temp*j]="R";
 					if(kingSafe()){
 						moveList=moveList+r+c+r+(c+temp*j)+oldPiece;
-					}					
+					}
 					chessBoard[r][c]="R";
-					chessBoard[r][c+temp*j]=oldPiece;					
+					chessBoard[r][c+temp*j]=oldPiece;
 				}
 			} catch (Exception e) {}
 			temp=1;
-			
+
 			try {
 				while(" ".equals(chessBoard[r+temp*j][c])){	//vertical direction
 					oldPiece=chessBoard[r+temp*j][c];
@@ -375,7 +372,7 @@ public class AlphaBetaChess {
 					chessBoard[r+temp*j][c]="R";
 					if(kingSafe()){
 						moveList=moveList+r+c+(r+temp*j)+c+oldPiece;
-					}					
+					}
 					chessBoard[r][c]="R";
 					chessBoard[r+temp*j][c]=oldPiece;
 					temp++;
@@ -386,23 +383,23 @@ public class AlphaBetaChess {
 					chessBoard[r+temp*j][c]="R";
 					if(kingSafe()){
 						moveList=moveList+r+c+(r+temp*j)+c+oldPiece;
-					}					
+					}
 					chessBoard[r][c]="R";
-					chessBoard[r+temp*j][c]=oldPiece;					
+					chessBoard[r+temp*j][c]=oldPiece;
 				}
 			} catch (Exception e) {}
 			temp=1;
 		}
 		return moveList;
 	}
-	
+
 	public static String possibleK(int i){
-		String moveList="",oldPiece;		
+		String moveList="",oldPiece;
 		int r=i/8,c=i%8;	//row and column position of the KNIGHT
-		
+
 		//loops for checking the diagonal both ways directions for the KNIGHT
 		for(int j=-1;j<=1;j+=2){
-			for(int k=-1;k<=1;k+=2){				
+			for(int k=-1;k<=1;k+=2){
 				if(j!=0 || k!=0){
 					try {
 						if(Character.isLowerCase(chessBoard[r+j][c+k*2].charAt(0)) || " ".equals(chessBoard[r+j][c+k*2])){
@@ -416,7 +413,7 @@ public class AlphaBetaChess {
 							chessBoard[r][c]="K";
 						}
 					} catch (Exception e) {}
-					
+
 					try {
 						if(Character.isLowerCase(chessBoard[r+j*2][c+k].charAt(0)) || " ".equals(chessBoard[r+j*2][c+k])){
 							oldPiece=chessBoard[r+j*2][c+k];
@@ -432,15 +429,15 @@ public class AlphaBetaChess {
 				}
 			}
 		}
-		
+
 		return moveList;
 	}
-	
+
 	public static String possibleB(int i){
-		String moveList="",oldPiece;		
+		String moveList="",oldPiece;
 		int r=i/8,c=i%8;	//row and column position of the BISHOP
 		int temp=1;
-		
+
 		//loops for checking the diagonal both ways directions for the BISHOP
 		for(int j=-1;j<=1;j+=2){
 			for(int k=-1;k<=1;k+=2){
@@ -465,22 +462,22 @@ public class AlphaBetaChess {
 								moveList=moveList+r+c+(r+temp*j)+(c+temp*k)+oldPiece;
 							}
 							chessBoard[r+temp*j][c+temp*k]=oldPiece;
-							chessBoard[r][c]="B";						
+							chessBoard[r][c]="B";
 						}
 					} catch (Exception e) {}
 					temp=1;
 				}
-			}	
+			}
 		}
-		
+
 		return moveList;
 	}
-	
+
 	public static String possibleQ(int i){
-		String moveList="",oldPiece;		
+		String moveList="",oldPiece;
 		int r=i/8,c=i%8;	//row and column position of the QUEEN
 		int temp=1;
-		
+
 		//loops for checking the horizontal, vertical, diagonal both ways directions for the queen
 		for(int j=-1;j<=1;j++){
 			for(int k=-1;k<=1;k++){
@@ -505,17 +502,17 @@ public class AlphaBetaChess {
 								moveList=moveList+r+c+(r+temp*j)+(c+temp*k)+oldPiece;
 							}
 							chessBoard[r+temp*j][c+temp*k]=oldPiece;
-							chessBoard[r][c]="Q";						
+							chessBoard[r][c]="Q";
 						}
 					} catch (Exception e) {}
 					temp=1;
 				}
 			}
 		}
-		
+
 		return moveList;
 	}
-	
+
 	public static String possibleA(int i){
 		String moveList="",oldPiece;
 		int kingTemp;
@@ -527,7 +524,7 @@ public class AlphaBetaChess {
 						oldPiece=chessBoard[r-1+j/3][c-1+j%3];
 						chessBoard[r][c]=" ";
 						chessBoard[r-1+j/3][c-1+j%3]="A";
-						kingTemp=kingPositionA;	
+						kingTemp=kingPositionA;
 						kingPositionA=i+(j/3)*8+j%3-9;
 						if(kingSafe()){
 							moveList=moveList+r+c+(r-1+j/3)+(c-1+j%3)+oldPiece;
@@ -535,93 +532,93 @@ public class AlphaBetaChess {
 						chessBoard[r][c]="A";
 						chessBoard[r-1+j/3][c-1+j%3]=oldPiece;
 						kingPositionA=kingTemp;
-					}						
-				} catch (Exception e) {}			
+					}
+				} catch (Exception e) {}
 			}
 		}
 		//need to add castling
 		return moveList;
 	}
-	
+
 	public static boolean kingSafe(){
 		//black bishop or queen in diagonal
 		int temp=1;
-		
+
 		for(int j=-1;j<=1;j+=2){
 			for(int k=-1;k<=1;k+=2){
 					try {
 						while(" ".equals(chessBoard[kingPositionA/8+temp*j][kingPositionA%8+temp*k])){temp++;}
-						
+
 						//if black bishop or queen are at the diagonal positions
 						if("b".equals(chessBoard[kingPositionA/8+temp*j][kingPositionA%8+temp*k]) ||
 								"q".equals(chessBoard[kingPositionA/8+temp*j][kingPositionA%8+temp*k]))
-							return false;							
+							return false;
 					} catch (Exception e) {}
-					temp=1;				
-			}	
+					temp=1;
+			}
 		}
-		
-		//black rook or queen in vertical or horizontal	
+
+		//black rook or queen in vertical or horizontal
 		for(int j=-1;j<=1;j+=2){
 			try {	//vertical
 				while(" ".equals(chessBoard[kingPositionA/8+temp*j][kingPositionA%8])){temp++;}
-				
+
 				//if black rook or queen are at the vertical or horizontal positions
 				if("r".equals(chessBoard[kingPositionA/8+temp*j][kingPositionA%8]) ||
 						"q".equals(chessBoard[kingPositionA/8+temp*j][kingPositionA%8]))
-					return false;							
+					return false;
 			} catch (Exception e) {}
-			
+
 			temp=1;
 			try {		//horizontal
 				while(" ".equals(chessBoard[kingPositionA/8][kingPositionA%8+temp*j])){temp++;}
-				
+
 				//if black rook or queen are at the vertical or horizontal positions
 				if("r".equals(chessBoard[kingPositionA/8][kingPositionA%8+temp*j]) ||
 						"q".equals(chessBoard[kingPositionA/8][kingPositionA%8+temp*j]))
-					return false;							
+					return false;
 			} catch (Exception e) {}
-			temp=1;									
-		}	
-		
+			temp=1;
+		}
+
 		//black knight
 		for(int j=-1;j<=1;j+=2){
 			for(int k=-1;k<=1;k+=2){
-					try {												
+					try {
 						if("k".equals(chessBoard[kingPositionA/8+j][kingPositionA%8+k*2]))
-							return false;					
+							return false;
 					} catch (Exception e) {}
 					try {
 						if("k".equals(chessBoard[kingPositionA/8+j*2][kingPositionA%8+k]))
 							return false;
-					} catch (Exception e) {}							
-			}	
+					} catch (Exception e) {}
+			}
 		}
-		
+
 		//black pawn
 		if(kingPositionA>=16){
-			try {								
+			try {
 				if("p".equals(chessBoard[kingPositionA/8-1][kingPositionA%8-1]))
-					return false;					
+					return false;
 			} catch (Exception e) {}
 			try {
 				if("p".equals(chessBoard[kingPositionA/8-1][kingPositionA%8+1]))
 					return false;
 			} catch (Exception e) {}
-		}	
-		
+		}
+
 		//black king
 		for(int j=-1;j<=1;j++){
 			for(int k=-1;k<=1;k++){
 				if(j!=0 || k!=0){
-					try {												
+					try {
 						if("a".equals(chessBoard[kingPositionA/8+j][kingPositionA%8+k]))
-							return false;					
+							return false;
 					} catch (Exception e) {}
 				}
-			}	
+			}
 		}
-		
+
 		return true;
 	}
 
