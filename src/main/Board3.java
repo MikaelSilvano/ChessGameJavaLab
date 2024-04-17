@@ -207,8 +207,8 @@ public class Board3 extends JPanel {
             }
         }
 
-        // Draw all pieces on the board
-        for (Piece piece : pieceList) {
+        for (int i = 0; i < pieceList.size(); i++) {
+            Piece piece = pieceList.get(i);
             piece.paint(g2d);
         }
     }
