@@ -1,4 +1,3 @@
-//ChessPage
 package main;
 
 import javax.swing.*;
@@ -7,25 +6,30 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ChessPage {
-    JFrame frame;
-    private JButton menuButton;
-    private JButton exitButton;
+    private JFrame frame;
     private JLabel turnLabel;
-    private JLabel timerLabel;
-    private int timeRemainingInSeconds = 300;
-    private Timer gameTimer;
+    private JLabel[] timerLabels;
+    private Timer[] timers;
+    private int[] playerTimeInSeconds;
+    private int currentPlayerIndex;
+    private Board3 board;
+
     InputAudio clickSound;
 
     public ChessPage() {
         frame = new JFrame();
-        frame.getContentPane().setBackground(Color.black);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setBackground(Color.BLACK);
         frame.setLayout(new GridBagLayout());
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setResizable(false);
-        frame.setLocationRelativeTo(null);
+
         clickSound = new InputAudio("src/res/ButtonClick.wav");
 
-        Board3 board = new Board3();
+        playerTimeInSeconds = new int[]{600, 600}; // 10 minutes for each player
+        currentPlayerIndex = 0;
+
+        board = new Board3(this); // Pass ChessPage reference to Board3
         frame.add(board);
         frame.setVisible(true);
 
@@ -39,42 +43,49 @@ public class ChessPage {
         gbc.gridy = 0;
         frame.add(turnLabel, gbc);
 
-        timerLabel = new JLabel();
-        timerLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        timerLabel.setForeground(Color.WHITE);
-        updateTimerLabel();
+        timerLabels = new JLabel[2];
+        timerLabels[0] = new JLabel("Player 1 Time: 10:00");
+        timerLabels[1] = new JLabel("Player 2 Time: 10:00");
+        timerLabels[0].setFont(new Font("Arial", Font.PLAIN, 16));
+        timerLabels[1].setFont(new Font("Arial", Font.PLAIN, 16));
+        timerLabels[0].setForeground(Color.WHITE);
+        timerLabels[1].setForeground(Color.WHITE);
         gbc.gridy = 1;
-        frame.add(timerLabel, gbc);
+        frame.add(timerLabels[0], gbc);
+        gbc.gridy = 2;
+        frame.add(timerLabels[1], gbc);
 
-        gameTimer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                timeRemainingInSeconds--;
-                updateTimerLabel();
+        timers = new Timer[2];
+        for (int i = 0; i < 2; i++) {
+            final int playerIndex = i;
+            timers[i] = new Timer(1000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    playerTimeInSeconds[playerIndex]--;
+                    updateTimerLabel(playerIndex);
 
-                if (timeRemainingInSeconds <= 0) {
-                    gameTimer.stop();
-                    JOptionPane.showMessageDialog(frame, "Time's up!");
+                    if (playerTimeInSeconds[playerIndex] <= 0) {
+                        timers[playerIndex].stop();
+                        JOptionPane.showMessageDialog(frame, "Player " + (playerIndex + 1) + " ran out of time!");
+                        // Game over logic here (e.g., declare the opposing player as the winner)
+                    }
                 }
-            }
-        });
-        gameTimer.start();
-        frame.setVisible(true);
+            });
+            timers[i].setInitialDelay(0); // Start timer immediately
+        }
 
-        //button yang dikanan
+        startCurrentPlayerTimer();
+
         JPanel buttonPanel = new JPanel(new GridBagLayout());
         buttonPanel.setBackground(Color.BLACK);
-
-        gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(5, 5, 5, 5); //untuk merapihkan button yang disebelah kanan
 
-        menuButton = new JButton("Menu");
-        menuButton.setPreferredSize(new Dimension(200, 100));
-        exitButton = new JButton("Exit");
-        exitButton.setPreferredSize(new Dimension(200, 100));
+        JButton menuButton = new JButton("Menu");
+        menuButton.setPreferredSize(new Dimension(200, 50));
         buttonPanel.add(menuButton, gbc);
 
+        JButton exitButton = new JButton("Exit");
+        exitButton.setPreferredSize(new Dimension(200, 50));
         gbc.gridy = 1;
         buttonPanel.add(exitButton, gbc);
 
@@ -82,8 +93,8 @@ public class ChessPage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 clickSound.ButtonClickSound();
-                frame.dispose(); //menutup board
-                new HomePage(); //back to menu
+                frame.dispose(); // Close the chess game
+                new HomePage(); // Return to menu
             }
         });
 
@@ -91,11 +102,33 @@ public class ChessPage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 clickSound.ButtonClickSound();
-                System.exit(0); //exit button
+                System.exit(0); // Exit the application
             }
         });
 
-        frame.add(buttonPanel);
+        frame.add(buttonPanel, gbc);
+        frame.pack();
+    }
+
+    private void startCurrentPlayerTimer() {
+        timers[currentPlayerIndex].start();
+    }
+
+    private void stopCurrentPlayerTimer() {
+        timers[currentPlayerIndex].stop();
+    }
+
+    private void updateTimerLabel(int playerIndex) {
+        int minutes = playerTimeInSeconds[playerIndex] / 60;
+        int seconds = playerTimeInSeconds[playerIndex] % 60;
+        timerLabels[playerIndex].setText(String.format("Player %d Time: %02d:%02d", playerIndex + 1, minutes, seconds));
+    }
+
+    public void switchTurn() {
+        stopCurrentPlayerTimer();
+        currentPlayerIndex = (currentPlayerIndex + 1) % 2;
+        startCurrentPlayerTimer();
+        updateTurnLabel(currentPlayerIndex == 0);
     }
 
     public void updateTurnLabel(boolean isWhiteTurn) {
@@ -108,9 +141,16 @@ public class ChessPage {
         }
     }
 
-    private void updateTimerLabel() {
-        int minutes = timeRemainingInSeconds / 60;
-        int seconds = timeRemainingInSeconds % 60;
-        timerLabel.setText(String.format("Time: %02d:%02d", minutes, seconds));
+    public void onPlayerMove() {
+        // Called when a player makes a move on the board
+        switchTurn(); // Switch turn after a valid move
+    }
+
+    public void pauseTimer() {
+        stopCurrentPlayerTimer();
+    }
+
+    public void resumeTimer() {
+        startCurrentPlayerTimer();
     }
 }
