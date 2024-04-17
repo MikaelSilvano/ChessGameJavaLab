@@ -32,6 +32,7 @@ public class HomePage extends JFrame {
             e.printStackTrace();
         }
 
+        frame.add(new JLabel(new ImageIcon(String.valueOf(backgroundImage))));
         clickSound = new InputAudio("ButtonClick.wav");
 
         JButton playButton = new JButton(playButtonIcon);
@@ -59,7 +60,7 @@ public class HomePage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 clickSound.ButtonClickSound();
-                displayDifficultyOptions(true);
+                displayDifficultyOptions();
             }
         });
 
@@ -68,7 +69,7 @@ public class HomePage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 clickSound.ButtonClickSound();
-                startGameMultiplayerOffline(false);
+                startGameMultiplayerOffline();
             }
         });
 
@@ -79,7 +80,7 @@ public class HomePage extends JFrame {
         frame.revalidate();
     }
 
-    private void displayDifficultyOptions(boolean isSinglePlayer) {
+    private void displayDifficultyOptions() {
         frame.getContentPane().removeAll();
         frame.repaint();
         JButton easyButton = new JButton(easyDifficultyIcon);
@@ -87,7 +88,7 @@ public class HomePage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 clickSound.ButtonClickSound();
-                //startGameSingleplayer(true, "Normal");
+                startGameSingleplayerEasy();
             }
         });
 
@@ -96,7 +97,7 @@ public class HomePage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 clickSound.ButtonClickSound();
-                //startGameSingleplayer(true, "Hard");
+                startGameSingleplayerHard();
             }
         });
 
@@ -107,12 +108,16 @@ public class HomePage extends JFrame {
         frame.revalidate();
     }
 
-    private void startGameMultiplayerOffline(boolean isSinglePlayer) {
+    private void startGameMultiplayerOffline() {
         new ChessPage();
         frame.dispose();
     }
-    private void startGameSingleplayer(boolean isSinglePlayer, String difficulty) {
-        new ChessPage();
+    private void startGameSingleplayerEasy() {
+        new AIChessPageEasy();
+        frame.dispose();
+    }
+    private void startGameSingleplayerHard() {
+        new AIChessPageHard();
         frame.dispose();
     }
 

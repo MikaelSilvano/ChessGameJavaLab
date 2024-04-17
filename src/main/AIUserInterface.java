@@ -68,7 +68,7 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
         for(int i=0;i<64;i++){
         	x=-1;
         	y=-1;
-	    	 switch (AlphaBetaChess.chessBoard[i/8][i%8]) {
+	    	 switch (AIChessPageEasy.chessBoard[i/8][i%8]) {
 	    	 case "P": x=5; y=0;
              	 break;
 	         case "p": x=5; y=1;
@@ -146,19 +146,19 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 			newMouseY=e.getY()/squareSize;
 			String move;
 			if(e.getButton()==MouseEvent.BUTTON1){
-				if(newMouseY==0 && oldMouseY==1 && "P".equals(AlphaBetaChess.chessBoard[oldMouseY][oldMouseX])){
+				if(newMouseY==0 && oldMouseY==1 && "P".equals(AIChessPageEasy.chessBoard[oldMouseY][oldMouseX])){
 					//if pawn promotion
-					move=""+oldMouseX+newMouseX+AlphaBetaChess.chessBoard[newMouseY][newMouseX]+"QP";
+					move=""+oldMouseX+newMouseX+ AIChessPageEasy.chessBoard[newMouseY][newMouseX]+"QP";
 				}	
 				else{	//if a regular move
-					move=""+oldMouseY+oldMouseX+newMouseY+newMouseX+AlphaBetaChess.chessBoard[newMouseY][newMouseX];
+					move=""+oldMouseY+oldMouseX+newMouseY+newMouseX+ AIChessPageEasy.chessBoard[newMouseY][newMouseX];
 				}
-				userPossibleMoves=AlphaBetaChess.possibleMoves();
+				userPossibleMoves= AIChessPageEasy.possibleMoves();
 				if(userPossibleMoves.replaceAll(move, "").length()<userPossibleMoves.length()){
-					AlphaBetaChess.makeMove(move);
-					AlphaBetaChess.flipBoard();
-					AlphaBetaChess.makeMove(AlphaBetaChess.alphaBeta(AlphaBetaChess.globalDepth, Integer.MAX_VALUE, Integer.MIN_VALUE, "", 0));
-					AlphaBetaChess.flipBoard();
+					AIChessPageEasy.makeMove(move);
+					AIChessPageEasy.flipBoard();
+					AIChessPageEasy.makeMove(AIChessPageEasy.alphaBeta(AIChessPageEasy.globalDepth, Integer.MAX_VALUE, Integer.MIN_VALUE, "", 0));
+					AIChessPageEasy.flipBoard();
 					repaint();
 					putSound.PutPieceSound();
 				}
