@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 
+
 public class AIChessPage {
     JFrame frame;
     private JButton menuButton;
@@ -63,7 +64,6 @@ public class AIChessPage {
 
         // button yang dikanan
         JPanel buttonPanel = new JPanel(new GridBagLayout());
-        buttonPanel.setBackground(Color.BLACK);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -82,7 +82,6 @@ public class AIChessPage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 clickSound.ButtonClickSound();
-                frame.dispose(); // menutup board
                 new HomePage(); // back to menu
             }
         });
@@ -91,12 +90,25 @@ public class AIChessPage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 clickSound.ButtonClickSound();
-                System.exit(0); // exit button
+                showExitConfirmation(); // Show exit confirmation dialog
             }
         });
 
         frame.add(buttonPanel);
         frame.setVisible(true);
+    }
+
+    private void showExitConfirmation() {
+        JFrame confirmFrame = new JFrame();
+        int confirmed = JOptionPane.showConfirmDialog(confirmFrame,
+                "Apakah Anda yakin ingin keluar dari game?",
+                "Konfirmasi",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirmed == JOptionPane.YES_OPTION) {
+            frame.dispose(); // Close the main frame
+            System.exit(0); // Exit the application
+        }
     }
 
     public void updateTurnLabel(boolean isWhiteTurn) {
