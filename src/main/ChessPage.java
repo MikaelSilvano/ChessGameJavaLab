@@ -31,16 +31,6 @@ public class ChessPage {
         frame.add(board);
         frame.setVisible(true);
 
-        turnLabel = new JLabel("White's Turn");
-        turnLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        turnLabel.setForeground(Color.WHITE);
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        frame.add(turnLabel, gbc);
-
         timerLabels = new JLabel[2];
         timerLabels[0] = new JLabel("Player 1 Time: 10:00");
         timerLabels[1] = new JLabel("Player 2 Time: 10:00");
@@ -48,11 +38,23 @@ public class ChessPage {
         timerLabels[1].setFont(new Font("Arial", Font.PLAIN, 16));
         timerLabels[0].setForeground(Color.WHITE);
         timerLabels[1].setForeground(Color.WHITE);
-        gbc.anchor = GridBagConstraints.NORTHEAST;
-        gbc.gridy = 1;
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
         frame.add(timerLabels[0], gbc);
-        gbc.gridy = 2;
+        gbc.gridy = 1;
         frame.add(timerLabels[1], gbc);
+
+        GridBagConstraints gbd = new GridBagConstraints();
+        turnLabel = new JLabel("White's Turn");
+        turnLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        turnLabel.setForeground(Color.WHITE);
+        gbd.insets = new Insets(10, 10, 10, 10);
+        gbd.gridx = 1;
+        gbd.gridy = 0;
+        frame.add(turnLabel, gbd);
 
         timers = new Timer[2];
         {
@@ -67,11 +69,10 @@ public class ChessPage {
                         if (playerTimeInSeconds[playerIndex] <= 0) {
                             timers[playerIndex].stop();
                             JOptionPane.showMessageDialog(frame, "Player " + (playerIndex + 1) + " ran out of time!");
-                            // Game over logic here (e.g., declare the opposing player as the winner)
                         }
                     }
                 });
-                timers[i].setInitialDelay(0); // Start timer immediately
+                timers[i].setInitialDelay(0);
             }
             startCurrentPlayerTimer();
             frame.setVisible(true);
@@ -80,18 +81,18 @@ public class ChessPage {
             JPanel buttonPanel = new JPanel(new GridBagLayout());
             buttonPanel.setBackground(Color.BLACK);
 
-            gbc.gridx = 0;
-            gbc.gridy = 0;
-            gbc.insets = new Insets(5, 5, 5, 5); //untuk merapihkan button yang disebelah kanan
+            gbd.gridx = 2;
+            gbd.gridy = 0;
+            gbd.insets = new Insets(5, 5, 5, 5); //untuk merapihkan button yang disebelah kanan
 
             JButton menuButton = new JButton("Menu");
             menuButton.setPreferredSize(new Dimension(200, 100));
             JButton exitButton = new JButton("Exit");
             exitButton.setPreferredSize(new Dimension(200, 100));
-            buttonPanel.add(menuButton, gbc);
+            buttonPanel.add(menuButton, gbd);
 
-            gbc.gridy = 1;
-            buttonPanel.add(exitButton, gbc);
+            gbd.gridy = 1;
+            buttonPanel.add(exitButton, gbd);
 
             menuButton.addActionListener(new ActionListener() {
                 @Override
