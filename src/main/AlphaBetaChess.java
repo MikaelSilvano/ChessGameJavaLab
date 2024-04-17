@@ -188,7 +188,7 @@ public class AlphaBetaChess {
 		}
 	}
 	
-	 public static String sortMoves(String list) {
+	public static String sortMoves(String list) {
         int[] score=new int [list.length()/5];
         for (int i=0;i<list.length();i+=5) {
             makeMove(list.substring(i, i+5));
@@ -207,8 +207,8 @@ public class AlphaBetaChess {
         }
         return newListA+newListB;
 	 }
-	 
-	public static void undoMove(String move){
+
+	 public static void undoMove(String move){
 		if(move.charAt(4)!='P'){
 			//old position in array
 			int x1=Character.getNumericValue(move.charAt(0));

@@ -212,7 +212,7 @@ public class Board3 extends JPanel {
         if (king != null && checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
             int kingX = king.col * tileSize;
             int kingY = king.row * tileSize;
-            g2d.setColor(Color.RED);
+            g2d.setColor(new Color(255, 0, 0));
             g2d.fillRect(kingX, kingY, tileSize, tileSize);
         }
 
