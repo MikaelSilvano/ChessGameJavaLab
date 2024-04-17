@@ -28,6 +28,7 @@ public class ChessPage {
         currentPlayerIndex = 0;
 
         Board3 board = new Board3(this);
+        //board.setSize(new Dimension(500, 500));
         frame.add(board);
         frame.setVisible(true);
 
