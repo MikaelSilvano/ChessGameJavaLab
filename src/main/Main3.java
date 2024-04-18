@@ -7,8 +7,9 @@ public class Main3 {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new HomePage();
-                //new ChessPage();
+                //new HomePage();
+                new ChessPage();
+                //new AIChessPageEasy();
             }
         }
         );
