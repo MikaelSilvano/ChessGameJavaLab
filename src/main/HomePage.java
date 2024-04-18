@@ -17,7 +17,7 @@ public class HomePage extends JFrame {
 
     public HomePage() {
         JButton button = new JButton();
-        button.setBounds (945, 730, 200, 75);
+        button.setBounds(945, 730, 200, 75);
 
         frame = new JFrame("Master Chess");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -37,10 +37,10 @@ public class HomePage extends JFrame {
             e.printStackTrace();
         }
 
+        setTaskbarIcon();
+
         frame.add(new JLabel(new ImageIcon(String.valueOf(backgroundImage))));
         clickSound = new InputAudio("ButtonClick.wav");
-
-
 
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -110,10 +110,12 @@ public class HomePage extends JFrame {
         new ChessPage();
         frame.dispose();
     }
+
     private void startGameSingleplayerEasy() {
         new AIChessPageEasy();
         frame.dispose();
     }
+
     private void startGameSingleplayerHard() {
         new AIChessPageHard();
         frame.dispose();
@@ -122,5 +124,20 @@ public class HomePage extends JFrame {
     public void paint(Graphics g) {
         super.paint(g);
         g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+    }
+
+
+    private void setTaskbarIcon() {
+        // Load icon image
+        ImageIcon icon = new ImageIcon("src/res/pumpkin.png"); // Adjust path as needed
+
+        // Set icon for JFrame
+        setIconImage(icon.getImage());
+
+        // Set icon for top-level window (taskbar icon)
+        Frame[] frames = Frame.getFrames();
+        for (Frame frame : frames) {
+            frame.setIconImage(icon.getImage());
+        }
     }
 }

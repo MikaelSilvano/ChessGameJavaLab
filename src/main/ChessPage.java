@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
 public class ChessPage {
     private JFrame frame;
@@ -38,6 +39,12 @@ public class ChessPage {
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
         };
+        ImageIcon icon = createImageIcon();
+        if (icon != null) {
+            frame.setIconImage(icon.getImage());
+        }
+
+
         backgroundPanel.setLayout(new GridBagLayout());
         frame.setContentPane(backgroundPanel);
 
@@ -129,6 +136,7 @@ public class ChessPage {
             frame.add(buttonPanel);
         }
     }
+
     private void startCurrentPlayerTimer() {
         timers[currentPlayerIndex].start();
     }
@@ -136,11 +144,13 @@ public class ChessPage {
     private void stopCurrentPlayerTimer() {
         timers[currentPlayerIndex].stop();
     }
+
     private void updateTimerLabel(int playerIndex) {
         int minutes = playerTimeInSeconds[playerIndex] / 60;
         int seconds = playerTimeInSeconds[playerIndex] % 60;
         timerLabels[playerIndex].setText(String.format("Player %d Time: %02d:%02d", playerIndex + 1, minutes, seconds));
     }
+
     public void switchTurn() {
         stopCurrentPlayerTimer();
         currentPlayerIndex = (currentPlayerIndex + 1) % 2;
@@ -157,6 +167,7 @@ public class ChessPage {
             turnLabel.setForeground(Color.WHITE);
         }
     }
+
     public void onPlayerMove() {
         // Called when a player makes a move on the board
         switchTurn(); // Switch turn after a valid move
@@ -177,11 +188,13 @@ public class ChessPage {
         }
     }
 
-    public void pauseTimer() {
-            stopCurrentPlayerTimer();
-    }
-
-    public void resumeTimer() {
-            startCurrentPlayerTimer();
+    protected ImageIcon createImageIcon() {
+        URL imgUrl = getClass().getResource("/res/pumpkin.png");
+        if (imgUrl != null) {
+            return new ImageIcon(imgUrl);
+        } else {
+            System.err.println("Couldn't find file: " + "/res/pumpkin.png");
+            return null;
+        }
     }
 }
