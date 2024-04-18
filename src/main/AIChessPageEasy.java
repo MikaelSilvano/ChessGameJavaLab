@@ -40,7 +40,7 @@ public class AIChessPageEasy {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				clickSound.ButtonClickSound();
-				frame.dispose(); //menutup board
+				frame.dispose();
 				new HomePage(); //back to menu
 			}
 		});
@@ -50,7 +50,7 @@ public class AIChessPageEasy {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				clickSound.ButtonClickSound();
-				System.exit(0); //exit button
+				showExitConfirmationAI();
 			}
 		});
 
@@ -59,6 +59,20 @@ public class AIChessPageEasy {
 		buttonPanel.add(exitButton);
 
 		frame.getContentPane().add(buttonPanel, BorderLayout.EAST);
+	}
+
+	public void showExitConfirmationAI() {
+		JFrame confirmFrame = new JFrame();
+		int confirmed = JOptionPane.showConfirmDialog(confirmFrame,
+				"Apakah Anda yakin ingin keluar dari game?",
+				"Konfirmasi",
+				JOptionPane.YES_NO_OPTION);
+		clickSound.ButtonClickSound();
+
+		if (confirmed == JOptionPane.YES_OPTION) {
+			System.exit(0);
+
+		}
 	}
 
 	//array for representation of the chess board
