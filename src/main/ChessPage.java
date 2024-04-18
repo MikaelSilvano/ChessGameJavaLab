@@ -10,11 +10,13 @@ public class ChessPage {
     private JFrame frame;
     private JLabel turnLabel;
     private JLabel[] timerLabels;
+    private JPanel backgroundPanel;
     private Timer[] timers;
     private int[] playerTimeInSeconds;
     private int currentPlayerIndex;
     private Board3 board;
     InputAudio clickSound;
+
 
     public ChessPage() {
         frame = new JFrame();
@@ -26,6 +28,18 @@ public class ChessPage {
         clickSound = new InputAudio("src/res/ButtonClick.wav");
         playerTimeInSeconds = new int[]{600, 600};
         currentPlayerIndex = 0;
+        backgroundPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                // Draw the background image
+                ImageIcon backgroundImage = new ImageIcon("src/res/Background.png");
+                Image image = backgroundImage.getImage();
+                g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        backgroundPanel.setLayout(new GridBagLayout());
+        frame.setContentPane(backgroundPanel);
 
         Board3 board = new Board3(this);
         //board.setSize(new Dimension(500, 500));
@@ -80,7 +94,7 @@ public class ChessPage {
 
             //button yang dikanan
             JPanel buttonPanel = new JPanel(new GridBagLayout());
-            buttonPanel.setBackground(Color.BLACK);
+            buttonPanel.setOpaque(false);
 
             gbd.gridx = 2;
             gbd.gridy = 0;
@@ -111,7 +125,6 @@ public class ChessPage {
                     System.exit(0); //exit button
                 }
             });
-
             frame.add(buttonPanel);
         }
     }
