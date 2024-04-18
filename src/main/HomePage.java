@@ -3,7 +3,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import javax.swing.JButton;
+import javax.swing.JFrame;
 public class HomePage extends JFrame {
     JFrame frame;
     ImageIcon backgroundImage;
@@ -15,11 +16,15 @@ public class HomePage extends JFrame {
     InputAudio clickSound;
 
     public HomePage() {
+        JButton button = new JButton();
+        button.setBounds (945, 730, 200, 75);
+
         frame = new JFrame("Master Chess");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setBackground(Color.BLACK);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setResizable(false);
+        frame.add(button);
 
         try {
             backgroundImage = new ImageIcon("src/res/Background.png");
@@ -35,19 +40,12 @@ public class HomePage extends JFrame {
         frame.add(new JLabel(new ImageIcon(String.valueOf(backgroundImage))));
         clickSound = new InputAudio("ButtonClick.wav");
 
-        JButton playButton = new JButton(playButtonIcon);
-        playButton.setBorderPainted(false);
-        playButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                clickSound.ButtonClickSound();
-                displayOptions();
-            }
-        });
+
+
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBackground(Color.BLACK);
-        buttonPanel.add(playButton);
+
         frame.add(buttonPanel, BorderLayout.SOUTH);
         frame.setVisible(true);
     }
