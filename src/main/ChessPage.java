@@ -58,9 +58,9 @@ public class ChessPage {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.gridx = 1;
         gbc.gridy = 0;
-        frame.add(timerLabels[0], gbc);
-        gbc.gridy = 1;
         frame.add(timerLabels[1], gbc);
+        gbc.gridy = 1;
+        frame.add(timerLabels[0], gbc);
 
         GridBagConstraints gbd = new GridBagConstraints();
         turnLabel = new JLabel("White's Turn");
