@@ -108,6 +108,7 @@ public class AIChessPage {
         if (confirmed == JOptionPane.YES_OPTION) {
             frame.dispose(); // Close the main frame
             System.exit(0); // Exit the application
+
         }
     }
 
