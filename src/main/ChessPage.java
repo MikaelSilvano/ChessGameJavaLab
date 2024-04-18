@@ -114,7 +114,8 @@ public class ChessPage {
                 public void actionPerformed(ActionEvent e) {
                     clickSound.ButtonClickSound();
                     frame.dispose(); //menutup board
-                    new HomePage(); //back to menu
+                    showExitConfirmation();
+                    //new HomePage(); //back to menu
                 }
             });
 
@@ -122,7 +123,8 @@ public class ChessPage {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     clickSound.ButtonClickSound();
-                    System.exit(0); //exit button
+                    showExitConfirmation();
+                    //System.exit(0); //exit button
                 }
             });
             frame.add(buttonPanel);
@@ -159,6 +161,20 @@ public class ChessPage {
     public void onPlayerMove() {
         // Called when a player makes a move on the board
         switchTurn(); // Switch turn after a valid move
+    }
+
+    private void showExitConfirmation() {
+        JFrame confirmFrame = new JFrame();
+        int confirmed = JOptionPane.showConfirmDialog(confirmFrame,
+                "Apakah Anda yakin ingin keluar dari game?",
+                "Konfirmasi",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirmed == JOptionPane.YES_OPTION) {
+            frame.dispose(); // Close the main frame
+            System.exit(0); // Exit the application
+
+        }
     }
 
     public void pauseTimer() {
