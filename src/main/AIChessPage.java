@@ -82,6 +82,7 @@ public class AIChessPage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 clickSound.ButtonClickSound();
+                frame.dispose();
                 new HomePage(); // back to menu
             }
         });

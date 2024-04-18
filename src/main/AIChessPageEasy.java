@@ -40,6 +40,7 @@ public class AIChessPageEasy {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				clickSound.ButtonClickSound();
+				frame.dispose();
 				new HomePage(); //back to menu
 			}
 		});
@@ -60,7 +61,7 @@ public class AIChessPageEasy {
 		frame.getContentPane().add(buttonPanel, BorderLayout.EAST);
 	}
 
-	private void showExitConfirmationAI() {
+	public void showExitConfirmationAI() {
 		JFrame confirmFrame = new JFrame();
 		int confirmed = JOptionPane.showConfirmDialog(confirmFrame,
 				"Apakah Anda yakin ingin keluar dari game?",
