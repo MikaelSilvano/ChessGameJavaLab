@@ -113,9 +113,7 @@ public class ChessPage {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     clickSound.ButtonClickSound();
-                    frame.dispose(); //menutup board
-                    showExitConfirmation();
-                    //new HomePage(); //back to menu
+                    new HomePage(); //back to menu
                 }
             });
 
@@ -163,12 +161,13 @@ public class ChessPage {
         switchTurn(); // Switch turn after a valid move
     }
 
-    private void showExitConfirmation() {
+    public void showExitConfirmation() {
         JFrame confirmFrame = new JFrame();
         int confirmed = JOptionPane.showConfirmDialog(confirmFrame,
                 "Apakah Anda yakin ingin keluar dari game?",
                 "Konfirmasi",
                 JOptionPane.YES_NO_OPTION);
+        clickSound.ButtonClickSound();
 
         if (confirmed == JOptionPane.YES_OPTION) {
             frame.dispose(); // Close the main frame

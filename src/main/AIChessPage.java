@@ -90,7 +90,7 @@ public class AIChessPage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 clickSound.ButtonClickSound();
-                showExitConfirmation(); // Show exit confirmation dialog
+                showExitConfirmationA(); // Show exit confirmation dialog
             }
         });
 
@@ -98,12 +98,13 @@ public class AIChessPage {
         frame.setVisible(true);
     }
 
-    private void showExitConfirmation() {
+    private void showExitConfirmationA() {
         JFrame confirmFrame = new JFrame();
         int confirmed = JOptionPane.showConfirmDialog(confirmFrame,
                 "Apakah Anda yakin ingin keluar dari game?",
                 "Konfirmasi",
                 JOptionPane.YES_NO_OPTION);
+        clickSound.ButtonClickSound();
 
         if (confirmed == JOptionPane.YES_OPTION) {
             frame.dispose(); // Close the main frame
