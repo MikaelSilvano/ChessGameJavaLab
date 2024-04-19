@@ -179,9 +179,9 @@ public class Board3 extends JPanel {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if ((i + j) % 2 == 0) {
-                    g2d.setColor(new Color(240, 217, 181));
+                    g2d.setColor(new Color(210, 81, 66));
                 } else {
-                    g2d.setColor(new Color(181, 136, 99));
+                    g2d.setColor(new Color(57, 47, 79));
                 }
                 g2d.fillRect(i * tileSize, j * tileSize, tileSize, tileSize);
             }

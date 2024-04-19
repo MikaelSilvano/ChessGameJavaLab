@@ -557,4 +557,14 @@ public class AIBoard {
 
         return true;
     }
+
+    public boolean isMoveValid(int sourceX, int sourceY, int destX, int destY) {
+        return false;
+    }
+
+    public void makeAIMove() {
+    }
+
+    public void makeMove(int sourceX, int sourceY, int destX, int destY) {
+    }
 }
