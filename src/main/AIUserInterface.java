@@ -14,7 +14,7 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 	InputAudio eatSound;
 	InputAudio putSound;
 	InputAudio pickSound;
-	private String userPossibleMoves;
+	private static String userPossibleMoves;
 	public AIUserInterface() {
 		promotionSound = new InputAudio("src/res/PawnPromotion.wav");
 		eatSound = new InputAudio("src/res/EatPieces.wav");
@@ -68,7 +68,7 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
         for(int i=0;i<64;i++){
         	x=-1;
         	y=-1;
-	    	 switch (AIChessPageEasy.chessBoard[i/8][i%8]) {
+	    	 switch (AIBoard.chessBoard[i/8][i%8]) {
 	    	 case "P": x=5; y=0;
              	 break;
 	         case "p": x=5; y=1;
@@ -146,19 +146,19 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 			newMouseY=e.getY()/squareSize;
 			String move;
 			if(e.getButton()==MouseEvent.BUTTON1){
-				if(newMouseY==0 && oldMouseY==1 && "P".equals(AIChessPageEasy.chessBoard[oldMouseY][oldMouseX])){
+				if(newMouseY==0 && oldMouseY==1 && "P".equals(AIBoard.chessBoard[oldMouseY][oldMouseX])){
 					//if pawn promotion
-					move=""+oldMouseX+newMouseX+ AIChessPageEasy.chessBoard[newMouseY][newMouseX]+"QP";
+					move=""+oldMouseX+newMouseX+ AIBoard.chessBoard[newMouseY][newMouseX]+"QP";
 				}	
 				else{	//if a regular move
-					move=""+oldMouseY+oldMouseX+newMouseY+newMouseX+ AIChessPageEasy.chessBoard[newMouseY][newMouseX];
+					move=""+oldMouseY+oldMouseX+newMouseY+newMouseX+ AIBoard.chessBoard[newMouseY][newMouseX];
 				}
-				userPossibleMoves= AIChessPageEasy.possibleMoves();
+				userPossibleMoves= AIBoard.possibleMoves();
 				if(userPossibleMoves.replaceAll(move, "").length()<userPossibleMoves.length()){
-					AIChessPageEasy.makeMove(move);
-					AIChessPageEasy.flipBoard();
-					AIChessPageEasy.makeMove(AIChessPageEasy.alphaBeta(AIChessPageEasy.globalDepth, Integer.MAX_VALUE, Integer.MIN_VALUE, "", 0));
-					AIChessPageEasy.flipBoard();
+					AIBoard.makeMove(move);
+					AIBoard.flipBoard();
+					AIBoard.makeMove(AIBoard.alphaBeta(AIBoard.globalDepth, Integer.MAX_VALUE, Integer.MIN_VALUE, "", 0));
+					AIBoard.flipBoard();
 					repaint();
 					putSound.PutPieceSound();
 				}

@@ -71,42 +71,42 @@ public class AIRating {
 		int pieceAvailability=ratePieceAvailability();
 		
 		rating+=rateAttack()+pieceAvailability+rateMovability(movesAvailableCount,depth)+ratePositional(pieceAvailability);
-		AIChessPageEasy.flipBoard();
+		AIBoard.flipBoard();
 		rating-=rateAttack()-pieceAvailability-rateMovability(movesAvailableCount,depth)-ratePositional(pieceAvailability);
-		AIChessPageEasy.flipBoard();
+		AIBoard.flipBoard();
 		return -(rating+depth*50);
 	}
 	
 	public static int rateAttack(){
 		int rating=0;
-		int tempKingPos= AIChessPageEasy.kingPositionA;
+		int tempKingPos= AIBoard.kingPositionA;
 		
         for (int i=0;i<64;i++) {
-            switch (AIChessPageEasy.chessBoard[i/8][i%8]) {
-                case "P": AIChessPageEasy.kingPositionA=i;
-	                	if(!AIChessPageEasy.kingSafe())
+            switch (AIBoard.chessBoard[i/8][i%8]) {
+                case "P": AIBoard.kingPositionA=i;
+	                	if(!AIBoard.kingSafe())
 	                		rating-=64;
 	                    break;
-                case "R": AIChessPageEasy.kingPositionA=i;
-		            	if(!AIChessPageEasy.kingSafe())
+                case "R": AIBoard.kingPositionA=i;
+		            	if(!AIBoard.kingSafe())
 		            		rating-=500;
 		                break;                    
-                case "K": AIChessPageEasy.kingPositionA=i;
-		            	if(!AIChessPageEasy.kingSafe())
+                case "K": AIBoard.kingPositionA=i;
+		            	if(!AIBoard.kingSafe())
 		            		rating-=300;
                     break;
-                case "B": AIChessPageEasy.kingPositionA=i;
-		            	if(!AIChessPageEasy.kingSafe())
+                case "B": AIBoard.kingPositionA=i;
+		            	if(!AIBoard.kingSafe())
 		            		rating-=300;
                     break;
-                case "Q": AIChessPageEasy.kingPositionA=i;
-		            	if(!AIChessPageEasy.kingSafe())
+                case "Q": AIBoard.kingPositionA=i;
+		            	if(!AIBoard.kingSafe())
 		            		rating-=900;
                     break;
             }
         }
-        AIChessPageEasy.kingPositionA=tempKingPos;
-        if(!AIChessPageEasy.kingSafe())
+		AIBoard.kingPositionA=tempKingPos;
+        if(!AIBoard.kingSafe())
         	rating-=200;
         return rating/2;
 	}
@@ -115,7 +115,7 @@ public class AIRating {
 	public static int ratePieceAvailability(){
 		int rating=0, bishopCount=0;
         for (int i=0;i<64;i++) {
-            switch (AIChessPageEasy.chessBoard[i/8][i%8]) {
+            switch (AIBoard.chessBoard[i/8][i%8]) {
                 case "P": rating+=100;
                     break;
                 case "R": rating+=500;
@@ -141,7 +141,7 @@ public class AIRating {
 		int rating=0;
 		rating+=movesAvailableCount;	//5 points for each possible move
 		if(movesAvailableCount==0){	//checkmate or stalemate condition
-			if(!AIChessPageEasy.kingSafe()){	//checkmate
+			if(!AIBoard.kingSafe()){	//checkmate
 				rating+=-200000*depth;
 			}else {	//stalemate
 				rating+=-150000*depth;
@@ -153,7 +153,7 @@ public class AIRating {
 	public static int ratePositional(int material) {
         int rating=0;
         for (int i=0;i<64;i++) {
-            switch (AIChessPageEasy.chessBoard[i/8][i%8]) {
+            switch (AIBoard.chessBoard[i/8][i%8]) {
                 case "P": rating+=pawnBoard[i/8][i%8];
                     break;
                 case "R": rating+=rookBoard[i/8][i%8];
@@ -164,8 +164,8 @@ public class AIRating {
                     break;
                 case "Q": rating+=queenBoard[i/8][i%8];
                     break;
-                case "A": if (material>=1750) {rating+=kingMidBoard[i/8][i%8]; rating+= AIChessPageEasy.possibleA(AIChessPageEasy.kingPositionA).length()*10;} else
-                {rating+=kingEndBoard[i/8][i%8]; rating+= AIChessPageEasy.possibleA(AIChessPageEasy.kingPositionA).length()*30;}
+                case "A": if (material>=1750) {rating+=kingMidBoard[i/8][i%8]; rating+= AIBoard.possibleA(AIBoard.kingPositionA).length()*10;} else
+                {rating+=kingEndBoard[i/8][i%8]; rating+= AIBoard.possibleA(AIBoard.kingPositionA).length()*30;}
                     break;
             }
         }
