@@ -145,6 +145,50 @@ public class Board3 extends JPanel {
         }
         return null;
     }
+    public boolean moveValid(Piece piece, int newCol, int newRow) {
+        if (sameTeam(piece, getPiece(newCol, newRow))) {
+            return false;
+        }
+
+        Move move = new Move(this, piece, newCol, newRow);
+
+        if (!piece.isValidMovement(newCol, newRow)) {
+            return false;
+        }
+
+        if (piece.moveCollidesWithPiece(newCol, newRow)) {
+            return false;
+        }
+
+        return !checkScanner.isKingChecked(move);
+    }
+
+    public boolean isCheckmate(boolean isWhite) {
+        Piece king = findKing(isWhite);
+
+        // Check if the king is in check
+        if (checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
+            // Check for legal moves for all pieces of the current player
+            for (Piece piece : pieceList) {
+                if (piece.isWhite == isWhite) {
+                    for (int i = 0; i < cols; i++) {
+                        for (int j = 0; j < rows; j++) {
+                            if (moveValid(piece, i, j)) {
+                                // If there's at least one legal move, it's not checkmate
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            // If no legal moves are found for any piece, it's checkmate
+            return true;
+        }
+
+        // If the king is not in check, it's not checkmate
+        return false;
+    }
+
 
     public void addPieces() {
         // Adding pieces for the initial setup

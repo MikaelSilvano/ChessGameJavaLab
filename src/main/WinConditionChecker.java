@@ -1,3 +1,4 @@
+/*
 // WinConditionChecker.java
 package main;
 
@@ -21,8 +22,8 @@ public class WinConditionChecker {
         int kingY = king.row;
 
         // Check if the king cannot move
-        for (Move move : king.isValidMovement(board, kingX, kingY)) {
-            Board3 testBoard = new Board3(board);
+        for (Move move : king.isValidMovement(this, kingX, kingY)) {
+            Board3 testBoard = new Board3(this);
             testBoard.makeMove(move);
             if (!scanner.isKingChecked(isWhiteTurn)) {
                 return false; // King has a valid move, game continues
@@ -33,3 +34,6 @@ public class WinConditionChecker {
         return true;
     }
 }
+
+ */
+

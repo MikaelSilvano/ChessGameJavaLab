@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.net.URL;
 
 public class ChessPage {
+    private CheckScanner checkScanner;
     private JFrame frame;
     private JLabel turnLabel;
     private JLabel[] timerLabels;
@@ -48,8 +49,8 @@ public class ChessPage {
         backgroundPanel.setLayout(new GridBagLayout());
         frame.setContentPane(backgroundPanel);
 
-        Board3 board = new Board3(this);
-        //board.setSize(new Dimension(500, 500));
+        this.board = new Board3(this);
+        this.checkScanner = new CheckScanner(board);
         frame.add(board);
         frame.setVisible(true);
 
@@ -161,27 +162,29 @@ public class ChessPage {
     public void updateTurnLabel(boolean isWhiteTurn) {
         if (isWhiteTurn) {
             turnLabel.setText("White's Turn");
-            turnLabel.setForeground(Color.WHITE);
         } else {
             turnLabel.setText("Black's Turn");
-            turnLabel.setForeground(Color.WHITE);
+        }
+
+        // Check if the current player is in check
+        boolean isCheck = checkScanner.isKingChecked(new Move(board, board.findKing(isWhiteTurn), -1, -1));
+        if (isCheck) {
+            // Check if the current player is in checkmate
+            boolean isCheckmate = board.isCheckmate(isWhiteTurn);
+            if (isCheckmate) {
+                turnLabel.setText("Checkmate!"); // Display "Checkmate!" if the player is in checkmate
+            } else {
+                turnLabel.setText("Check!"); // Display "Check!" if the player is in check
+            }
+            turnLabel.setForeground(Color.RED);
+        } else {
+            turnLabel.setForeground(Color.WHITE); // Set the text color back to white
         }
     }
 
     public void onPlayerMove() {
         // Called when a player makes a move on the board
         switchTurn(); // Switch turn after a valid move
-
-        // Check for win condition
-        boolean isWhiteTurn = currentPlayerIndex == 0; // Change here to currentPlayerIndex == 0
-        boolean isWin = WinConditionChecker.isWin(board, isWhiteTurn);
-
-        if (isWin) {
-            String message = isWhiteTurn ? "White wins!" : "Black wins!";
-            JOptionPane.showMessageDialog(frame, message);
-            frame.dispose(); // Close the main frame
-            new HomePage(); // Go back to menu
-        }
     }
 
 

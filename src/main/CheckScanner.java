@@ -122,8 +122,4 @@ public class CheckScanner {
             return false;
         }
     }
-
-    public boolean isKingChecked(boolean isWhiteTurn) {
-        return isWhiteTurn;
-    }
 }
