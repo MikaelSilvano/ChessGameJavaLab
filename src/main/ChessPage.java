@@ -12,6 +12,7 @@ public class ChessPage {
     private JFrame frame;
     private JLabel turnLabel;
     private JLabel[] timerLabels;
+    private JLabel checkStatusLabel;
     private JPanel backgroundPanel;
     private Timer[] timers;
     private int[] playerTimeInSeconds;
@@ -78,6 +79,15 @@ public class ChessPage {
         gbd.gridx = 1;
         gbd.gridy = 0;
         frame.add(turnLabel, gbd);
+
+        checkStatusLabel = new JLabel("");
+        checkStatusLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        checkStatusLabel.setForeground(Color.RED);
+        GridBagConstraints gbcCheckStatusLabel = new GridBagConstraints();
+        gbcCheckStatusLabel.insets = new Insets(10, 10, 10, 10);
+        gbcCheckStatusLabel.gridx = 1;
+        gbcCheckStatusLabel.gridy = 1;
+        frame.add(checkStatusLabel, gbcCheckStatusLabel);
 
         timers = new Timer[2];
         {
@@ -165,20 +175,14 @@ public class ChessPage {
         } else {
             turnLabel.setText("Black's Turn");
         }
-
-        // Check if the current player is in check
-        boolean isCheck = checkScanner.isKingChecked(new Move(board, board.findKing(isWhiteTurn), -1, -1));
-        if (isCheck) {
-            // Check if the current player is in checkmate
-            boolean isCheckmate = board.isCheckmate(isWhiteTurn);
-            if (isCheckmate) {
-                turnLabel.setText("Checkmate!"); // Display "Checkmate!" if the player is in checkmate
-            } else {
-                turnLabel.setText("Check!"); // Display "Check!" if the player is in check
-            }
-            turnLabel.setForeground(Color.RED);
+    }
+    public void updateStatusLabel(boolean isWhiteChecked, boolean isCheckmate) {
+        if (isCheckmate) {
+            checkStatusLabel.setText(isWhiteChecked ? "White is in Checkmate!" : "Black is in Checkmate!");
+        } else if (isWhiteChecked) {
+            checkStatusLabel.setText("White is in Check!");
         } else {
-            turnLabel.setForeground(Color.WHITE); // Set the text color back to white
+            checkStatusLabel.setText("Black is in Check!");
         }
     }
 
