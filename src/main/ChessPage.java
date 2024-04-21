@@ -171,7 +171,19 @@ public class ChessPage {
     public void onPlayerMove() {
         // Called when a player makes a move on the board
         switchTurn(); // Switch turn after a valid move
+
+        // Check for win condition
+        boolean isWhiteTurn = currentPlayerIndex == 0; // Change here to currentPlayerIndex == 0
+        boolean isWin = WinConditionChecker.isWin(board, isWhiteTurn);
+
+        if (isWin) {
+            String message = isWhiteTurn ? "White wins!" : "Black wins!";
+            JOptionPane.showMessageDialog(frame, message);
+            frame.dispose(); // Close the main frame
+            new HomePage(); // Go back to menu
+        }
     }
+
 
     public void showExitConfirmation() {
         JFrame confirmFrame = new JFrame();
