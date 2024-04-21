@@ -1,8 +1,10 @@
-package main;
+
+        package main;
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
+        import java.awt.*;
+        import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 public class HomePage extends JFrame {
@@ -16,15 +18,16 @@ public class HomePage extends JFrame {
     InputAudio clickSound;
 
     public HomePage() {
-        JButton button = new JButton();
-        button.setBounds(945, 730, 200, 75);
+        JButton playButton = new JButton(playButtonIcon);
+        playButton.setBounds (945, 730, 200, 75);
+        clickSound = new InputAudio("ButtonClick.wav");
 
         frame = new JFrame("Master Chess");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setBackground(Color.BLACK);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setResizable(false);
-        frame.add(button);
+        frame.add(playButton);
 
         try {
             backgroundImage = new ImageIcon("src/res/Background.png");
@@ -37,16 +40,26 @@ public class HomePage extends JFrame {
             e.printStackTrace();
         }
 
-        setTaskbarIcon();
-
         frame.add(new JLabel(new ImageIcon(String.valueOf(backgroundImage))));
-        clickSound = new InputAudio("ButtonClick.wav");
 
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+       // playButton.setBorderPainted(false);
+        playButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clickSound.ButtonClickSound();
+                displayOptions();
+            }
+        });
+
+
+
+        /*JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBackground(Color.BLACK);
+        buttonPanel.add(playButton);*/
 
-        frame.add(buttonPanel, BorderLayout.SOUTH);
+        //frame.add(buttonPanel, BorderLayout.SOUTH);
         frame.setVisible(true);
     }
 
@@ -110,12 +123,10 @@ public class HomePage extends JFrame {
         new ChessPage();
         frame.dispose();
     }
-
     private void startGameSingleplayerEasy() {
         new AIChessPageEasy();
         frame.dispose();
     }
-
     private void startGameSingleplayerHard() {
         new AIChessPageHard();
         frame.dispose();
@@ -124,20 +135,5 @@ public class HomePage extends JFrame {
     public void paint(Graphics g) {
         super.paint(g);
         g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
-    }
-
-
-    private void setTaskbarIcon() {
-        // Load icon image
-        ImageIcon icon = new ImageIcon("src/res/pumpkin.png"); // Adjust path as needed
-
-        // Set icon for JFrame
-        setIconImage(icon.getImage());
-
-        // Set icon for top-level window (taskbar icon)
-        Frame[] frames = Frame.getFrames();
-        for (Frame frame : frames) {
-            frame.setIconImage(icon.getImage());
-        }
     }
 }

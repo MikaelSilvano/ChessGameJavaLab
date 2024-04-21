@@ -8,7 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class ChessboardPanel extends JPanel {
-    private static final int SQUARE_SIZE = 105;
+    private static final int SQUARE_SIZE = 50;
     private AIBoard aiBoard;
     private int selectedSquare = -1; // Stores the index of the currently selected square (-1 if none)
 
