@@ -42,11 +42,6 @@ public class ChessPage {
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
         };
-        ImageIcon icon = createImageIcon();
-        if (icon != null) {
-            frame.setIconImage(icon.getImage());
-        }
-
 
         backgroundPanel.setLayout(new GridBagLayout());
         frame.setContentPane(backgroundPanel);
@@ -141,10 +136,23 @@ public class ChessPage {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     clickSound.ButtonClickSound();
-
                     showExitConfirmation();
                     //System.exit(0); //exit button
                 }
+                private void showExitConfirmation() {
+                    int confirmed = JOptionPane.showConfirmDialog(frame,
+                            "Are you sure you want to exit the game?",
+                            "Exit Confirmation",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            createImageIcon("/res/pump.png"));
+
+                    if (confirmed == JOptionPane.YES_OPTION) {
+                        frame.dispose(); // Close the main frame
+                        System.exit(0);
+                    }
+                }// Exit the application
+
             });
             frame.add(buttonPanel);
         }
@@ -210,7 +218,7 @@ public class ChessPage {
         }
     }
 
-    protected ImageIcon createImageIcon() {
+    public ImageIcon createImageIcon(String s) {
         URL imgUrl = getClass().getResource("/res/pump.png");
         if (imgUrl != null) {
             return new ImageIcon(imgUrl);
