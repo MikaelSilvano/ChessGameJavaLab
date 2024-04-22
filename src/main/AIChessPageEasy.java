@@ -21,7 +21,7 @@ public class AIChessPageEasy {
 		frame.setResizable(false);
 
 		AIBoard aiBoard = new AIBoard();
-		ChessboardPanel chessboardPanel = new ChessboardPanel(aiBoard);
+		ChessBoardPanel chessboardPanel = new ChessBoardPanel(aiBoard);
 
 		JPanel buttonPanel = new JPanel();
 		menuButton = new JButton("Menu");
@@ -49,7 +49,7 @@ public class AIChessPageEasy {
 
 		frame.setLayout(new BorderLayout());
 
-		frame.add(chessboardPanel, BorderLayout.WEST);
+		frame.add(chessboardPanel, BorderLayout.CENTER);
 
 		frame.add(buttonPanel, BorderLayout.EAST);
 

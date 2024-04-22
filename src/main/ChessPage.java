@@ -37,6 +37,7 @@ public class ChessPage {
                 super.paintComponent(g);
                 // Draw the background image
                 ImageIcon backgroundImage = new ImageIcon("src/res/Background.png");
+                ImageIcon pumpkinImage = new ImageIcon("src/res/pump.png");
                 Image image = backgroundImage.getImage();
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
@@ -140,6 +141,7 @@ public class ChessPage {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     clickSound.ButtonClickSound();
+
                     showExitConfirmation();
                     //System.exit(0); //exit button
                 }
@@ -147,6 +149,7 @@ public class ChessPage {
             frame.add(buttonPanel);
         }
     }
+
 
     private void startCurrentPlayerTimer() {
         timers[currentPlayerIndex].start();
@@ -208,11 +211,11 @@ public class ChessPage {
     }
 
     protected ImageIcon createImageIcon() {
-        URL imgUrl = getClass().getResource("/res/pumpkin.png");
+        URL imgUrl = getClass().getResource("/res/pump.png");
         if (imgUrl != null) {
             return new ImageIcon(imgUrl);
         } else {
-            System.err.println("Couldn't find file: " + "/res/pumpkin.png");
+            System.err.println("Couldn't find file: " + "/res/pump.png");
             return null;
         }
     }
