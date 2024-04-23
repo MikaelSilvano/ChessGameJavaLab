@@ -9,6 +9,8 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import static main.AIChessPageEasy.*;
+
 public class AIUserInterface extends JPanel implements MouseListener, MouseMotionListener{
 	InputAudio promotionSound;
 	InputAudio eatSound;
@@ -68,7 +70,7 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
         for(int i=0;i<64;i++){
         	x=-1;
         	y=-1;
-	    	 switch (AIBoard.chessBoard[i/8][i%8]) {
+	    	 switch (chessBoard[i/8][i%8]) {
 	    	 case "P": x=5; y=0;
              	 break;
 	         case "p": x=5; y=1;
@@ -146,19 +148,19 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 			newMouseY=e.getY()/squareSize;
 			String move;
 			if(e.getButton()==MouseEvent.BUTTON1){
-				if(newMouseY==0 && oldMouseY==1 && "P".equals(AIBoard.chessBoard[oldMouseY][oldMouseX])){
+				if(newMouseY==0 && oldMouseY==1 && "P".equals(chessBoard[oldMouseY][oldMouseX])){
 					//if pawn promotion
-					move=""+oldMouseX+newMouseX+ AIBoard.chessBoard[newMouseY][newMouseX]+"QP";
-				}	
-				else{	//if a regular move
-					move=""+oldMouseY+oldMouseX+newMouseY+newMouseX+ AIBoard.chessBoard[newMouseY][newMouseX];
+					move=""+oldMouseX+newMouseX+ chessBoard[newMouseY][newMouseX]+"QP";
 				}
-				userPossibleMoves= AIBoard.possibleMoves();
+				else{	//if a regular move
+					move=""+oldMouseY+oldMouseX+newMouseY+newMouseX+ chessBoard[newMouseY][newMouseX];
+				}
+				userPossibleMoves= possibleMoves();
 				if(userPossibleMoves.replaceAll(move, "").length()<userPossibleMoves.length()){
-					AIBoard.makeMove(move);
-					AIBoard.flipBoard();
-					AIBoard.makeMove(AIBoard.alphaBeta(AIBoard.globalDepth, Integer.MAX_VALUE, Integer.MIN_VALUE, "", 0));
-					AIBoard.flipBoard();
+					makeMove(move);
+					flipBoard();
+					makeMove(alphaBeta(globalDepth, Integer.MAX_VALUE, Integer.MIN_VALUE, "", 0));
+					flipBoard();
 					repaint();
 					putSound.PutPieceSound();
 				}

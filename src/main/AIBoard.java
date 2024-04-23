@@ -1,18 +1,19 @@
+/*
 package main;
 
 public class AIBoard {
     // array for representation of the chess board
-    /*
+
      * color=WHITE/black pawn=P/p knight=K/k rook=R/r queen=Q/q king=A/a
-     */
+
     static String[][] chessBoard = { { "r", "k", "b", "q", "a", "b", "k", "r" },
-                                     { "p", "p", "p", "p", "p", "p", "p", "p" },
-                                     { " ", " ", " ", " ", " ", " ", " ", " " },
-                                     { " ", " ", " ", " ", " ", " ", " ", " " },
-                                     { " ", " ", " ", " ", " ", " ", " ", " " },
-                                     { " ", " ", " ", " ", " ", " ", " ", " " },
-                                     { "P", "P", "P", "P", "P", "P", "P", "P" },
-                                     { "R", "K", "B", "Q", "A", "B", "K", "R" } };
+            { "p", "p", "p", "p", "p", "p", "p", "p" },
+            { " ", " ", " ", " ", " ", " ", " ", " " },
+            { " ", " ", " ", " ", " ", " ", " ", " " },
+            { " ", " ", " ", " ", " ", " ", " ", " " },
+            { " ", " ", " ", " ", " ", " ", " ", " " },
+            { "P", "P", "P", "P", "P", "P", "P", "P" },
+            { "R", "K", "B", "Q", "A", "B", "K", "R" } };
 
     static int kingPositionA, kingPositiona; // white and black king's position in the array
     static int globalDepth = 4; // depth of best move searching
@@ -168,7 +169,7 @@ public class AIBoard {
         /*
 		 	checks for each square on the chess board the further possible moves of the chess pieces
 			returns the possible move for each piece and adds it to the moveList
-		*/
+
         String moveList="";
         for (int i=0; i<64; i++) {
             switch (chessBoard[i/8][i%8]) {
@@ -568,3 +569,4 @@ public class AIBoard {
     public void makeMove(int sourceX, int sourceY, int destX, int destY) {
     }
 }
+*/
