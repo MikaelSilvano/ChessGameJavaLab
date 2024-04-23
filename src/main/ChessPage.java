@@ -17,7 +17,7 @@ public class ChessPage {
     private Timer[] timers;
     private int[] playerTimeInSeconds;
     private int currentPlayerIndex;
-    private Board3 board;
+    private Board board;
     InputAudio clickSound;
 
 
@@ -46,7 +46,7 @@ public class ChessPage {
         backgroundPanel.setLayout(new GridBagLayout());
         frame.setContentPane(backgroundPanel);
 
-        this.board = new Board3(this);
+        this.board = new Board(this);
         this.checkScanner = new CheckScanner(board);
         frame.add(board);
         frame.setVisible(true);

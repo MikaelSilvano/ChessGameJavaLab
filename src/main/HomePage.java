@@ -19,7 +19,7 @@ public class HomePage extends JFrame {
         JButton button = new JButton();
         button.setBounds(945, 730, 200, 75);
 
-        frame = new JFrame("Master Chess");
+        frame = new JFrame("Catur Mas Putra");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setBackground(Color.BLACK);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);

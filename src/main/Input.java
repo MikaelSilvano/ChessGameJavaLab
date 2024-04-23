@@ -2,17 +2,15 @@
 //input 
 package main;
 import pieces.Piece;
-import javax.swing.*;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
 public class Input extends MouseAdapter {
-    Board3 board;
+    Board board;
     InputAudio putSound;
     InputAudio pickSound;
-    public Input(Board3 board) {
+    public Input(Board board) {
         this.board = board;
         pickSound = new InputAudio("src/res/PickUpPieces.wav");
         putSound = new InputAudio("src/res/PutPieces.wav");

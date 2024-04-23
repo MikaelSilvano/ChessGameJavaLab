@@ -9,7 +9,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-public class Board3 extends JPanel {
+public class Board extends JPanel {
     public int tileSize = 90;
     int cols = 8;
     int rows = 8;
@@ -23,7 +23,7 @@ public class Board3 extends JPanel {
     InputAudio eatSound;
     private ChessPage chessPage; // Reference to the ChessPage
 
-    public Board3(ChessPage chessPage) {
+    public Board(ChessPage chessPage) {
         this.chessPage = chessPage;
         this.setPreferredSize(new Dimension(cols * tileSize, rows * tileSize));
         this.addMouseListener(input);

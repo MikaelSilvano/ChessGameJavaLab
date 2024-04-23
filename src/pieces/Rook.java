@@ -1,12 +1,12 @@
 //rook
 package pieces;
 
-import main.Board3;
+import main.Board;
 
 import java.awt.image.BufferedImage;
 
 public class Rook extends Piece {
-    public Rook(Board3 board, int col, int row, boolean isWhite) {
+    public Rook(Board board, int col, int row, boolean isWhite) {
         super(board);
         this.col = col;
         this.row = row;

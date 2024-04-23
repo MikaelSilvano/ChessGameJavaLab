@@ -6,12 +6,12 @@ import pieces.Piece;
 
 public class WinConditionChecker {
 
-    public static boolean isWin(Board3 board, boolean isWhiteTurn) {
+    public static boolean isWin(Board board, boolean isWhiteTurn) {
         CheckScanner scanner = new CheckScanner(board); // Create local variable scanner
         return scanner.isKingChecked(isWhiteTurn) || isKingStuck(board, isWhiteTurn);
     }
 
-    private static boolean isKingStuck(Board3 board, boolean isWhiteTurn) {
+    private static boolean isKingStuck(Board board, boolean isWhiteTurn) {
         CheckScanner scanner = new CheckScanner(board); // Create local variable scanner
         Piece king = board.findKing(isWhiteTurn);
         if (king == null) {
@@ -23,7 +23,7 @@ public class WinConditionChecker {
 
         // Check if the king cannot move
         for (Move move : king.isValidMovement(this, kingX, kingY)) {
-            Board3 testBoard = new Board3(this);
+            Board testBoard = new Board(this);
             testBoard.makeMove(move);
             if (!scanner.isKingChecked(isWhiteTurn)) {
                 return false; // King has a valid move, game continues

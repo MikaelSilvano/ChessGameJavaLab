@@ -1,7 +1,7 @@
 //piece
 package pieces;
 
-import main.Board3;
+import main.Board;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -29,13 +29,13 @@ public class Piece {
 
     Image sprite; //ngambil bagian2 piece
 
-    Board3 board;
+    Board board;
 
-    public Piece(Board3 board) {
+    public Piece(Board board) {
         this.board = board;
     }
 
-    public boolean canMove(Board3 board, int newCol, int newRow, int oldCol, int oldRow, boolean isWhiteTurn) {
+    public boolean canMove(Board board, int newCol, int newRow, int oldCol, int oldRow, boolean isWhiteTurn) {
         // Check if the new position is within the bounds of the board
         if (newCol < 0 || newCol >= 8 || newRow < 0 || newRow >= 8) {
             return false;

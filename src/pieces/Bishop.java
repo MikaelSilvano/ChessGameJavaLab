@@ -1,12 +1,12 @@
 //bishop
 package pieces;
 
-import main.Board3;
+import main.Board;
 
 import java.awt.image.BufferedImage;
 
 public class Bishop extends Piece {
-    public Bishop(Board3 board, int col, int row, boolean isWhite) {
+    public Bishop(Board board, int col, int row, boolean isWhite) {
         super(board);
         this.col = col;
         this.row = row;

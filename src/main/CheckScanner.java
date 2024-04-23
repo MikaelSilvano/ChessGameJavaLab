@@ -4,8 +4,8 @@ package main;
 import pieces.Piece;
 
 public class CheckScanner {
-    Board3 board;
-    public CheckScanner(Board3 board) {
+    Board board;
+    public CheckScanner(Board board) {
         this.board = board;
     }
 
