@@ -9,25 +9,35 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-public class Board3 extends JPanel {
-    public int tileSize = 50;
+public class Board extends JPanel {
+    public int tileSize = 120;
     int cols = 8;
     int rows = 8;
-    ArrayList<Piece> pieceList = new ArrayList<>(); // List of all pieces
-    public Piece selectedPiece; // Piece to be moved
+    ArrayList<Piece> pieceList = new ArrayList<>();
+    public Piece selectedPiece;
     Input input = new Input(this);
     public CheckScanner checkScanner = new CheckScanner(this);
     public int enPassantTile = -1;
     public boolean isWhiteTurn = true;
     InputAudio promotionSound;
     InputAudio eatSound;
-    private ChessPage chessPage; // Reference to the ChessPage
+    private ChessPage chessPage;
+    class Position {
+        int col;
+        int row;
 
-    public Board3(ChessPage chessPage) {
+        Position(int col, int row) {
+            this.col = col;
+            this.row = row;
+        }
+    }
+
+    public Board(ChessPage chessPage) {
         this.chessPage = chessPage;
         this.setPreferredSize(new Dimension(cols * tileSize, rows * tileSize));
         this.addMouseListener(input);
         this.addMouseMotionListener(input);
+        setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 5));
         promotionSound = new InputAudio("src/res/PawnPromotion.wav");
         eatSound = new InputAudio("src/res/EatPieces.wav");
         addPieces();
@@ -60,11 +70,11 @@ public class Board3 extends JPanel {
         }
 
         capture(move.capture);
-        chessPage.onPlayerMove(); // Inform ChessPage that a move has been made
+        chessPage.switchTurn();
     }
 
     private void moveKing(Move move) {
-        if (Math.abs(move.piece.col - move.newCol) == 2) { // Handling castling
+        if (Math.abs(move.piece.col - move.newCol) == 2) {
             Piece rook;
             if (move.piece.col < move.newCol) {
                 rook = getPiece(7, move.piece.row);
@@ -78,7 +88,7 @@ public class Board3 extends JPanel {
     }
 
     private void movePawn(Move move) {
-        // En passant
+        //en passant
         int colorIndex = move.piece.isWhite ? 1 : -1;
         if (getTileNum(move.newCol, move.newRow) == enPassantTile) {
             move.capture = getPiece(move.newCol, move.newRow + colorIndex);
@@ -89,7 +99,7 @@ public class Board3 extends JPanel {
             enPassantTile = -1;
         }
 
-        // Promotions
+        //promosi
         colorIndex = move.piece.isWhite ? 0 : 7;
         if (move.newRow == colorIndex) {
             promotePawn(move);
@@ -145,9 +155,93 @@ public class Board3 extends JPanel {
         }
         return null;
     }
+    public boolean moveValid(Piece piece, int newCol, int newRow) {
+        if (sameTeam(piece, getPiece(newCol, newRow))) {
+            return false;
+        }
+
+        Move move = new Move(this, piece, newCol, newRow);
+
+        if (!piece.isValidMovement(newCol, newRow)) {
+            return false;
+        }
+
+        if (piece.moveCollidesWithPiece(newCol, newRow)) {
+            return false;
+        }
+
+        return !checkScanner.isKingChecked(move);
+    }
+    public boolean isCheck(boolean isWhite) {
+        Piece king = findKing(isWhite);
+        if (king != null) {
+            Move kingMove = new Move(this, king, king.col, king.row);
+            return checkScanner.isKingChecked(kingMove);
+        }
+        return false;
+    }
+
+    public boolean isCheckmate(boolean isWhite) {
+        Piece king = findKing(isWhite);
+
+        // Check if the king is in check
+        if (checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
+            // Generate possible moves for the king
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dy = -1; dy <= 1; dy++) {
+                    int newX = king.col + dx;
+                    int newY = king.row + dy;
+                    if (isValidMove(new Move(this, king, newX, newY))) {
+                        // If the king can escape from check, it's not checkmate
+                        return false;
+                    }
+                }
+            }
+
+            // Check if any piece can block the check
+            for (Piece piece : pieceList) {
+                if (piece.isWhite == isWhite && moveValid(piece, king.col, king.row)) {
+                    // If a piece can block the check, it's not checkmate
+                    return false;
+                }
+            }
+
+            // Check if any piece can capture the attacking piece
+            ArrayList<Piece> attackingPieces = getAttackingPieces(king, isWhite);
+            for (Piece attackingPiece : attackingPieces) {
+                for (Piece piece : pieceList) {
+                    if (piece.isWhite == isWhite && isValidMove(new Move(this, piece, attackingPiece.col, attackingPiece.row))) {
+                        // If a piece can capture the attacking piece, it's not checkmate
+                        return false;
+                    }
+                }
+            }
+
+            // If none of the above conditions are met, it's checkmate
+            return true;
+        }
+
+        // If the king is not in check, it's not checkmate
+        return false;
+    }
+
+    public ArrayList<Piece> getAttackingPieces(Piece targetPiece, boolean isTargetPieceWhite) {
+        ArrayList<Piece> attackingPieces = new ArrayList<>();
+
+        for (Piece piece : pieceList) {
+            if (piece.isWhite != isTargetPieceWhite && piece.isValidMovement(targetPiece.col, targetPiece.row)) {
+                // Check if the piece's movement can capture the target piece
+                if (piece.moveCollidesWithPiece(targetPiece.col, targetPiece.row)) {
+                    attackingPieces.add(piece);
+                }
+            }
+        }
+
+        return attackingPieces;
+    }
+
 
     public void addPieces() {
-        // Adding pieces for the initial setup
         pieceList.add(new Rook(this, 0, 0, false));
         pieceList.add(new Knight(this, 1, 0, false));
         pieceList.add(new Bishop(this, 2, 0, false));
@@ -210,6 +304,35 @@ public class Board3 extends JPanel {
         for (int i = 0; i < pieceList.size(); i++) {
             Piece piece = pieceList.get(i);
             piece.paint(g2d);
+        }
+        boolean isPlayer1InCheck = isCheck(true);
+        boolean isPlayer2InCheck = isCheck(false);
+
+        if (isPlayer1InCheck) {
+            chessPage.updateCheckStatusLabel(1);
+        } else {
+            chessPage.clearCheckStatusLabel(1);
+        }
+
+        if (isPlayer2InCheck) {
+            chessPage.updateCheckStatusLabel(2);
+        } else {
+            chessPage.clearCheckStatusLabel(2);
+        }
+
+        boolean isPlayer1InCheckmate = isCheckmate(true);
+        boolean isPlayer2InCheckmate = isCheckmate(false);
+
+        if (isPlayer1InCheckmate) {
+            chessPage.updateCheckmateStatusLabel(1);
+        } else {
+            chessPage.clearCheckmateStatusLabel(1);
+        }
+
+        if (isPlayer2InCheckmate) {
+            chessPage.updateCheckmateStatusLabel(2);
+        } else {
+            chessPage.clearCheckmateStatusLabel(2);
         }
     }
 }

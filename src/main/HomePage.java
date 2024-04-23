@@ -1,10 +1,10 @@
-
-        package main;
+package main;
 import javax.swing.*;
-        import java.awt.*;
-        import java.awt.event.ActionEvent;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 public class HomePage extends JFrame {
@@ -18,17 +18,6 @@ public class HomePage extends JFrame {
     InputAudio clickSound;
 
     public HomePage() {
-        JButton playButton = new JButton(playButtonIcon);
-        playButton.setBounds (945, 730, 200, 75);
-        clickSound = new InputAudio("ButtonClick.wav");
-
-        frame = new JFrame("Master Chess");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setBackground(Color.BLACK);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setResizable(false);
-        frame.add(playButton);
-
         try {
             backgroundImage = new ImageIcon("src/res/Background.png");
             playButtonIcon = new ImageIcon("src/res/PlayButton.png");
@@ -40,40 +29,57 @@ public class HomePage extends JFrame {
             e.printStackTrace();
         }
 
+        JLabel playButton = new JLabel(playButtonIcon);
+        playButton.setBounds (945, 730, 200, 75);
+        clickSound = new InputAudio("ButtonClick.wav");
+
+        frame = new JFrame("Catur Mas Putra");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setBackground(Color.BLACK);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setResizable(false);
+        frame.add(playButton);
+
         frame.add(new JLabel(new ImageIcon(String.valueOf(backgroundImage))));
 
-
-
-       // playButton.setBorderPainted(false);
-        playButton.addActionListener(new ActionListener() {
+        playButton.addMouseListener(new MouseListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void mouseClicked(MouseEvent e) {
                 clickSound.ButtonClickSound();
                 displayOptions();
             }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
         });
+        frame.setVisible(true);
 
+        setTaskbarIcon();
+        clickSound = new InputAudio("ButtonClick.wav");
 
-
-        /*JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel.setBackground(Color.BLACK);
-        buttonPanel.add(playButton);*/
-
-        //frame.add(buttonPanel, BorderLayout.SOUTH);
         frame.setVisible(true);
     }
 
     private void displayOptions() {
         frame.getContentPane().removeAll();
         frame.repaint();
-        JButton singlePlayerButton = new JButton(singlePlayerIcon);
-        singlePlayerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                clickSound.ButtonClickSound();
-                displayDifficultyOptions();
-            }
-        });
 
         JButton multiplayerOfflineButton = new JButton(multiPlayerIcon);
         multiplayerOfflineButton.addActionListener(new ActionListener() {
@@ -84,38 +90,21 @@ public class HomePage extends JFrame {
             }
         });
 
-        JPanel difficultyPanel = new JPanel(new GridLayout(1, 1));
-        difficultyPanel.add(singlePlayerButton);
-        difficultyPanel.add(multiplayerOfflineButton);
-        frame.add(difficultyPanel, BorderLayout.CENTER);
-        frame.revalidate();
-    }
-
-    private void displayDifficultyOptions() {
-        frame.getContentPane().removeAll();
-        frame.repaint();
-        JButton easyButton = new JButton(easyDifficultyIcon);
-        easyButton.addActionListener(new ActionListener() {
+        JButton singlePlayerButton = new JButton(singlePlayerIcon);
+        singlePlayerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 clickSound.ButtonClickSound();
-                startGameSingleplayerEasy();
+                startGameSingleplayerEasy(); // Memulai permainan single player dengan AIChessPageEasy
             }
         });
 
-        JButton hardButton = new JButton(hardDifficultyIcon);
-        hardButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                clickSound.ButtonClickSound();
-                startGameSingleplayerHard();
-            }
-        });
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBackground(Color.BLACK);
+        buttonPanel.add(multiplayerOfflineButton);
+        buttonPanel.add(singlePlayerButton);
 
-        JPanel difficultyPanel = new JPanel(new GridLayout(2, 1, 10, 10));
-        difficultyPanel.add(easyButton);
-        difficultyPanel.add(hardButton);
-        frame.add(difficultyPanel, BorderLayout.CENTER);
+        frame.add(buttonPanel, BorderLayout.CENTER);
         frame.revalidate();
     }
 
@@ -123,17 +112,26 @@ public class HomePage extends JFrame {
         new ChessPage();
         frame.dispose();
     }
+
     private void startGameSingleplayerEasy() {
-        new AIChessPageEasy();
-        frame.dispose();
-    }
-    private void startGameSingleplayerHard() {
-        new AIChessPageHard();
+        new AIChessPage();
         frame.dispose();
     }
 
     public void paint(Graphics g) {
         super.paint(g);
         g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+    }
+
+
+    private void setTaskbarIcon() {
+        ImageIcon icon = new ImageIcon("src/res/pumpkin.png");
+
+        setIconImage(icon.getImage());
+
+        Frame[] frames = Frame.getFrames();
+        for (Frame frame : frames) {
+            frame.setIconImage(icon.getImage());
+        }
     }
 }

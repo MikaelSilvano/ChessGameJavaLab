@@ -1,13 +1,13 @@
 //king
 package pieces;
 
-import main.Board3;
+import main.Board;
 import main.Move;
 
 import java.awt.image.BufferedImage;
 
 public class King extends Piece {
-    public King(Board3 board, int col, int row, boolean isWhite) {
+    public King(Board board, int col, int row, boolean isWhite) {
         super(board);
         this.col = col;
         this.row = row;

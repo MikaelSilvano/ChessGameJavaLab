@@ -1,12 +1,12 @@
 //pawn
 package pieces;
 
-import main.Board3;
+import main.Board;
 
 import java.awt.image.BufferedImage;
 
 public class Pawn extends Piece {
-    public Pawn(Board3 board, int col, int row, boolean isWhite) {
+    public Pawn(Board board, int col, int row, boolean isWhite) {
         super(board);
         this.col = col;
         this.row = row;

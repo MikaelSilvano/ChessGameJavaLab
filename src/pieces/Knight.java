@@ -1,12 +1,12 @@
 //knight
 package pieces;
 
-import main.Board3;
+import main.Board;
 
 import java.awt.image.BufferedImage;
 
 public class Knight extends Piece {
-    public Knight(Board3 board, int col, int row, boolean isWhite) {
+    public Knight(Board board, int col, int row, boolean isWhite) {
         super(board);
         this.col = col;
         this.row = row;

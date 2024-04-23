@@ -1,44 +1,75 @@
 package main;
 
-public class AIBoard {
-    // array for representation of the chess board
+import javax.swing.*;
+import java.util.Arrays;
+import java.awt.Dimension;
+
+public class AIBoard{
+    private static InputAudio clickSound;
+
+    public AIBoard(){
+
+        clickSound = new InputAudio("src/res/ButtonClick.wav");
+        //get initial position of white and black king
+        while(!"A".equals(chessBoard[kingPositionA/8][kingPositionA%8]))	kingPositionA++;
+        while(!"a".equals(chessBoard[kingPositiona/8][kingPositiona%8]))	kingPositiona++;
+
+
+        AIUserInterface ui = new AIUserInterface();
+        System.out.println(possibleMoves());
+
+        for(int i=0;i<8;i++)
+            System.out.println(Arrays.toString(chessBoard[i]));
+    }
+
+    //array for representation of the chess board
     /*
-     * color=WHITE/black pawn=P/p knight=K/k rook=R/r queen=Q/q king=A/a
+     * color=WHITE/black
+     * pawn=P/p
+     * knight=K/k
+     * rook=R/r
+     * queen=Q/q
+     * king=A/a
      */
-    static String[][] chessBoard = { { "r", "k", "b", "q", "a", "b", "k", "r" },
-                                     { "p", "p", "p", "p", "p", "p", "p", "p" },
-                                     { " ", " ", " ", " ", " ", " ", " ", " " },
-                                     { " ", " ", " ", " ", " ", " ", " ", " " },
-                                     { " ", " ", " ", " ", " ", " ", " ", " " },
-                                     { " ", " ", " ", " ", " ", " ", " ", " " },
-                                     { "P", "P", "P", "P", "P", "P", "P", "P" },
-                                     { "R", "K", "B", "Q", "A", "B", "K", "R" } };
+    static String chessBoard[][]={
+            {"r","k","b","q","a","b","k","r"},
+            {"p","p","p","p","p","p","p","p"},
+            {" "," "," "," "," "," "," "," "},
+            {" "," "," "," "," "," "," "," "},
+            {" "," "," "," "," "," "," "," "},
+            {" "," "," "," "," "," "," "," "},
+            {"P","P","P","P","P","P","P","P"},
+            {"R","K","B","Q","A","B","K","R"}};
 
-    static int kingPositionA, kingPositiona; // white and black king's position in the array
-    static int globalDepth = 4; // depth of best move searching
-
-    //static int playerColor = -1; // 1=player as white 0=player as black
+    static int kingPositionA, kingPositiona;	//white and black king's position in the array
+    static int globalDepth=4;	//depth of best move searching
+    static int playerColor=-1;	//1=player as white 0=player as black
 
     //returns a String with move , captured piece and a score value of that move
     public static String alphaBeta(int depth, int beta, int alpha, String move, int player){
         String moveList=possibleMoves();
-        if(depth==0 || moveList.length()==0)	//limiting cases if searching depth becomes 0 or no possible moves are left (eg. checkmate)
+        if(depth==0 || moveList.length()==0) //limiting cases if searching depth becomes 0 or no possible moves are left (eg. checkmate)
             return move+(AIRating.rating(moveList.length(),depth)*(player*2-1));
 
-        moveList=sortMoves(moveList);	//sort the moves to put the best moves in the front to improve speed
+        moveList=sortMoves(moveList); //sort the moves to put the best moves in the front to improve speed
 
-        player=1-player;	//1 or 0
+        player=1-player; //1 or 0
 
         String returnedStr="";
         int ratingValue;
 
         for(int i=0;i<moveList.length();i+=5){
-            makeMove(moveList.substring(i, i+5));
+            String currentMove = moveList.substring(i, i+5);
+
+            // Create a delay before making the AI move
+
+            makeMove(currentMove);
+
             flipBoard();
-            returnedStr=alphaBeta(depth-1, beta, alpha, moveList.substring(i,i+5), player); //recursive call for more depth
-            ratingValue=Integer.valueOf(returnedStr.substring(5));	//get the value of the rating from the depth
+            returnedStr=alphaBeta(depth-1, beta, alpha, currentMove, player); //recursive call for more depth
+            ratingValue=Integer.valueOf(returnedStr.substring(5)); //get the value of the rating from the depth
             flipBoard();
-            undoMove(moveList.substring(i,i+5));
+            undoMove(currentMove);
 
             if(player==0){
                 if(ratingValue<=beta){
@@ -70,6 +101,7 @@ public class AIBoard {
             return move+alpha;
         }
     }
+
 
     //method to swap the pieces i.e. to flip the board to the 2nd player's side
     public static void flipBoard(){
@@ -163,13 +195,12 @@ public class AIBoard {
         }
     }
     //returns previous position(row1,column1), current position (row2,column2) and the captured piece if any else space
-
     public static String possibleMoves(){
-        /*
+        String moveList="";
+		/*
 		 	checks for each square on the chess board the further possible moves of the chess pieces
 			returns the possible move for each piece and adds it to the moveList
 		*/
-        String moveList="";
         for (int i=0; i<64; i++) {
             switch (chessBoard[i/8][i%8]) {
                 case "P": moveList+=possibleP(i);
@@ -556,15 +587,5 @@ public class AIBoard {
         }
 
         return true;
-    }
-
-    public boolean isMoveValid(int sourceX, int sourceY, int destX, int destY) {
-        return false;
-    }
-
-    public void makeAIMove() {
-    }
-
-    public void makeMove(int sourceX, int sourceY, int destX, int destY) {
     }
 }

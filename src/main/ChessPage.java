@@ -2,24 +2,39 @@
 package main;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.net.URL;
 
 public class ChessPage {
+    private CheckScanner checkScanner;
     private JFrame frame;
+    private JPanel  displayPanel;
     private JLabel turnLabel;
     private JLabel[] timerLabels;
+    private static JLabel checkStatusLabel;
+    private JLabel checkmateStatusLabel;
     private JPanel backgroundPanel;
     private Timer[] timers;
     private int[] playerTimeInSeconds;
     private int currentPlayerIndex;
-    private Board3 board;
+    private Board board;
     InputAudio clickSound;
-
+    ImageIcon menuButtonIcon;
+    ImageIcon exitButtonIcon;
 
     public ChessPage() {
+        try {
+            menuButtonIcon = new ImageIcon("src/res/menuButton.png");
+            exitButtonIcon = new ImageIcon("src/res/exitButton.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         frame = new JFrame();
         frame.getContentPane().setBackground(Color.black);
         frame.setLayout(new GridBagLayout());
@@ -33,50 +48,66 @@ public class ChessPage {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                // Draw the background image
-                ImageIcon backgroundImage = new ImageIcon("src/res/Background.png");
+                ImageIcon backgroundImage = new ImageIcon("src/res/BackgroundMultiplayerOffline.png");
+                ImageIcon pumpkinImage = new ImageIcon("src/res/pump.png");
                 Image image = backgroundImage.getImage();
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
         };
-        ImageIcon icon = createImageIcon();
-        if (icon != null) {
-            frame.setIconImage(icon.getImage());
-        }
-
-
         backgroundPanel.setLayout(new GridBagLayout());
         frame.setContentPane(backgroundPanel);
 
-        Board3 board = new Board3(this);
-        //board.setSize(new Dimension(500, 500));
-        frame.add(board);
+
+        GridBagConstraints gbcFrame = new GridBagConstraints();
+        gbcFrame.anchor = GridBagConstraints.WEST;
+        gbcFrame.insets = new Insets(10, 10, 10, 10);
+        gbcFrame.gridx = 0;
+        gbcFrame.gridy = 0;
+
+        this.board = new Board(this);
+        this.checkScanner = new CheckScanner(board);
+        frame.add(board, gbcFrame);
         frame.setVisible(true);
 
         timerLabels = new JLabel[2];
         timerLabels[0] = new JLabel("Player 1 Time: 10:00");
         timerLabels[1] = new JLabel("Player 2 Time: 10:00");
-        timerLabels[0].setFont(new Font("Arial", Font.PLAIN, 16));
-        timerLabels[1].setFont(new Font("Arial", Font.PLAIN, 16));
+        timerLabels[0].setFont(new Font("Monospaced", Font.BOLD, 16));
+        timerLabels[1].setFont(new Font("Monospaced", Font.BOLD, 16));
         timerLabels[0].setForeground(Color.WHITE);
         timerLabels[1].setForeground(Color.WHITE);
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.NORTH;
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        frame.add(timerLabels[1], gbc);
-        gbc.gridy = 1;
-        frame.add(timerLabels[0], gbc);
 
-        GridBagConstraints gbd = new GridBagConstraints();
-        turnLabel = new JLabel("White's Turn");
-        turnLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        gbcFrame.gridx = 1;
+        gbcFrame.gridy = 0;
+        gbcFrame.anchor = GridBagConstraints.NORTH;
+        frame.add(timerLabels[1], gbcFrame);
+        gbcFrame.gridy = 1;
+        frame.add(timerLabels[0], gbcFrame);
+
+        turnLabel = new JLabel("Player 1 Turn"); //untuk turn label
+        turnLabel.setFont(new Font("Monospaced", Font.BOLD, 20));
         turnLabel.setForeground(Color.WHITE);
-        gbd.insets = new Insets(10, 10, 10, 10);
-        gbd.gridx = 1;
-        gbd.gridy = 0;
-        frame.add(turnLabel, gbd);
+
+        gbcFrame.gridx = 1;
+        gbcFrame.gridy = 0;
+        gbcFrame.anchor = GridBagConstraints.CENTER;
+        frame.add(turnLabel, gbcFrame);
+
+        checkStatusLabel = new JLabel("TEST");
+        checkStatusLabel.setFont(new Font("Monospaced", Font.BOLD, 20));
+        checkStatusLabel.setForeground(Color.BLUE);
+
+        gbcFrame.gridx = 3;
+        gbcFrame.gridy = 0;
+        frame.add(checkStatusLabel, gbcFrame);
+
+        checkmateStatusLabel = new JLabel("TEST");
+        checkmateStatusLabel.setFont(new Font("Monospaced", Font.BOLD, 20));
+        checkmateStatusLabel.setForeground(Color.RED);
+
+        gbcFrame.gridx = 4;
+        gbcFrame.gridy = 0;
+        frame.add(checkmateStatusLabel, gbcFrame);
 
         timers = new Timer[2];
         {
@@ -100,42 +131,78 @@ public class ChessPage {
             frame.setVisible(true);
 
             //button yang dikanan
-            JPanel buttonPanel = new JPanel(new GridBagLayout());
+            JPanel buttonPanel = new JPanel(new BorderLayout());
+            buttonPanel.setPreferredSize(new Dimension(250,  200));
             buttonPanel.setOpaque(false);
 
-            gbd.gridx = 2;
-            gbd.gridy = 0;
-            gbd.insets = new Insets(5, 5, 5, 5); //untuk merapihkan button yang disebelah kanan
+            clickSound = new InputAudio("ButtonClick.wav");
 
-            JButton menuButton = new JButton("Menu");
-            menuButton.setPreferredSize(new Dimension(200, 100));
-            JButton exitButton = new JButton("Exit");
-            exitButton.setPreferredSize(new Dimension(200, 100));
-            buttonPanel.add(menuButton, gbd);
+            JLabel menuButton = new JLabel(menuButtonIcon);
+            buttonPanel.add(menuButton, BorderLayout.NORTH);
 
-            gbd.gridy = 1;
-            buttonPanel.add(exitButton, gbd);
-
-            menuButton.addActionListener(new ActionListener() {
+            JLabel exitButton = new JLabel(exitButtonIcon);
+            buttonPanel.add(exitButton, BorderLayout.SOUTH);
+            menuButton.addMouseListener(new MouseListener() {
                 @Override
-                public void actionPerformed(ActionEvent e) {
+                public void mouseClicked(MouseEvent e) {
                     clickSound.ButtonClickSound();
-                    frame.dispose();
-                    new HomePage(); //back to menu
+                    showMenuConfirmation();
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+
                 }
             });
 
-            exitButton.addActionListener(new ActionListener() {
+            exitButton.addMouseListener(new MouseListener() {
                 @Override
-                public void actionPerformed(ActionEvent e) {
+                public void mouseClicked(MouseEvent e) {
                     clickSound.ButtonClickSound();
                     showExitConfirmation();
-                    //System.exit(0); //exit button
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+
                 }
             });
-            frame.add(buttonPanel);
+            gbcFrame.gridx = 2;
+            gbcFrame.gridy = 0;
+            frame.add(buttonPanel, gbcFrame);
         }
     }
+
 
     private void startCurrentPlayerTimer() {
         timers[currentPlayerIndex].start();
@@ -160,40 +227,78 @@ public class ChessPage {
 
     public void updateTurnLabel(boolean isWhiteTurn) {
         if (isWhiteTurn) {
-            turnLabel.setText("White's Turn");
-            turnLabel.setForeground(Color.WHITE);
+            turnLabel.setText("Player 1 Turn");
         } else {
-            turnLabel.setText("Black's Turn");
-            turnLabel.setForeground(Color.WHITE);
+            turnLabel.setText("Player 2 Turn");
+        }
+    }
+    public void clearCheckStatusLabel(int playerNumber) {
+        if (playerNumber == 1) {
+            checkStatusLabel.setText("TEST");
+        } else if (playerNumber == 2) {
+            checkStatusLabel.setText("TEST");
+        }
+    }
+    public void updateCheckStatusLabel(int playerNumber) {
+        if (playerNumber == 1) {
+            checkStatusLabel.setText("<html>Player 1 is<br/> in check!</html>");
+        } else if (playerNumber == 2) {
+            checkStatusLabel.setText("<html>Player 2 is<br/> in check!</html>");
+        }
+    }
+    public void clearCheckmateStatusLabel(int playerNumber) {
+        if (playerNumber == 1) {
+            checkmateStatusLabel.setText("TEST");
+        } else if (playerNumber == 2) {
+            checkmateStatusLabel.setText("TEST");
+        }
+    }
+    public void updateCheckmateStatusLabel(int playerNumber) {
+        if (playerNumber == 1) {
+            checkmateStatusLabel.setText("<html>Player 1 is<br/> in checkmate!</html>");
+        } else if (playerNumber == 2) {
+            checkmateStatusLabel.setText("<html>Player 2 is<br/> in checkmate!</html>");
         }
     }
 
-    public void onPlayerMove() {
-        // Called when a player makes a move on the board
-        switchTurn(); // Switch turn after a valid move
-    }
-
-    public void showExitConfirmation() {
-        JFrame confirmFrame = new JFrame();
-        int confirmed = JOptionPane.showConfirmDialog(confirmFrame,
-                "Apakah Anda yakin ingin keluar dari game?",
-                "Konfirmasi",
-                JOptionPane.YES_NO_OPTION);
+    private void showMenuConfirmation() {
+        int confirmed = JOptionPane.showConfirmDialog(frame,
+                "Are you sure you want to go back to menu?",
+                "Menu Confirmation",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                createImageIcon("/res/pump.png"));
         clickSound.ButtonClickSound();
 
         if (confirmed == JOptionPane.YES_OPTION) {
-            frame.dispose(); // Close the main frame
-            System.exit(0); // Exit the application
-
+            clickSound.ButtonClickSound();
+            frame.dispose();
+            new HomePage();
         }
     }
 
-    protected ImageIcon createImageIcon() {
-        URL imgUrl = getClass().getResource("/res/pumpkin.png");
+    private void showExitConfirmation() {
+        int confirmed = JOptionPane.showConfirmDialog(frame,
+                "Are you sure you want to exit the game?",
+                "Exit Confirmation",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                createImageIcon("/res/pump.png"));
+        clickSound.ButtonClickSound();
+
+        if (confirmed == JOptionPane.YES_OPTION) {
+            clickSound.ButtonClickSound();
+            frame.dispose();
+            System.exit(0);
+        }
+    }
+
+    public ImageIcon createImageIcon(String s) {
+        URL imgUrl = getClass().getResource("/res/pump.png");
         if (imgUrl != null) {
             return new ImageIcon(imgUrl);
         } else {
-            System.err.println("Couldn't find file: " + "/res/pumpkin.png");
+            System.err.println("Couldn't find file: " + "/res/pump.png");
             return null;
         }
     }
