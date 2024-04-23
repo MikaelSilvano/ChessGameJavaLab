@@ -3,8 +3,7 @@ package main;
 import java.util.Arrays;
 
 public class AIBoard {
-    private
-    static InputAudio clickSound;
+    private static InputAudio clickSound;
 
     public AIBoard(){
 
