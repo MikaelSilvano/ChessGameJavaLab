@@ -13,6 +13,7 @@ import java.net.URL;
 public class ChessPage {
     private CheckScanner checkScanner;
     private JFrame frame;
+    private JPanel  displayPanel;
     private JLabel turnLabel;
     private JLabel[] timerLabels;
     private static JLabel checkStatusLabel;
@@ -53,13 +54,18 @@ public class ChessPage {
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
         };
+        //frame.add(new JLabel(new ImageIcon(String.valueOf(backgroundImage))));
 
-        backgroundPanel.setLayout(new GridBagLayout());
-        frame.setContentPane(backgroundPanel);
+
+        GridBagConstraints gbcFrame = new GridBagConstraints();
+        gbcFrame.anchor = GridBagConstraints.WEST;
+        gbcFrame.insets = new Insets(10, 10, 10, 10);
+        gbcFrame.gridx = 0;
+        gbcFrame.gridy = 0;
 
         this.board = new Board(this);
         this.checkScanner = new CheckScanner(board);
-        frame.add(board);
+        frame.add(board, gbcFrame);
         frame.setVisible(true);
 
         timerLabels = new JLabel[2];
@@ -69,46 +75,38 @@ public class ChessPage {
         timerLabels[1].setFont(new Font("Monospaced", Font.BOLD, 16));
         timerLabels[0].setForeground(Color.WHITE);
         timerLabels[1].setForeground(Color.WHITE);
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.NORTH;
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        frame.add(timerLabels[1], gbc);
-        gbc.gridy = 1;
-        frame.add(timerLabels[0], gbc);
 
-        GridBagConstraints gbd = new GridBagConstraints();
-        turnLabel = new JLabel("Player 1 Turn");
+        gbcFrame.gridx = 1;
+        gbcFrame.gridy = 0;
+        gbcFrame.anchor = GridBagConstraints.NORTH;
+        frame.add(timerLabels[1], gbcFrame);
+        gbcFrame.gridy = 1;
+        frame.add(timerLabels[0], gbcFrame);
+
+        turnLabel = new JLabel("Player 1 Turn"); //untuk turn label
         turnLabel.setFont(new Font("Monospaced", Font.BOLD, 20));
         turnLabel.setForeground(Color.WHITE);
-        gbd.insets = new Insets(10, 10, 10, 10);
-        gbd.gridx = 1;
-        gbd.gridy = 0;
-        frame.add(turnLabel, gbd);
+
+        gbcFrame.gridx = 1;
+        gbcFrame.gridy = 0;
+        gbcFrame.anchor = GridBagConstraints.CENTER;
+        frame.add(turnLabel, gbcFrame);
 
         checkStatusLabel = new JLabel("TEST");
         checkStatusLabel.setFont(new Font("Monospaced", Font.BOLD, 20));
-        checkStatusLabel.setForeground(Color.RED);
+        checkStatusLabel.setForeground(Color.BLUE);
 
-        GridBagConstraints gbcCheckStatusLabel = new GridBagConstraints();
-        gbcCheckStatusLabel.anchor = GridBagConstraints.CENTER;
-        gbcCheckStatusLabel.insets = new Insets(10, 10, 10, 10);
-        gbcCheckStatusLabel.gridx = 4;
-        gbcCheckStatusLabel.gridy = 1;
-
-
-        frame.add(checkStatusLabel, gbcCheckStatusLabel);
+        gbcFrame.gridx = 3;
+        gbcFrame.gridy = 0;
+        frame.add(checkStatusLabel, gbcFrame);
 
         checkmateStatusLabel = new JLabel("TEST");
         checkmateStatusLabel.setFont(new Font("Monospaced", Font.BOLD, 20));
         checkmateStatusLabel.setForeground(Color.RED);
-        GridBagConstraints gbcCheckmateStatusLabel = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbcCheckmateStatusLabel.insets = new Insets(10, 10, 10, 10);
-        gbcCheckmateStatusLabel.gridx = 4;
-        gbcCheckmateStatusLabel.gridy = 0;
-        frame.add(checkmateStatusLabel, gbcCheckmateStatusLabel);
+
+        gbcFrame.gridx = 4;
+        gbcFrame.gridy = 0;
+        frame.add(checkmateStatusLabel, gbcFrame);
 
         timers = new Timer[2];
         {
@@ -132,30 +130,22 @@ public class ChessPage {
             frame.setVisible(true);
 
             //button yang dikanan
-            JPanel buttonPanel = new JPanel(new GridBagLayout());
+            JPanel buttonPanel = new JPanel(new BorderLayout());
+            buttonPanel.setPreferredSize(new Dimension(250,  200));
             buttonPanel.setOpaque(false);
 
-            gbd.gridx = 1;
-            gbd.gridy = 0;
-            gbd.insets = new Insets(5, 5, 5, 5); //untuk merapihkan button yang disebelah kanan
-
-            JLabel menuButton = new JLabel(menuButtonIcon);
-            //menuButton.setPreferredSize(new Dimension(200, 100));
             clickSound = new InputAudio("ButtonClick.wav");
 
-            JLabel exitButton = new JLabel(exitButtonIcon);
-            //exitButton.setPreferredSize(new Dimension(200, 100));
-            buttonPanel.add(menuButton, gbd);
+            JLabel menuButton = new JLabel(menuButtonIcon);
+            buttonPanel.add(menuButton, BorderLayout.NORTH);
 
-            gbd.gridx = 1;
-            gbd.gridy = 1;
-            buttonPanel.add(exitButton, gbd);
+            JLabel exitButton = new JLabel(exitButtonIcon);
+            buttonPanel.add(exitButton, BorderLayout.SOUTH);
             menuButton.addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     clickSound.ButtonClickSound();
-                    frame.dispose();
-                    new HomePage();
+                    showMenuConfirmation();
                 }
 
                 @Override
@@ -184,7 +174,6 @@ public class ChessPage {
                 public void mouseClicked(MouseEvent e) {
                     clickSound.ButtonClickSound();
                     showExitConfirmation();
-                    //System.exit(0); //exit button
                 }
 
                 @Override
@@ -207,7 +196,9 @@ public class ChessPage {
 
                 }
             });
-            frame.add(buttonPanel);
+            gbcFrame.gridx = 2;
+            gbcFrame.gridy = 0;
+            frame.add(buttonPanel, gbcFrame);
         }
     }
 
@@ -249,9 +240,9 @@ public class ChessPage {
     }
     public void updateCheckStatusLabel(int playerNumber) {
         if (playerNumber == 1) {
-            checkStatusLabel.setText("Player 1 is in check!");
+            checkStatusLabel.setText("<html>Player 1 is<br/> in check!</html>");
         } else if (playerNumber == 2) {
-            checkStatusLabel.setText("Player 2 is in check!");
+            checkStatusLabel.setText("<html>Player 2 is<br/> in check!</html>");
         }
     }
     public void clearCheckmateStatusLabel(int playerNumber) {

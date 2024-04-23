@@ -33,7 +33,8 @@ public class AIChessPage {
 		//chessBoardPanel.setBackground(Color.BLACK);
 		//frame.add(chessBoardPanel);
 		frame.add(ui);
-		frame.getContentPane().setBackground(new Color(238,238,238,255));
+		ui.setOpaque(false);
+		frame.getContentPane().setBackground(new Color(0,0,0));
 
 		//button yang dikanan
 		GridBagConstraints gbd = new GridBagConstraints();

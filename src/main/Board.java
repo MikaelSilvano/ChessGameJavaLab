@@ -10,7 +10,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 public class Board extends JPanel {
-    public int tileSize = 90;
+    public int tileSize = 120;
     int cols = 8;
     int rows = 8;
     ArrayList<Piece> pieceList = new ArrayList<>();
