@@ -127,7 +127,7 @@ public class ChessPage {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     clickSound.ButtonClickSound();
-                    showMenuConfirmation();
+                    showExitConfirmation();
                 }
             });
 
@@ -137,19 +137,6 @@ public class ChessPage {
                     clickSound.ButtonClickSound();
                     showExitConfirmation();
                 }
-                private void showExitConfirmation() {
-                    int confirmed = JOptionPane.showConfirmDialog(frame,
-                            "Are you sure you want to exit the game?",
-                            "Exit Confirmation",
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.QUESTION_MESSAGE,
-                            createImageIcon("/res/pump.png"));
-
-                    if (confirmed == JOptionPane.YES_OPTION) {
-                        frame.dispose(); // Close the main frame
-                        System.exit(0);
-                    }
-                }// Exit the application
 
             });
             frame.add(buttonPanel);
@@ -200,33 +187,19 @@ public class ChessPage {
         switchTurn(); // Switch turn after a valid move
     }
 
-
-    public void showMenuConfirmation() {
-        JFrame confirmFrame = new JFrame();
-        int confirmed = JOptionPane.showConfirmDialog(confirmFrame,
-                "Are you sure to exit the game?",
-                "Confirmation",
-                JOptionPane.YES_NO_OPTION);
-        clickSound.ButtonClickSound();
-
-        if (confirmed == JOptionPane.YES_OPTION) {
-            frame.dispose(); // Close the main frame
-            new HomePage();
-        }
-    }
-    public void showExitConfirmation() {
-        JFrame confirmFrame = new JFrame();
-        int confirmed = JOptionPane.showConfirmDialog(confirmFrame,
-                "Are you sure to exit the game?",
-                "Confirmation",
-                JOptionPane.YES_NO_OPTION);
-        clickSound.ButtonClickSound();
+    private void showExitConfirmation() {
+        int confirmed = JOptionPane.showConfirmDialog(frame,
+                "Are you sure you want to exit the game?",
+                "Exit Confirmation",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                createImageIcon("/res/pump.png"));
 
         if (confirmed == JOptionPane.YES_OPTION) {
             frame.dispose(); // Close the main frame
-            System.exit(0); // Exit the application
+            System.exit(0);
         }
-    }
+    }// Exit the application
 
     public ImageIcon createImageIcon(String s) {
         URL imgUrl = getClass().getResource("/res/pump.png");
