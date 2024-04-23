@@ -20,8 +20,13 @@ public class AIChessPage {
 		frame.setLocationRelativeTo(null);
 
 		AIUserInterface ui = new AIUserInterface();
+		ui.setPreferredSize(new Dimension(500, 100));
 		aiBoard = new AIBoard(); //panggil board ai
-		frame.getContentPane().add(ui, BorderLayout.CENTER);
+		JPanel chessBoardPanel = new JPanel(new BorderLayout());
+		chessBoardPanel.add(ui, BorderLayout.EAST);
+		chessBoardPanel.setBackground(Color.BLACK);
+		frame.add(chessBoardPanel);
+		frame.getContentPane().setBackground(Color.black);
 
 		//button yang dikanan
 		GridBagConstraints gbd = new GridBagConstraints();

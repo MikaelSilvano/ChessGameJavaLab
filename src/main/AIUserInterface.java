@@ -25,16 +25,20 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 	}
 
 	static int oldMouseX,oldMouseY,newMouseX, newMouseY;
-	static int squareSize=105;
+	static int squareSize=50;
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		this.addMouseListener(this);
         this.addMouseMotionListener(this);
-		for(int i=0;i<64;i+=2){
-			g.setColor(new Color(255,200,100));
-			g.fillRect((i%8+(i/8)%2)*squareSize, (i/8)*squareSize, squareSize, squareSize);
-			g.setColor(new Color(150,50,30));
-			g.fillRect(((i+1)%8-((i+1)/8)%2)*squareSize, ((i+1)/8)*squareSize, squareSize, squareSize);
+		for(int row = 0; row < 8; row++) {
+			for(int col = 0; col < 8; col++) {
+				if((row + col) % 2 == 0) { // Check if it's a white square
+					g.setColor(new Color(255, 200, 100)); // Set color for white square
+				} else {
+					g.setColor(new Color(150, 50, 30)); // Set color for black square
+				}
+				g.fillRect(col * squareSize, row * squareSize, squareSize, squareSize); // Draw the square
+			}
 		}
 		Image chessPiecesImage;
         chessPiecesImage=new ImageIcon("src/res/ChessPieces.png").getImage();

@@ -1,8 +1,10 @@
 package main;
 
+import javax.swing.*;
 import java.util.Arrays;
+import java.awt.Dimension;
 
-public class AIBoard {
+public class AIBoard{
     private static InputAudio clickSound;
 
     public AIBoard(){
