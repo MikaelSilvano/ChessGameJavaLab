@@ -127,7 +127,7 @@ public class ChessPage {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     clickSound.ButtonClickSound();
-                    showExitConfirmation();
+                    showMenuConfirmation();
                 }
             });
 
@@ -194,10 +194,28 @@ public class ChessPage {
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 createImageIcon("/res/pump.png"));
+        clickSound.ButtonClickSound();
 
         if (confirmed == JOptionPane.YES_OPTION) {
+            clickSound.ButtonClickSound();
             frame.dispose(); // Close the main frame
             System.exit(0);
+        }
+    }
+
+    private void showMenuConfirmation() {
+        int confirmed = JOptionPane.showConfirmDialog(frame,
+                "Are you sure you want to go back to menu?",
+                "Menu Confirmation",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                createImageIcon("/res/pump.png"));
+        clickSound.ButtonClickSound();
+
+        if (confirmed == JOptionPane.YES_OPTION) {
+            clickSound.ButtonClickSound();
+            frame.dispose(); // Close the main frame
+            new HomePage();
         }
     }
 
