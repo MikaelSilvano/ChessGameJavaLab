@@ -7,26 +7,33 @@ import java.net.URL;
 import javax.swing.*;
 
 public class AIChessPage {
+	private JFrame frame;
 	static InputAudio clickSound;
 	private AIBoard aiBoard;
+	private JLabel[] timerLabels;
+	private Timer[] timers;
+	private int[] playerTimeInSeconds;
+	private int currentPlayerIndex;
 
 	public AIChessPage() {
 		clickSound = new InputAudio("src/res/ButtonClick.wav");
 
-		JFrame frame = new JFrame("Master Chess");
+		frame = new JFrame("Master Chess");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setSize(new Dimension(1080, 720));
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
 
 		AIUserInterface ui = new AIUserInterface();
 		//ui.setPreferredSize(new Dimension(1920, 100));
-		aiBoard = new AIBoard(); //panggil board ai
-		JPanel chessBoardPanel = new JPanel(new BorderLayout());
-		chessBoardPanel.add(ui, BorderLayout.CENTER);
-		chessBoardPanel.setBackground(Color.BLACK);
-		frame.add(chessBoardPanel);
-		frame.getContentPane().setBackground(Color.black);
+		//aiBoard = new AIBoard(); //panggil board ai
+		//JPanel chessBoardPanel = new JPanel(new BorderLayout());
+		//chessBoardPanel.add(ui, BorderLayout.CENTER);
+		//chessBoardPanel.setBackground(Color.BLACK);
+		//frame.add(chessBoardPanel);
+		frame.add(ui);
+		frame.getContentPane().setBackground(new Color(238,238,238,255));
 
 		//button yang dikanan
 		GridBagConstraints gbd = new GridBagConstraints();

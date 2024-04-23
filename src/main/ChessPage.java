@@ -12,7 +12,8 @@ public class ChessPage {
     private JFrame frame;
     private JLabel turnLabel;
     private JLabel[] timerLabels;
-    private JLabel checkStatusLabel;
+    private static JLabel checkStatusLabel;
+    private JLabel checkmateStatusLabel;
     private JPanel backgroundPanel;
     private Timer[] timers;
     private int[] playerTimeInSeconds;
@@ -53,8 +54,8 @@ public class ChessPage {
         timerLabels = new JLabel[2];
         timerLabels[0] = new JLabel("Player 1 Time: 10:00");
         timerLabels[1] = new JLabel("Player 2 Time: 10:00");
-        timerLabels[0].setFont(new Font("Arial", Font.PLAIN, 16));
-        timerLabels[1].setFont(new Font("Arial", Font.PLAIN, 16));
+        timerLabels[0].setFont(new Font("Monospaced", Font.BOLD, 16));
+        timerLabels[1].setFont(new Font("Monospaced", Font.BOLD, 16));
         timerLabels[0].setForeground(Color.WHITE);
         timerLabels[1].setForeground(Color.WHITE);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -67,22 +68,31 @@ public class ChessPage {
         frame.add(timerLabels[0], gbc);
 
         GridBagConstraints gbd = new GridBagConstraints();
-        turnLabel = new JLabel("White's Turn");
-        turnLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        turnLabel = new JLabel("Player 1 Turn");
+        turnLabel.setFont(new Font("Monospaced", Font.BOLD, 20));
         turnLabel.setForeground(Color.WHITE);
         gbd.insets = new Insets(10, 10, 10, 10);
         gbd.gridx = 1;
         gbd.gridy = 0;
         frame.add(turnLabel, gbd);
 
-        checkStatusLabel = new JLabel("");
-        checkStatusLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        checkStatusLabel.setForeground(Color.RED);
+        checkStatusLabel = new JLabel("NO CHECK");
+        checkStatusLabel.setFont(new Font("Monospaced", Font.BOLD, 20));
+        checkStatusLabel.setForeground(Color.BLUE);
         GridBagConstraints gbcCheckStatusLabel = new GridBagConstraints();
         gbcCheckStatusLabel.insets = new Insets(10, 10, 10, 10);
         gbcCheckStatusLabel.gridx = 1;
         gbcCheckStatusLabel.gridy = 1;
         frame.add(checkStatusLabel, gbcCheckStatusLabel);
+
+        checkmateStatusLabel = new JLabel("NO CHECKMATE");
+        checkmateStatusLabel.setFont(new Font("Monospaced", Font.BOLD, 20));
+        checkmateStatusLabel.setForeground(Color.RED);
+        GridBagConstraints gbcCheckmateStatusLabel = new GridBagConstraints();
+        gbcCheckmateStatusLabel.insets = new Insets(10, 10, 10, 10);
+        gbcCheckmateStatusLabel.gridx = 1;
+        gbcCheckmateStatusLabel.gridy = 2;
+        frame.add(checkmateStatusLabel, gbcCheckmateStatusLabel);
 
         timers = new Timer[2];
         {
@@ -166,23 +176,38 @@ public class ChessPage {
 
     public void updateTurnLabel(boolean isWhiteTurn) {
         if (isWhiteTurn) {
-            turnLabel.setText("White's Turn");
+            turnLabel.setText("Player 1 Turn");
         } else {
-            turnLabel.setText("Black's Turn");
+            turnLabel.setText("Player 2 Turn");
         }
     }
-    public void updateStatusLabel(boolean isWhiteChecked, boolean isCheckmate) {
-        if (isCheckmate) {
-            checkStatusLabel.setText(isWhiteChecked ? "White is in Checkmate!" : "Black is in Checkmate!");
-        } else if (isWhiteChecked) {
-            checkStatusLabel.setText("White is in Check!");
-        } else {
-            checkStatusLabel.setText("Black is in Check!");
+    public void clearCheckStatusLabel(int playerNumber) {
+        if (playerNumber == 1) {
+            checkStatusLabel.setText("");
+        } else if (playerNumber == 2) {
+            checkStatusLabel.setText("");
         }
     }
-
-    public void onPlayerMove() {
-        switchTurn();
+    public void updateCheckStatusLabel(int playerNumber) {
+        if (playerNumber == 1) {
+            checkStatusLabel.setText("Player 1 is in check!");
+        } else if (playerNumber == 2) {
+            checkStatusLabel.setText("Player 2 is in check!");
+        }
+    }
+    public void clearCheckmateStatusLabel(int playerNumber) {
+        if (playerNumber == 1) {
+            checkmateStatusLabel.setText("");
+        } else if (playerNumber == 2) {
+            checkmateStatusLabel.setText("");
+        }
+    }
+    public void updateCheckmateStatusLabel(int playerNumber) {
+        if (playerNumber == 1) {
+            checkmateStatusLabel.setText("Player 1 is in checkmate!");
+        } else if (playerNumber == 2) {
+            checkmateStatusLabel.setText("Player 2 is in checkmate!");
+        }
     }
 
     private void showMenuConfirmation() {

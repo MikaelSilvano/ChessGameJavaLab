@@ -15,16 +15,16 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 	InputAudio putSound;
 	InputAudio pickSound;
 	private static String userPossibleMoves;
+	static int squareSize = 105;
 	public AIUserInterface() {
+		this.setPreferredSize(new Dimension(200, 200));
 		promotionSound = new InputAudio("src/res/PawnPromotion.wav");
 		eatSound = new InputAudio("src/res/EatPieces.wav");
 		pickSound = new InputAudio("src/res/PickUpPieces.wav");
 		putSound = new InputAudio("src/res/PutPieces.wav");
 	}
-	this.setPreferredSize(new Dimension(8 * squareSize, 8 * squareSize));
-
 	static int oldMouseX,oldMouseY,newMouseX, newMouseY;
-	static int squareSize=50;
+
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		this.addMouseListener(this);
@@ -32,9 +32,9 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 		for(int row = 0; row < 8; row++) {
 			for(int col = 0; col < 8; col++) {
 				if((row + col) % 2 == 0) { // Check if it's a white square
-					g.setColor(new Color(255, 200, 100)); // Set color for white square
+					g.setColor(new Color(210, 81, 66)); // Set color for white square
 				} else {
-					g.setColor(new Color(150, 50, 30)); // Set color for black square
+					g.setColor(new Color(57, 47, 79)); // Set color for black square
 				}
 				g.fillRect(col * squareSize, row * squareSize, squareSize, squareSize); // Draw the square
 			}

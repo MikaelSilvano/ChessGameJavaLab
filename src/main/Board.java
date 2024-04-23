@@ -22,6 +22,15 @@ public class Board extends JPanel {
     InputAudio promotionSound;
     InputAudio eatSound;
     private ChessPage chessPage;
+   class Position {
+       int col;
+       int row;
+
+       Position(int col, int row) {
+           this.col = col;
+           this.row = row;
+       }
+   }
 
     public Board(ChessPage chessPage) {
         this.chessPage = chessPage;
@@ -60,7 +69,7 @@ public class Board extends JPanel {
         }
 
         capture(move.capture);
-        chessPage.onPlayerMove();
+        chessPage.switchTurn();
     }
 
     private void moveKing(Move move) {
@@ -162,26 +171,123 @@ public class Board extends JPanel {
 
         return !checkScanner.isKingChecked(move);
     }
+    public boolean isCheck(boolean isWhite) {
+        Piece king = findKing(isWhite);
+        if (king != null) {
+            Move kingMove = new Move(this, king, king.col, king.row);
+            return checkScanner.isKingChecked(kingMove);
+        }
+        return false;
+    }
 
     public boolean isCheckmate(boolean isWhite) {
         Piece king = findKing(isWhite);
 
+        // Check if the king is in check
         if (checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
-            for (Piece piece : pieceList) {
-                if (piece.isWhite == isWhite) {
-                    for (int i = 0; i < cols; i++) {
-                        for (int j = 0; j < rows; j++) {
-                            if (moveValid(piece, i, j)) {
-                                return false;
-                            }
+            // Check if the king can escape from check
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dy = -1; dy <= 1; dy++) {
+                    int newX = king.col + dx;
+                    int newY = king.row + dy;
+                    if (isValidMove(new Move(this, king, newX, newY))) {
+                        // If the king can escape from check, it's not checkmate
+                        return false;
+                    }
+                }
+            }
+
+            // Check if any friendly piece can capture the attacking piece
+            ArrayList<Piece> attackingPieces = getAttackingPieces(king, isWhite);
+            for (Piece attackingPiece : attackingPieces) {
+                for (Piece piece : pieceList) {
+                    if (piece.isWhite == isWhite && isValidMove(new Move(this, piece, attackingPiece.col, attackingPiece.row))) {
+                        // If a friendly piece can capture the attacking piece, it's not checkmate
+                        return false;
+                    }
+                }
+            }
+
+            // Check if any friendly piece can block the check
+            ArrayList<Piece> defendingPieces = getDefendingPieces(king, isWhite);
+            for (Piece defendingPiece : defendingPieces) {
+                ArrayList<Position> pathToKing = getPathToKing(defendingPiece, king);
+                for (Position pos : pathToKing) {
+                    for (Piece piece : pieceList) {
+                        if (piece.isWhite == isWhite && isValidMove(new Move(this, piece, pos.col, pos.row))) {
+                            // If a friendly piece can move in between the attacking piece and the king, it's not checkmate
+                            return false;
                         }
                     }
                 }
             }
+
+            // If none of the above conditions are met, it's checkmate
             return true;
         }
 
+        // If the king is not in check, it's not checkmate
         return false;
+    }
+
+    private ArrayList<Piece> getDefendingPieces(Piece targetPiece, boolean isTargetPieceWhite) {
+        ArrayList<Piece> defendingPieces = new ArrayList<>();
+
+        for (Piece piece : pieceList) {
+            if (piece.isWhite == isTargetPieceWhite && piece.isValidMovement(targetPiece.col, targetPiece.row)) {
+                // Check if the piece's movement can block the attack
+                if (piece.moveCollidesWithPiece(targetPiece.col, targetPiece.row)) {
+                    defendingPieces.add(piece);
+                }
+            }
+        }
+
+        return defendingPieces;
+    }
+    public ArrayList<Piece> getAttackingPieces(Piece targetPiece, boolean isTargetPieceWhite) {
+        ArrayList<Piece> attackingPieces = new ArrayList<>();
+
+        for (Piece piece : pieceList) {
+            if (piece.isWhite != isTargetPieceWhite && piece.isValidMovement(targetPiece.col, targetPiece.row)) {
+                // Check if the piece's movement can capture the target piece
+                if (piece.moveCollidesWithPiece(targetPiece.col, targetPiece.row)) {
+                    attackingPieces.add(piece);
+                }
+            }
+        }
+
+        return attackingPieces;
+    }
+
+    private ArrayList<Position> getPathToKing(Piece attackingPiece, Piece king) {
+        ArrayList<Position> pathToKing = new ArrayList<>();
+        int kingCol = king.col;
+        int kingRow = king.row;
+        int deltaX = Math.abs(attackingPiece.col - kingCol);
+        int deltaY = Math.abs(attackingPiece.row - kingRow);
+
+        int colDirection = Integer.compare(attackingPiece.col, kingCol);
+        int rowDirection = Integer.compare(attackingPiece.row, kingRow);
+
+        int col = attackingPiece.col;
+        int row = attackingPiece.row;
+
+        // Check if the king is in the same row or column as the attacking piece
+        if (deltaX == 0) {
+            for (int i = 1; i < deltaY; i++) {
+                pathToKing.add(new Position(col, row + i * rowDirection));
+            }
+        } else if (deltaY == 0) {
+            for (int i = 1; i < deltaX; i++) {
+                pathToKing.add(new Position(col + i * colDirection, row));
+            }
+        } else if (deltaX == deltaY) { // Check if the king is in one of the diagonals of the attacking piece
+            for (int i = 1; i < deltaX; i++) {
+                pathToKing.add(new Position(col + i * colDirection, row + i * rowDirection));
+            }
+        }
+
+        return pathToKing;
     }
 
 
@@ -195,25 +301,10 @@ public class Board extends JPanel {
         pieceList.add(new Knight(this, 6, 0, false));
         pieceList.add(new Rook(this, 7, 0, false));
 
-        pieceList.add(new Pawn(this, 0, 1, false));
-        pieceList.add(new Pawn(this, 1, 1, false));
-        pieceList.add(new Pawn(this, 2, 1, false));
-        pieceList.add(new Pawn(this, 3, 1, false));
-        pieceList.add(new Pawn(this, 4, 1, false));
-        pieceList.add(new Pawn(this, 5, 1, false));
-        pieceList.add(new Pawn(this, 6, 1, false));
-        pieceList.add(new Pawn(this, 7, 1, false));
-        pieceList.add(new Pawn(this, 8, 1, false));
-
-        pieceList.add(new Pawn(this, 0, 6, false));
-        pieceList.add(new Pawn(this, 1, 6, false));
-        pieceList.add(new Pawn(this, 2, 6, false));
-        pieceList.add(new Pawn(this, 3, 6, false));
-        pieceList.add(new Pawn(this, 4, 6, false));
-        pieceList.add(new Pawn(this, 5, 6, false));
-        pieceList.add(new Pawn(this, 6, 6, false));
-        pieceList.add(new Pawn(this, 7, 6, false));
-        pieceList.add(new Pawn(this, 8, 6, false));
+        for (int i = 0; i < 8; i++) {
+            pieceList.add(new Pawn(this, i, 1, false));
+            pieceList.add(new Pawn(this, i, 6, true));
+        }
 
         pieceList.add(new Rook(this, 0, 7, true));
         pieceList.add(new Knight(this, 1, 7, true));
@@ -228,6 +319,7 @@ public class Board extends JPanel {
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
 
+        // Draw the chessboard
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if ((i + j) % 2 == 0) {
@@ -239,12 +331,14 @@ public class Board extends JPanel {
             }
         }
 
+        // Highlight checked king
         Piece king = findKing(isWhiteTurn);
         if (king != null && checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
             g2d.setColor(Color.RED);
             g2d.fillRect(king.col * tileSize, king.row * tileSize, tileSize, tileSize);
         }
 
+        // Highlight valid moves for the selected piece
         if (selectedPiece != null) {
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
@@ -260,6 +354,35 @@ public class Board extends JPanel {
         for (int i = 0; i < pieceList.size(); i++) {
             Piece piece = pieceList.get(i);
             piece.paint(g2d);
+        }
+        boolean isPlayer1InCheck = isCheck(true);
+        boolean isPlayer2InCheck = isCheck(false);
+
+        if (isPlayer1InCheck) {
+            chessPage.updateCheckStatusLabel(1);
+        } else {
+            chessPage.clearCheckStatusLabel(1);
+        }
+
+        if (isPlayer2InCheck) {
+            chessPage.updateCheckStatusLabel(2);
+        } else {
+            chessPage.clearCheckStatusLabel(2);
+        }
+
+        boolean isPlayer1InCheckmate = isCheckmate(true);
+        boolean isPlayer2InCheckmate = isCheckmate(false);
+
+        if (isPlayer1InCheckmate) {
+            chessPage.updateCheckmateStatusLabel(1);
+        } else {
+            chessPage.clearCheckmateStatusLabel(1);
+        }
+
+        if (isPlayer2InCheckmate) {
+            chessPage.updateCheckmateStatusLabel(2);
+        } else {
+            chessPage.clearCheckmateStatusLabel(2);
         }
     }
 }
