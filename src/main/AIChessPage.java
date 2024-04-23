@@ -20,7 +20,7 @@ public class AIChessPage {
 		frame.setLocationRelativeTo(null);
 
 		AIUserInterface ui = new AIUserInterface();
-		ui.setPreferredSize(new Dimension(1920, 100));
+		//ui.setPreferredSize(new Dimension(1920, 100));
 		aiBoard = new AIBoard(); //panggil board ai
 		JPanel chessBoardPanel = new JPanel(new BorderLayout());
 		chessBoardPanel.add(ui, BorderLayout.CENTER);

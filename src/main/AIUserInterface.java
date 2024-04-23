@@ -1,8 +1,6 @@
 package main;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -23,6 +21,7 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 		pickSound = new InputAudio("src/res/PickUpPieces.wav");
 		putSound = new InputAudio("src/res/PutPieces.wav");
 	}
+	this.setPreferredSize(new Dimension(8 * squareSize, 8 * squareSize));
 
 	static int oldMouseX,oldMouseY,newMouseX, newMouseY;
 	static int squareSize=50;
@@ -30,8 +29,8 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 		super.paintComponent(g);
 		this.addMouseListener(this);
         this.addMouseMotionListener(this);
-		for(int row = 0; row < 40; row++) {
-			for(int col = 0; col < 40; col++) {
+		for(int row = 0; row < 8; row++) {
+			for(int col = 0; col < 8; col++) {
 				if((row + col) % 2 == 0) { // Check if it's a white square
 					g.setColor(new Color(255, 200, 100)); // Set color for white square
 				} else {
