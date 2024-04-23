@@ -199,7 +199,7 @@ public class ChessPage {
             frame.dispose(); // Close the main frame
             System.exit(0);
         }
-    }// Exit the application
+    }
 
     public ImageIcon createImageIcon(String s) {
         URL imgUrl = getClass().getResource("/res/pump.png");
