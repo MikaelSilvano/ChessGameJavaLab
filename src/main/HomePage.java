@@ -106,13 +106,10 @@ public class HomePage extends JFrame {
 
 
     private void setTaskbarIcon() {
-        // Load icon image
-        ImageIcon icon = new ImageIcon("src/res/pumpkin.png"); // Adjust path as needed
+        ImageIcon icon = new ImageIcon("src/res/pumpkin.png");
 
-        // Set icon for JFrame
         setIconImage(icon.getImage());
 
-        // Set icon for top-level window (taskbar icon)
         Frame[] frames = Frame.getFrames();
         for (Frame frame : frames) {
             frame.setIconImage(icon.getImage());

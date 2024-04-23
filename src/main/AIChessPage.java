@@ -20,10 +20,10 @@ public class AIChessPage {
 		frame.setLocationRelativeTo(null);
 
 		AIUserInterface ui = new AIUserInterface();
-		ui.setPreferredSize(new Dimension(500, 100));
+		ui.setPreferredSize(new Dimension(1920, 100));
 		aiBoard = new AIBoard(); //panggil board ai
 		JPanel chessBoardPanel = new JPanel(new BorderLayout());
-		chessBoardPanel.add(ui, BorderLayout.EAST);
+		chessBoardPanel.add(ui, BorderLayout.CENTER);
 		chessBoardPanel.setBackground(Color.BLACK);
 		frame.add(chessBoardPanel);
 		frame.getContentPane().setBackground(Color.black);
@@ -62,7 +62,7 @@ public class AIChessPage {
 				showExitConfirmationAI(frame);
 			}
 		});
-		frame.add(buttonPanel, BorderLayout.EAST); // Add button panel to the right
+		frame.add(buttonPanel, BorderLayout.EAST);
 		frame.setVisible(true);
 	}
 
@@ -77,7 +77,7 @@ public class AIChessPage {
 
 		if (confirmed == JOptionPane.YES_OPTION) {
 			clickSound.ButtonClickSound();
-			frame.dispose(); // Close the main frame
+			frame.dispose();
 			new HomePage();
 		}
 	}
@@ -93,7 +93,7 @@ public class AIChessPage {
 
 		if (confirmed == JOptionPane.YES_OPTION) {
 			clickSound.ButtonClickSound();
-			frame.dispose(); // Close the main frame
+			frame.dispose();
 			System.exit(0);
 		}
 	}

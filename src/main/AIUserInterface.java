@@ -30,8 +30,8 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 		super.paintComponent(g);
 		this.addMouseListener(this);
         this.addMouseMotionListener(this);
-		for(int row = 0; row < 8; row++) {
-			for(int col = 0; col < 8; col++) {
+		for(int row = 0; row < 40; row++) {
+			for(int col = 0; col < 40; col++) {
 				if((row + col) % 2 == 0) { // Check if it's a white square
 					g.setColor(new Color(255, 200, 100)); // Set color for white square
 				} else {

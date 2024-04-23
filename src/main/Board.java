@@ -13,15 +13,15 @@ public class Board extends JPanel {
     public int tileSize = 90;
     int cols = 8;
     int rows = 8;
-    ArrayList<Piece> pieceList = new ArrayList<>(); // List of all pieces
-    public Piece selectedPiece; // Piece to be moved
+    ArrayList<Piece> pieceList = new ArrayList<>();
+    public Piece selectedPiece;
     Input input = new Input(this);
     public CheckScanner checkScanner = new CheckScanner(this);
     public int enPassantTile = -1;
     public boolean isWhiteTurn = true;
     InputAudio promotionSound;
     InputAudio eatSound;
-    private ChessPage chessPage; // Reference to the ChessPage
+    private ChessPage chessPage;
 
     public Board(ChessPage chessPage) {
         this.chessPage = chessPage;
@@ -60,11 +60,11 @@ public class Board extends JPanel {
         }
 
         capture(move.capture);
-        chessPage.onPlayerMove(); // Inform ChessPage that a move has been made
+        chessPage.onPlayerMove();
     }
 
     private void moveKing(Move move) {
-        if (Math.abs(move.piece.col - move.newCol) == 2) { // Handling castling
+        if (Math.abs(move.piece.col - move.newCol) == 2) {
             Piece rook;
             if (move.piece.col < move.newCol) {
                 rook = getPiece(7, move.piece.row);
@@ -78,7 +78,7 @@ public class Board extends JPanel {
     }
 
     private void movePawn(Move move) {
-        // En passant
+        //en passant
         int colorIndex = move.piece.isWhite ? 1 : -1;
         if (getTileNum(move.newCol, move.newRow) == enPassantTile) {
             move.capture = getPiece(move.newCol, move.newRow + colorIndex);
@@ -89,7 +89,7 @@ public class Board extends JPanel {
             enPassantTile = -1;
         }
 
-        // Promotions
+        //promosi
         colorIndex = move.piece.isWhite ? 0 : 7;
         if (move.newRow == colorIndex) {
             promotePawn(move);
@@ -166,32 +166,26 @@ public class Board extends JPanel {
     public boolean isCheckmate(boolean isWhite) {
         Piece king = findKing(isWhite);
 
-        // Check if the king is in check
         if (checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
-            // Check for legal moves for all pieces of the current player
             for (Piece piece : pieceList) {
                 if (piece.isWhite == isWhite) {
                     for (int i = 0; i < cols; i++) {
                         for (int j = 0; j < rows; j++) {
                             if (moveValid(piece, i, j)) {
-                                // If there's at least one legal move, it's not checkmate
                                 return false;
                             }
                         }
                     }
                 }
             }
-            // If no legal moves are found for any piece, it's checkmate
             return true;
         }
 
-        // If the king is not in check, it's not checkmate
         return false;
     }
 
 
     public void addPieces() {
-        // Adding pieces for the initial setup
         pieceList.add(new Rook(this, 0, 0, false));
         pieceList.add(new Knight(this, 1, 0, false));
         pieceList.add(new Bishop(this, 2, 0, false));
@@ -201,10 +195,25 @@ public class Board extends JPanel {
         pieceList.add(new Knight(this, 6, 0, false));
         pieceList.add(new Rook(this, 7, 0, false));
 
-        for (int i = 0; i < 8; i++) {
-            pieceList.add(new Pawn(this, i, 1, false));
-            pieceList.add(new Pawn(this, i, 6, true));
-        }
+        pieceList.add(new Pawn(this, 0, 1, false));
+        pieceList.add(new Pawn(this, 1, 1, false));
+        pieceList.add(new Pawn(this, 2, 1, false));
+        pieceList.add(new Pawn(this, 3, 1, false));
+        pieceList.add(new Pawn(this, 4, 1, false));
+        pieceList.add(new Pawn(this, 5, 1, false));
+        pieceList.add(new Pawn(this, 6, 1, false));
+        pieceList.add(new Pawn(this, 7, 1, false));
+        pieceList.add(new Pawn(this, 8, 1, false));
+
+        pieceList.add(new Pawn(this, 0, 6, false));
+        pieceList.add(new Pawn(this, 1, 6, false));
+        pieceList.add(new Pawn(this, 2, 6, false));
+        pieceList.add(new Pawn(this, 3, 6, false));
+        pieceList.add(new Pawn(this, 4, 6, false));
+        pieceList.add(new Pawn(this, 5, 6, false));
+        pieceList.add(new Pawn(this, 6, 6, false));
+        pieceList.add(new Pawn(this, 7, 6, false));
+        pieceList.add(new Pawn(this, 8, 6, false));
 
         pieceList.add(new Rook(this, 0, 7, true));
         pieceList.add(new Knight(this, 1, 7, true));
@@ -219,7 +228,6 @@ public class Board extends JPanel {
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
 
-        // Draw the chessboard
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if ((i + j) % 2 == 0) {
@@ -231,14 +239,12 @@ public class Board extends JPanel {
             }
         }
 
-        // Highlight checked king
         Piece king = findKing(isWhiteTurn);
         if (king != null && checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
             g2d.setColor(Color.RED);
             g2d.fillRect(king.col * tileSize, king.row * tileSize, tileSize, tileSize);
         }
 
-        // Highlight valid moves for the selected piece
         if (selectedPiece != null) {
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {

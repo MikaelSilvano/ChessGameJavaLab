@@ -35,8 +35,7 @@ public class ChessPage {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                // Draw the background image
-                ImageIcon backgroundImage = new ImageIcon("src/res/Background.png");
+                ImageIcon backgroundImage = new ImageIcon("src/res/BackgroundMultiplayerOffline.png");
                 ImageIcon pumpkinImage = new ImageIcon("src/res/pump.png");
                 Image image = backgroundImage.getImage();
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
@@ -183,8 +182,7 @@ public class ChessPage {
     }
 
     public void onPlayerMove() {
-        // Called when a player makes a move on the board
-        switchTurn(); // Switch turn after a valid move
+        switchTurn();
     }
 
     private void showMenuConfirmation() {
@@ -198,7 +196,7 @@ public class ChessPage {
 
         if (confirmed == JOptionPane.YES_OPTION) {
             clickSound.ButtonClickSound();
-            frame.dispose(); // Close the main frame
+            frame.dispose();
             new HomePage();
         }
     }
@@ -214,7 +212,7 @@ public class ChessPage {
 
         if (confirmed == JOptionPane.YES_OPTION) {
             clickSound.ButtonClickSound();
-            frame.dispose(); // Close the main frame
+            frame.dispose();
             System.exit(0);
         }
     }
