@@ -1,6 +1,6 @@
 package main;
 
-import static main.AIChessPageEasy.*;
+import static main.AIBoard.*;
 
 public class AIRating {
 	

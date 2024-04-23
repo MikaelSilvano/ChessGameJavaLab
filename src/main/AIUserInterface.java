@@ -9,7 +9,7 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import static main.AIChessPageEasy.*;
+import static main.AIBoard.*;
 
 public class AIUserInterface extends JPanel implements MouseListener, MouseMotionListener{
 	InputAudio promotionSound;
@@ -39,6 +39,7 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 		Image chessPiecesImage;
         chessPiecesImage=new ImageIcon("src/res/ChessPieces.png").getImage();
         int x,y,x1=-1,y1=-1;
+
         
       /*  switch (main.AlphaBetaChess.chessBoard[oldMouseX][oldMouseY]) {
    	 	case "P": x1=5; y1=0;

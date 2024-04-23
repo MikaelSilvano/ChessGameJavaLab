@@ -94,7 +94,7 @@ public class HomePage extends JFrame {
     }
 
     private void startGameSingleplayerEasy() {
-        new AIChessPageEasy();
+        new AIChessPage();
         frame.dispose();
     }
 
