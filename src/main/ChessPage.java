@@ -54,6 +54,7 @@ public class ChessPage {
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
         };
+
         backgroundPanel.setLayout(new GridBagLayout());
         frame.setContentPane(backgroundPanel);
 
@@ -63,6 +64,17 @@ public class ChessPage {
         gbcFrame.insets = new Insets(10, 10, 10, 10);
         gbcFrame.gridx = 0;
         gbcFrame.gridy = 0;
+
+
+        //frame.add(new JLabel(new ImageIcon(String.valueOf(backgroundImage))));
+
+
+        GridBagConstraints gbcFrame = new GridBagConstraints();
+        gbcFrame.anchor = GridBagConstraints.WEST;
+        gbcFrame.insets = new Insets(10, 10, 10, 10);
+        gbcFrame.gridx = 0;
+        gbcFrame.gridy = 0;
+
 
         this.board = new Board(this);
         this.checkScanner = new CheckScanner(board);
@@ -255,9 +267,15 @@ public class ChessPage {
     }
     public void updateCheckmateStatusLabel(int playerNumber) {
         if (playerNumber == 1) {
+
             checkmateStatusLabel.setText("<html>Player 1 is<br/> in checkmate!</html>");
         } else if (playerNumber == 2) {
             checkmateStatusLabel.setText("<html>Player 2 is<br/> in checkmate!</html>");
+
+            checkmateStatusLabel.setText("Player 1 is in checkmate!");
+        } else if (playerNumber == 2) {
+            checkmateStatusLabel.setText("Player 2 is in checkmate!");
+
         }
     }
 

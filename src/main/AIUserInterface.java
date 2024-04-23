@@ -15,15 +15,20 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 	InputAudio putSound;
 	InputAudio pickSound;
 	private static String userPossibleMoves;
+	static int squareSize = 105;
 	public AIUserInterface() {
+
 		this.setPreferredSize(new Dimension(500, 500));
+
+		this.setPreferredSize(new Dimension(200, 200));
+
 		promotionSound = new InputAudio("src/res/PawnPromotion.wav");
 		eatSound = new InputAudio("src/res/EatPieces.wav");
 		pickSound = new InputAudio("src/res/PickUpPieces.wav");
 		putSound = new InputAudio("src/res/PutPieces.wav");
 	}
-
 	static int oldMouseX,oldMouseY,newMouseX, newMouseY;
+
 	static int squareSize=90;
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -35,14 +40,34 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 					g.setColor(new Color(255, 200, 100)); // Set color for white square
 				} else {
 					g.setColor(new Color(150, 50, 30)); // Set color for black square
+
+
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		this.addMouseListener(this);
+        this.addMouseMotionListener(this);
+		for(int row = 0; row < 8; row++) {
+			for(int col = 0; col < 8; col++) {
+				if((row + col) % 2 == 0) { // Check if it's a white square
+					g.setColor(new Color(210, 81, 66)); // Set color for white square
+				} else {
+					g.setColor(new Color(57, 47, 79)); // Set color for black square
+
 				}
 				g.fillRect(col * squareSize, row * squareSize, squareSize, squareSize); // Draw the square
 			}
 		}
 		Image chessPiecesImage;
+
 		chessPiecesImage=new ImageIcon("src/res/ChessPieces.png").getImage();
 		int x,y,x1=-1,y1=-1;
 
+
+
+        chessPiecesImage=new ImageIcon("src/res/ChessPieces.png").getImage();
+        int x,y,x1=-1,y1=-1;
+
+        
 
       /*  switch (main.AlphaBetaChess.chessBoard[oldMouseX][oldMouseY]) {
    	 	case "P": x1=5; y1=0;
@@ -71,6 +96,7 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
             break;
    	}
         g.drawImage(chessPiecesImage, (newMouseX-15), (newMouseY-15), (newMouseX+64), (newMouseY+64), x1*64, y1*64, (x1+1)*64, (y1+1)*64, this);*/
+
 		for(int i=0;i<64;i++){
 			x=-1;
 			y=-1;
@@ -103,6 +129,40 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 			if(x!=-1 && y!=-1)
 				g.drawImage(chessPiecesImage, (i%8)*squareSize, (i/8)*squareSize, (i%8+1)*squareSize, (i/8+1)*squareSize, x*64, y*64, (x+1)*64, (y+1)*64, this);
 		}
+
+        for(int i=0;i<64;i++){
+        	x=-1;
+        	y=-1;
+	    	 switch (chessBoard[i/8][i%8]) {
+	    	 case "P": x=5; y=0;
+             	 break;
+	         case "p": x=5; y=1;
+	             break;
+	         case "R": x=2; y=0;
+	             break;
+	         case "r": x=2; y=1;
+	             break;
+	         case "K": x=4; y=0;
+	             break;
+	         case "k": x=4; y=1;
+	             break;
+	         case "B": x=3; y=0;
+	             break;
+	         case "b": x=3; y=1;
+	             break;
+	         case "Q": x=1; y=0;
+	             break;
+	         case "q": x=1; y=1;
+	             break;
+	         case "A": x=0; y=0;
+	             break;
+	         case "a": x=0; y=1;
+	             break;
+	    	}
+	    if(x!=-1 && y!=-1)
+	    	g.drawImage(chessPiecesImage, (i%8)*squareSize, (i/8)*squareSize, (i%8+1)*squareSize, (i/8+1)*squareSize, x*64, y*64, (x+1)*64, (y+1)*64, this);	    	
+        }
+
 		/*
 		if (userPossibleMoves != null) {
 			for (int i = 0; i < userPossibleMoves.length(); i += 5) {
@@ -174,13 +234,13 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
+
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
+		/
 
 	}
 }

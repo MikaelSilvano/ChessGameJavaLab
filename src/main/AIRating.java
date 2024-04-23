@@ -83,6 +83,7 @@ public class AIRating {
 		int rating=0;
 		int tempKingPos= kingPositionA;
 
+
 		for (int i=0;i<64;i++) {
 			switch (chessBoard[i/8][i%8]) {
 				case "P": kingPositionA=i;
@@ -111,11 +112,43 @@ public class AIRating {
 		if(!kingSafe())
 			rating-=200;
 		return rating/2;
+
+		
+        for (int i=0;i<64;i++) {
+            switch (chessBoard[i/8][i%8]) {
+                case "P": kingPositionA=i;
+	                	if(!kingSafe())
+	                		rating-=64;
+	                    break;
+                case "R": kingPositionA=i;
+		            	if(!kingSafe())
+		            		rating-=500;
+		                break;                    
+                case "K": kingPositionA=i;
+		            	if(!kingSafe())
+		            		rating-=300;
+                    break;
+                case "B": kingPositionA=i;
+		            	if(!kingSafe())
+		            		rating-=300;
+                    break;
+                case "Q": kingPositionA=i;
+		            	if(!kingSafe())
+		            		rating-=900;
+                    break;
+            }
+        }
+		kingPositionA=tempKingPos;
+        if(!kingSafe())
+        	rating-=200;
+        return rating/2;
+
 	}
 
 	//rates according to the chess pieces availability on the board
 	public static int ratePieceAvailability(){
 		int rating=0, bishopCount=0;
+
 		for (int i=0;i<64;i++) {
 			switch (chessBoard[i/8][i%8]) {
 				case "P": rating+=100;
@@ -136,6 +169,28 @@ public class AIRating {
 			if (bishopCount==1) {rating+=250;}
 		}
 		return rating;
+
+        for (int i=0;i<64;i++) {
+            switch (chessBoard[i/8][i%8]) {
+                case "P": rating+=100;
+                    break;
+                case "R": rating+=500;
+                    break;
+                case "K": rating+=300;
+                    break;
+                case "B": bishopCount++;
+                    break;
+                case "Q": rating+=900;
+                    break;
+            }
+        }
+        if (bishopCount>=2) {
+        	rating+=300*bishopCount;
+        } else {
+            if (bishopCount==1) {rating+=250;}
+        }
+        return rating;
+
 	}
 
 	//rates according to the flexibilty in possible moves
@@ -153,6 +208,7 @@ public class AIRating {
 	}
 
 	public static int ratePositional(int material) {
+
 		int rating=0;
 		for (int i=0;i<64;i++) {
 			switch (chessBoard[i/8][i%8]) {
@@ -173,4 +229,26 @@ public class AIRating {
 		}
 		return rating;
 	}
+
+        int rating=0;
+        for (int i=0;i<64;i++) {
+            switch (chessBoard[i/8][i%8]) {
+                case "P": rating+=pawnBoard[i/8][i%8];
+                    break;
+                case "R": rating+=rookBoard[i/8][i%8];
+                    break;
+                case "K": rating+=knightBoard[i/8][i%8];
+                    break;
+                case "B": rating+=bishopBoard[i/8][i%8];
+                    break;
+                case "Q": rating+=queenBoard[i/8][i%8];
+                    break;
+                case "A": if (material>=1750) {rating+=kingMidBoard[i/8][i%8]; rating+= possibleA(kingPositionA).length()*10;} else
+                {rating+=kingEndBoard[i/8][i%8]; rating+= possibleA(kingPositionA).length()*30;}
+                    break;
+            }
+        }
+        return rating;
+    }
+
 }
