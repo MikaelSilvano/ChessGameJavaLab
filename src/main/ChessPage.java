@@ -2,6 +2,7 @@
 package main;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -60,7 +61,7 @@ public class ChessPage {
         timerLabels[1].setForeground(Color.WHITE);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.NORTH;
-        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.insets = new Insets(10, 50, 10, 10);
         gbc.gridx = 1;
         gbc.gridy = 0;
         frame.add(timerLabels[1], gbc);
@@ -76,22 +77,27 @@ public class ChessPage {
         gbd.gridy = 0;
         frame.add(turnLabel, gbd);
 
-        checkStatusLabel = new JLabel("NO CHECK");
+        checkStatusLabel = new JLabel("TEST");
         checkStatusLabel.setFont(new Font("Monospaced", Font.BOLD, 20));
-        checkStatusLabel.setForeground(Color.BLUE);
+        checkStatusLabel.setForeground(Color.RED);
+        /*
         GridBagConstraints gbcCheckStatusLabel = new GridBagConstraints();
+        gbcCheckStatusLabel.anchor = GridBagConstraints.SOUTH;
         gbcCheckStatusLabel.insets = new Insets(10, 10, 10, 10);
-        gbcCheckStatusLabel.gridx = 1;
-        gbcCheckStatusLabel.gridy = 1;
-        frame.add(checkStatusLabel, gbcCheckStatusLabel);
+        gbcCheckStatusLabel.gridx = 4;
+        gbcCheckStatusLabel.gridy = 0;
 
-        checkmateStatusLabel = new JLabel("NO CHECKMATE");
+         */
+        frame.add(checkStatusLabel, );
+
+        checkmateStatusLabel = new JLabel("TEST");
         checkmateStatusLabel.setFont(new Font("Monospaced", Font.BOLD, 20));
         checkmateStatusLabel.setForeground(Color.RED);
         GridBagConstraints gbcCheckmateStatusLabel = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.SOUTH;
         gbcCheckmateStatusLabel.insets = new Insets(10, 10, 10, 10);
-        gbcCheckmateStatusLabel.gridx = 1;
-        gbcCheckmateStatusLabel.gridy = 2;
+        gbcCheckmateStatusLabel.gridx = 4;
+        gbcCheckmateStatusLabel.gridy = 0;
         frame.add(checkmateStatusLabel, gbcCheckmateStatusLabel);
 
         timers = new Timer[2];
@@ -183,9 +189,9 @@ public class ChessPage {
     }
     public void clearCheckStatusLabel(int playerNumber) {
         if (playerNumber == 1) {
-            checkStatusLabel.setText("");
+            checkStatusLabel.setText("TEST");
         } else if (playerNumber == 2) {
-            checkStatusLabel.setText("");
+            checkStatusLabel.setText("TEST");
         }
     }
     public void updateCheckStatusLabel(int playerNumber) {
@@ -197,9 +203,9 @@ public class ChessPage {
     }
     public void clearCheckmateStatusLabel(int playerNumber) {
         if (playerNumber == 1) {
-            checkmateStatusLabel.setText("");
+            checkmateStatusLabel.setText("TEST");
         } else if (playerNumber == 2) {
-            checkmateStatusLabel.setText("");
+            checkmateStatusLabel.setText("TEST");
         }
     }
     public void updateCheckmateStatusLabel(int playerNumber) {

@@ -37,6 +37,7 @@ public class Board extends JPanel {
         this.setPreferredSize(new Dimension(cols * tileSize, rows * tileSize));
         this.addMouseListener(input);
         this.addMouseMotionListener(input);
+        setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 5));
         promotionSound = new InputAudio("src/res/PawnPromotion.wav");
         eatSound = new InputAudio("src/res/EatPieces.wav");
         addPieces();
@@ -185,7 +186,7 @@ public class Board extends JPanel {
 
         // Check if the king is in check
         if (checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
-            // Check if the king can escape from check
+            // Generate possible moves for the king
             for (int dx = -1; dx <= 1; dx++) {
                 for (int dy = -1; dy <= 1; dy++) {
                     int newX = king.col + dx;
@@ -197,27 +198,21 @@ public class Board extends JPanel {
                 }
             }
 
-            // Check if any friendly piece can capture the attacking piece
+            // Check if any piece can block the check
+            for (Piece piece : pieceList) {
+                if (piece.isWhite == isWhite && moveValid(piece, king.col, king.row)) {
+                    // If a piece can block the check, it's not checkmate
+                    return false;
+                }
+            }
+
+            // Check if any piece can capture the attacking piece
             ArrayList<Piece> attackingPieces = getAttackingPieces(king, isWhite);
             for (Piece attackingPiece : attackingPieces) {
                 for (Piece piece : pieceList) {
                     if (piece.isWhite == isWhite && isValidMove(new Move(this, piece, attackingPiece.col, attackingPiece.row))) {
-                        // If a friendly piece can capture the attacking piece, it's not checkmate
+                        // If a piece can capture the attacking piece, it's not checkmate
                         return false;
-                    }
-                }
-            }
-
-            // Check if any friendly piece can block the check
-            ArrayList<Piece> defendingPieces = getDefendingPieces(king, isWhite);
-            for (Piece defendingPiece : defendingPieces) {
-                ArrayList<Position> pathToKing = getPathToKing(defendingPiece, king);
-                for (Position pos : pathToKing) {
-                    for (Piece piece : pieceList) {
-                        if (piece.isWhite == isWhite && isValidMove(new Move(this, piece, pos.col, pos.row))) {
-                            // If a friendly piece can move in between the attacking piece and the king, it's not checkmate
-                            return false;
-                        }
                     }
                 }
             }
@@ -230,20 +225,6 @@ public class Board extends JPanel {
         return false;
     }
 
-    private ArrayList<Piece> getDefendingPieces(Piece targetPiece, boolean isTargetPieceWhite) {
-        ArrayList<Piece> defendingPieces = new ArrayList<>();
-
-        for (Piece piece : pieceList) {
-            if (piece.isWhite == isTargetPieceWhite && piece.isValidMovement(targetPiece.col, targetPiece.row)) {
-                // Check if the piece's movement can block the attack
-                if (piece.moveCollidesWithPiece(targetPiece.col, targetPiece.row)) {
-                    defendingPieces.add(piece);
-                }
-            }
-        }
-
-        return defendingPieces;
-    }
     public ArrayList<Piece> getAttackingPieces(Piece targetPiece, boolean isTargetPieceWhite) {
         ArrayList<Piece> attackingPieces = new ArrayList<>();
 
@@ -257,37 +238,6 @@ public class Board extends JPanel {
         }
 
         return attackingPieces;
-    }
-
-    private ArrayList<Position> getPathToKing(Piece attackingPiece, Piece king) {
-        ArrayList<Position> pathToKing = new ArrayList<>();
-        int kingCol = king.col;
-        int kingRow = king.row;
-        int deltaX = Math.abs(attackingPiece.col - kingCol);
-        int deltaY = Math.abs(attackingPiece.row - kingRow);
-
-        int colDirection = Integer.compare(attackingPiece.col, kingCol);
-        int rowDirection = Integer.compare(attackingPiece.row, kingRow);
-
-        int col = attackingPiece.col;
-        int row = attackingPiece.row;
-
-        // Check if the king is in the same row or column as the attacking piece
-        if (deltaX == 0) {
-            for (int i = 1; i < deltaY; i++) {
-                pathToKing.add(new Position(col, row + i * rowDirection));
-            }
-        } else if (deltaY == 0) {
-            for (int i = 1; i < deltaX; i++) {
-                pathToKing.add(new Position(col + i * colDirection, row));
-            }
-        } else if (deltaX == deltaY) { // Check if the king is in one of the diagonals of the attacking piece
-            for (int i = 1; i < deltaX; i++) {
-                pathToKing.add(new Position(col + i * colDirection, row + i * rowDirection));
-            }
-        }
-
-        return pathToKing;
     }
 
 
