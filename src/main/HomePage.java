@@ -79,7 +79,7 @@ public class HomePage extends JFrame {
                 startGameSingleplayerEasy(); // Memulai permainan single player dengan AIChessPageEasy
             }
         });
-        
+
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBackground(Color.BLACK);
         buttonPanel.add(multiplayerOfflineButton);
