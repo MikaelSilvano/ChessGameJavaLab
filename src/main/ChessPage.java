@@ -118,8 +118,8 @@ public class ChessPage {
             menuButton.setPreferredSize(new Dimension(200, 100));
             JButton exitButton = new JButton("Exit");
             exitButton.setPreferredSize(new Dimension(200, 100));
-            buttonPanel.add(menuButton, gbd);
 
+            buttonPanel.add(menuButton, gbd);
             gbd.gridy = 1;
             buttonPanel.add(exitButton, gbd);
 
@@ -187,22 +187,6 @@ public class ChessPage {
         switchTurn(); // Switch turn after a valid move
     }
 
-    private void showExitConfirmation() {
-        int confirmed = JOptionPane.showConfirmDialog(frame,
-                "Are you sure you want to exit the game?",
-                "Exit Confirmation",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                createImageIcon("/res/pump.png"));
-        clickSound.ButtonClickSound();
-
-        if (confirmed == JOptionPane.YES_OPTION) {
-            clickSound.ButtonClickSound();
-            frame.dispose(); // Close the main frame
-            System.exit(0);
-        }
-    }
-
     private void showMenuConfirmation() {
         int confirmed = JOptionPane.showConfirmDialog(frame,
                 "Are you sure you want to go back to menu?",
@@ -216,6 +200,22 @@ public class ChessPage {
             clickSound.ButtonClickSound();
             frame.dispose(); // Close the main frame
             new HomePage();
+        }
+    }
+
+    private void showExitConfirmation() {
+        int confirmed = JOptionPane.showConfirmDialog(frame,
+                "Are you sure you want to exit the game?",
+                "Exit Confirmation",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                createImageIcon("/res/pump.png"));
+        clickSound.ButtonClickSound();
+
+        if (confirmed == JOptionPane.YES_OPTION) {
+            clickSound.ButtonClickSound();
+            frame.dispose(); // Close the main frame
+            System.exit(0);
         }
     }
 
