@@ -61,14 +61,6 @@ public class HomePage extends JFrame {
     private void displayOptions() {
         frame.getContentPane().removeAll();
         frame.repaint();
-        JButton singlePlayerButton = new JButton(singlePlayerIcon);
-        singlePlayerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                clickSound.ButtonClickSound();
-                startGameSingleplayerEasy(); // Memulai permainan single player dengan AIChessPageEasy
-            }
-        });
 
         JButton multiplayerOfflineButton = new JButton(multiPlayerIcon);
         multiplayerOfflineButton.addActionListener(new ActionListener() {
@@ -79,10 +71,19 @@ public class HomePage extends JFrame {
             }
         });
 
+        JButton singlePlayerButton = new JButton(singlePlayerIcon);
+        singlePlayerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clickSound.ButtonClickSound();
+                startGameSingleplayerEasy(); // Memulai permainan single player dengan AIChessPageEasy
+            }
+        });
+        
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBackground(Color.BLACK);
-        buttonPanel.add(singlePlayerButton);
         buttonPanel.add(multiplayerOfflineButton);
+        buttonPanel.add(singlePlayerButton);
 
         frame.add(buttonPanel, BorderLayout.CENTER);
         frame.revalidate();
