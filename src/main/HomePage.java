@@ -26,6 +26,14 @@ public class HomePage extends JFrame {
         frame.setResizable(false);
         frame.add(button);
 
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clickSound.ButtonClickSound();
+                displayOptions();
+            }
+        });
+
         try {
             backgroundImage = new ImageIcon("src/res/Background.png");
             playButtonIcon = new ImageIcon("src/res/PlayButton.png");
@@ -58,7 +66,7 @@ public class HomePage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 clickSound.ButtonClickSound();
-                displayDifficultyOptions();
+                startGameSingleplayerEasy(); // Memulai permainan single player dengan AIChessPageEasy
             }
         });
 
@@ -71,38 +79,12 @@ public class HomePage extends JFrame {
             }
         });
 
-        JPanel difficultyPanel = new JPanel(new GridLayout(1, 1));
-        difficultyPanel.add(singlePlayerButton);
-        difficultyPanel.add(multiplayerOfflineButton);
-        frame.add(difficultyPanel, BorderLayout.CENTER);
-        frame.revalidate();
-    }
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBackground(Color.BLACK);
+        buttonPanel.add(singlePlayerButton);
+        buttonPanel.add(multiplayerOfflineButton);
 
-    private void displayDifficultyOptions() {
-        frame.getContentPane().removeAll();
-        frame.repaint();
-        JButton easyButton = new JButton(easyDifficultyIcon);
-        easyButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                clickSound.ButtonClickSound();
-                startGameSingleplayerEasy();
-            }
-        });
-
-        JButton hardButton = new JButton(hardDifficultyIcon);
-        hardButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                clickSound.ButtonClickSound();
-                startGameSingleplayerHard();
-            }
-        });
-
-        JPanel difficultyPanel = new JPanel(new GridLayout(2, 1, 10, 10));
-        difficultyPanel.add(easyButton);
-        difficultyPanel.add(hardButton);
-        frame.add(difficultyPanel, BorderLayout.CENTER);
+        frame.add(buttonPanel, BorderLayout.CENTER);
         frame.revalidate();
     }
 
@@ -113,11 +95,6 @@ public class HomePage extends JFrame {
 
     private void startGameSingleplayerEasy() {
         new AIChessPageEasy();
-        frame.dispose();
-    }
-
-    private void startGameSingleplayerHard() {
-        new AIChessPageHard();
         frame.dispose();
     }
 
