@@ -6,6 +6,8 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.net.URL;
 
 public class ChessPage {
@@ -21,9 +23,17 @@ public class ChessPage {
     private int currentPlayerIndex;
     private Board board;
     InputAudio clickSound;
-
+    ImageIcon menuButtonIcon;
+    ImageIcon exitButtonIcon;
 
     public ChessPage() {
+        try {
+            menuButtonIcon = new ImageIcon("src/res/menuButton.png");
+            exitButtonIcon = new ImageIcon("src/res/exitButton.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         frame = new JFrame();
         frame.getContentPane().setBackground(Color.black);
         frame.setLayout(new GridBagLayout());
@@ -61,7 +71,7 @@ public class ChessPage {
         timerLabels[1].setForeground(Color.WHITE);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.NORTH;
-        gbc.insets = new Insets(10, 50, 10, 10);
+        gbc.insets = new Insets(10, 10, 10, 10);
         gbc.gridx = 1;
         gbc.gridy = 0;
         frame.add(timerLabels[1], gbc);
@@ -80,21 +90,21 @@ public class ChessPage {
         checkStatusLabel = new JLabel("TEST");
         checkStatusLabel.setFont(new Font("Monospaced", Font.BOLD, 20));
         checkStatusLabel.setForeground(Color.RED);
-        /*
+
         GridBagConstraints gbcCheckStatusLabel = new GridBagConstraints();
-        gbcCheckStatusLabel.anchor = GridBagConstraints.SOUTH;
+        gbcCheckStatusLabel.anchor = GridBagConstraints.CENTER;
         gbcCheckStatusLabel.insets = new Insets(10, 10, 10, 10);
         gbcCheckStatusLabel.gridx = 4;
-        gbcCheckStatusLabel.gridy = 0;
+        gbcCheckStatusLabel.gridy = 1;
 
-         */
-        frame.add(checkStatusLabel, );
+
+        frame.add(checkStatusLabel, gbcCheckStatusLabel);
 
         checkmateStatusLabel = new JLabel("TEST");
         checkmateStatusLabel.setFont(new Font("Monospaced", Font.BOLD, 20));
         checkmateStatusLabel.setForeground(Color.RED);
         GridBagConstraints gbcCheckmateStatusLabel = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.SOUTH;
+        gbc.anchor = GridBagConstraints.CENTER;
         gbcCheckmateStatusLabel.insets = new Insets(10, 10, 10, 10);
         gbcCheckmateStatusLabel.gridx = 4;
         gbcCheckmateStatusLabel.gridy = 0;
@@ -125,34 +135,77 @@ public class ChessPage {
             JPanel buttonPanel = new JPanel(new GridBagLayout());
             buttonPanel.setOpaque(false);
 
-            gbd.gridx = 2;
+            gbd.gridx = 1;
             gbd.gridy = 0;
             gbd.insets = new Insets(5, 5, 5, 5); //untuk merapihkan button yang disebelah kanan
 
-            JButton menuButton = new JButton("Menu");
-            menuButton.setPreferredSize(new Dimension(200, 100));
-            JButton exitButton = new JButton("Exit");
-            exitButton.setPreferredSize(new Dimension(200, 100));
+            JLabel menuButton = new JLabel(menuButtonIcon);
+            //menuButton.setPreferredSize(new Dimension(200, 100));
+            clickSound = new InputAudio("ButtonClick.wav");
 
+            JLabel exitButton = new JLabel(exitButtonIcon);
+            //exitButton.setPreferredSize(new Dimension(200, 100));
             buttonPanel.add(menuButton, gbd);
+
+            gbd.gridx = 1;
             gbd.gridy = 1;
             buttonPanel.add(exitButton, gbd);
-
-            menuButton.addActionListener(new ActionListener() {
+            menuButton.addMouseListener(new MouseListener() {
                 @Override
-                public void actionPerformed(ActionEvent e) {
+                public void mouseClicked(MouseEvent e) {
                     clickSound.ButtonClickSound();
-                    showMenuConfirmation();
+                    frame.dispose();
+                    new HomePage();
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+
                 }
             });
 
-            exitButton.addActionListener(new ActionListener() {
+            exitButton.addMouseListener(new MouseListener() {
                 @Override
-                public void actionPerformed(ActionEvent e) {
+                public void mouseClicked(MouseEvent e) {
                     clickSound.ButtonClickSound();
                     showExitConfirmation();
+                    //System.exit(0); //exit button
                 }
 
+                @Override
+                public void mousePressed(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+
+                }
             });
             frame.add(buttonPanel);
         }

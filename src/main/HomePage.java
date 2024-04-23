@@ -3,6 +3,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 public class HomePage extends JFrame {
@@ -16,24 +18,6 @@ public class HomePage extends JFrame {
     InputAudio clickSound;
 
     public HomePage() {
-        JButton button = new JButton();
-        button.setBounds(945, 730, 200, 75);
-
-        frame = new JFrame("Catur Mas Putra");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setBackground(Color.BLACK);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setResizable(false);
-        frame.add(button);
-
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                clickSound.ButtonClickSound();
-                displayOptions();
-            }
-        });
-
         try {
             backgroundImage = new ImageIcon("src/res/Background.png");
             playButtonIcon = new ImageIcon("src/res/PlayButton.png");
@@ -45,16 +29,51 @@ public class HomePage extends JFrame {
             e.printStackTrace();
         }
 
-        setTaskbarIcon();
-
-        frame.add(new JLabel(new ImageIcon(String.valueOf(backgroundImage))));
+        JLabel playButton = new JLabel(playButtonIcon);
+        playButton.setBounds (945, 730, 200, 75);
         clickSound = new InputAudio("ButtonClick.wav");
 
+        frame = new JFrame("Catur Mas Putra");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setBackground(Color.BLACK);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setResizable(false);
+        frame.add(playButton);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel.setBackground(Color.BLACK);
+        frame.add(new JLabel(new ImageIcon(String.valueOf(backgroundImage))));
 
-        frame.add(buttonPanel, BorderLayout.SOUTH);
+        playButton.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                clickSound.ButtonClickSound();
+                displayOptions();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+        frame.setVisible(true);
+
+        setTaskbarIcon();
+        clickSound = new InputAudio("ButtonClick.wav");
+
         frame.setVisible(true);
     }
 
