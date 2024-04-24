@@ -1,10 +1,11 @@
+
 //ChessPage
-package main;
+        package main;
 
 import javax.swing.*;
-import javax.swing.border.Border;
+        import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionEvent;
+        import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -24,6 +25,7 @@ public class ChessPage {
     private int currentPlayerIndex;
     private Board board;
     InputAudio clickSound;
+    InputAudio winChessSound;
     ImageIcon menuButtonIcon;
     ImageIcon exitButtonIcon;
 
@@ -34,6 +36,8 @@ public class ChessPage {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        clickSound = new InputAudio("src/res/ButtonClick.wav");
+        winChessSound = new InputAudio("src/res/WinChess.wav");
 
         frame = new JFrame();
         frame.getContentPane().setBackground(Color.black);
@@ -54,7 +58,6 @@ public class ChessPage {
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
         };
-
         backgroundPanel.setLayout(new GridBagLayout());
         frame.setContentPane(backgroundPanel);
 
@@ -64,17 +67,6 @@ public class ChessPage {
         gbcFrame.insets = new Insets(10, 10, 10, 10);
         gbcFrame.gridx = 0;
         gbcFrame.gridy = 0;
-
-
-        //frame.add(new JLabel(new ImageIcon(String.valueOf(backgroundImage))));
-
-
-        GridBagConstraints gbcFrame = new GridBagConstraints();
-        gbcFrame.anchor = GridBagConstraints.WEST;
-        gbcFrame.insets = new Insets(10, 10, 10, 10);
-        gbcFrame.gridx = 0;
-        gbcFrame.gridy = 0;
-
 
         this.board = new Board(this);
         this.checkScanner = new CheckScanner(board);
@@ -133,7 +125,12 @@ public class ChessPage {
 
                         if (playerTimeInSeconds[playerIndex] <= 0) {
                             timers[playerIndex].stop();
-                            JOptionPane.showMessageDialog(frame, "Player " + (playerIndex + 1) + " ran out of time!");
+                            if(playerIndex == 0) {
+                                player2Wins();
+                            } else if(playerIndex == 1) {
+                                player1Wins();
+                            }
+
                         }
                     }
                 });
@@ -146,8 +143,6 @@ public class ChessPage {
             JPanel buttonPanel = new JPanel(new BorderLayout());
             buttonPanel.setPreferredSize(new Dimension(250,  200));
             buttonPanel.setOpaque(false);
-
-            clickSound = new InputAudio("ButtonClick.wav");
 
             JLabel menuButton = new JLabel(menuButtonIcon);
             buttonPanel.add(menuButton, BorderLayout.NORTH);
@@ -251,13 +246,7 @@ public class ChessPage {
             checkStatusLabel.setText("TEST");
         }
     }
-    public void updateCheckStatusLabel(int playerNumber) {
-        if (playerNumber == 1) {
-            checkStatusLabel.setText("<html>Player 1 is<br/> in check!</html>");
-        } else if (playerNumber == 2) {
-            checkStatusLabel.setText("<html>Player 2 is<br/> in check!</html>");
-        }
-    }
+
     public void clearCheckmateStatusLabel(int playerNumber) {
         if (playerNumber == 1) {
             checkmateStatusLabel.setText("TEST");
@@ -267,16 +256,23 @@ public class ChessPage {
     }
     public void updateCheckmateStatusLabel(int playerNumber) {
         if (playerNumber == 1) {
-
-            checkmateStatusLabel.setText("<html>Player 1 is<br/> in checkmate!</html>");
-        } else if (playerNumber == 2) {
-            checkmateStatusLabel.setText("<html>Player 2 is<br/> in checkmate!</html>");
-
             checkmateStatusLabel.setText("Player 1 is in checkmate!");
         } else if (playerNumber == 2) {
             checkmateStatusLabel.setText("Player 2 is in checkmate!");
-
         }
+    }
+    /////////
+    public void clearCheckStatus() {
+        checkStatusLabel.setText("TEST");
+    }
+    public void updateCheckStatus() {
+        checkStatusLabel.setText("Check!");
+    }
+    public void clearCheckmateStatus() {
+        checkStatusLabel.setText("TEST");
+    }
+    public void updateCheckmateStatus() {
+        checkStatusLabel.setText("Check!");
     }
 
     private void showMenuConfirmation() {
@@ -309,6 +305,113 @@ public class ChessPage {
             frame.dispose();
             System.exit(0);
         }
+    }
+    public void player1Wins() {
+        JDialog dialog = new JDialog(frame, "Player 1 Wins", true);
+        dialog.getContentPane().setBackground(Color.WHITE);
+        dialog.setLayout(new BorderLayout());
+        dialog.setResizable(false);
+        winChessSound.WinChessSound();
+
+        ImageIcon icon = createImageIcon("/res/pump.png");
+
+        JLabel messageLabel = new JLabel("<html>Player 2 ran out of time!<br/>Player 1 wins!</html>", icon, JLabel.CENTER);
+        messageLabel.setFont(new Font("Monospaced", Font.BOLD, 20));
+        messageLabel.setBackground(new Color(0,0,0));
+        messageLabel.setForeground(new Color(255, 134, 58));
+        messageLabel.setHorizontalAlignment(JLabel.CENTER);
+        messageLabel.setVerticalTextPosition(JLabel.BOTTOM);
+        messageLabel.setHorizontalTextPosition(JLabel.CENTER);
+
+        dialog.add(messageLabel, BorderLayout.CENTER);
+
+        JButton retryButton = new JButton("Retry");
+        retryButton.setForeground(new Color(57, 47, 79));
+        retryButton.addActionListener(e -> {
+            clickSound.ButtonClickSound();
+            dialog.dispose();
+            frame.dispose();
+            new HomePage();
+        });
+        retryButton.setPreferredSize(new Dimension(100, 40));
+        retryButton.setFont(new Font("Monospaced", Font.PLAIN, 16));
+
+        JButton exitButton = new JButton("Exit");
+        exitButton.setForeground(new Color(57, 47, 79));
+        exitButton.addActionListener(e -> {
+            clickSound.ButtonClickSound();
+            dialog.dispose();
+            frame.dispose();
+            System.exit(0);
+        });
+        exitButton.setPreferredSize(new Dimension(100, 40));
+        exitButton.setFont(new Font("Monospaced", Font.PLAIN, 16));
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBackground(Color.WHITE);
+        buttonPanel.add(retryButton);
+        buttonPanel.add(exitButton);
+
+        dialog.add(buttonPanel, BorderLayout.SOUTH);
+
+        dialog.setSize(500, 250);
+        dialog.setLocationRelativeTo(frame);
+
+        dialog.setVisible(true);
+    }
+
+    public void player2Wins() {
+        JDialog dialog = new JDialog(frame, "Player 2 Wins", true);
+        dialog.getContentPane().setBackground(Color.WHITE);
+        dialog.setLayout(new BorderLayout());
+        dialog.setResizable(false);
+        winChessSound.WinChessSound();
+
+        ImageIcon icon = createImageIcon("/res/pump.png");
+
+        JLabel messageLabel = new JLabel("<html>Player 1 ran out of time!<br/>Player 2 wins!</html>", icon, JLabel.CENTER);
+        messageLabel.setFont(new Font("Monospaced", Font.PLAIN, 20));
+        messageLabel.setForeground(new Color(255, 134, 58));
+        messageLabel.setHorizontalAlignment(JLabel.CENTER);
+        messageLabel.setVerticalTextPosition(JLabel.BOTTOM);
+        messageLabel.setHorizontalTextPosition(JLabel.CENTER);
+
+        dialog.add(messageLabel, BorderLayout.CENTER);
+
+        JButton retryButton = new JButton("Retry");
+        retryButton.setForeground(new Color(57, 47, 79));
+        retryButton.addActionListener(e -> {
+            clickSound.ButtonClickSound();
+            dialog.dispose();
+            frame.dispose();
+            new HomePage();
+        });
+        retryButton.setPreferredSize(new Dimension(100, 40));
+        retryButton.setFont(new Font("Monospaced", Font.PLAIN, 16));
+
+        JButton exitButton = new JButton("Exit");
+        exitButton.setForeground(new Color(57, 47, 79));
+        exitButton.addActionListener(e -> {
+            clickSound.ButtonClickSound();
+            dialog.dispose();
+            frame.dispose();
+            System.exit(0);
+        });
+        exitButton.setPreferredSize(new Dimension(100, 40));
+        exitButton.setFont(new Font("Monospaced", Font.PLAIN, 16));
+
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBackground(Color.WHITE);
+        buttonPanel.add(retryButton);
+        buttonPanel.add(exitButton);
+
+        dialog.add(buttonPanel, BorderLayout.SOUTH);
+
+        dialog.setSize(500, 250);
+        dialog.setLocationRelativeTo(frame);
+
+        dialog.setVisible(true);
     }
 
     public ImageIcon createImageIcon(String s) {
