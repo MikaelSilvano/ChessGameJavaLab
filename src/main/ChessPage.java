@@ -266,6 +266,19 @@ public class ChessPage {
             checkmateStatusLabel.setText("Player 2 is in checkmate!");
         }
     }
+    /////////
+    public void clearCheckStatus() {
+        checkStatusLabel.setText("TEST");
+    }
+    public void updateCheckStatus() {
+        checkStatusLabel.setText("Check!");
+    }
+    public void clearCheckmateStatus() {
+        checkStatusLabel.setText("TEST");
+    }
+    public void updateCheckmateStatus() {
+        checkStatusLabel.setText("Check!");
+    }
 
     private void showMenuConfirmation() {
         int confirmed = JOptionPane.showConfirmDialog(frame,

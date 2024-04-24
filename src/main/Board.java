@@ -53,6 +53,10 @@ public class Board extends JPanel {
         return null;
     }
 
+    public boolean isCheckmate(boolean isWhite) {
+        return checkScanner.isCheckmate(isWhite);
+    }
+
     public void makeMove(Move move) {
         if (move.piece.name.equals("Pawn")) {
             movePawn(move);
@@ -71,6 +75,21 @@ public class Board extends JPanel {
 
         capture(move.capture);
         chessPage.switchTurn();
+
+        boolean isPlayer1InCheckmate = isCheckmate(true);
+        boolean isPlayer2InCheckmate = isCheckmate(false);
+
+        if (isPlayer1InCheckmate) {
+            chessPage.updateCheckmateStatusLabel(1);
+        } else {
+            chessPage.clearCheckmateStatusLabel(1);
+        }
+
+        if (isPlayer2InCheckmate) {
+            chessPage.updateCheckmateStatusLabel(2);
+        } else {
+            chessPage.clearCheckmateStatusLabel(2);
+        }
     }
 
     private void moveKing(Move move) {
@@ -172,6 +191,7 @@ public class Board extends JPanel {
 
         return !checkScanner.isKingChecked(move);
     }
+/*
     public boolean isCheck(boolean isWhite) {
         Piece king = findKing(isWhite);
         if (king != null) {
@@ -224,6 +244,7 @@ public class Board extends JPanel {
         // If the king is not in check, it's not checkmate
         return false;
     }
+ */
 
     public ArrayList<Piece> getAttackingPieces(Piece targetPiece, boolean isTargetPieceWhite) {
         ArrayList<Piece> attackingPieces = new ArrayList<>();
@@ -285,6 +306,7 @@ public class Board extends JPanel {
         Piece king = findKing(isWhiteTurn);
         if (king != null && checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
             g2d.setColor(Color.RED);
+            chessPage.updateCheckStatus();
             g2d.fillRect(king.col * tileSize, king.row * tileSize, tileSize, tileSize);
         }
 
@@ -296,6 +318,7 @@ public class Board extends JPanel {
                     if (isValidMove(move)) {
                         g2d.setColor(new Color(39, 215, 34, 171));
                         g2d.fillRect(i * tileSize, j * tileSize, tileSize, tileSize);
+                        chessPage.clearCheckStatus();
                     }
                 }
             }
@@ -304,35 +327,6 @@ public class Board extends JPanel {
         for (int i = 0; i < pieceList.size(); i++) {
             Piece piece = pieceList.get(i);
             piece.paint(g2d);
-        }
-        boolean isPlayer1InCheck = isCheck(true);
-        boolean isPlayer2InCheck = isCheck(false);
-
-        if (isPlayer1InCheck) {
-            chessPage.updateCheckStatusLabel(1);
-        } else {
-            chessPage.clearCheckStatusLabel(1);
-        }
-
-        if (isPlayer2InCheck) {
-            chessPage.updateCheckStatusLabel(2);
-        } else {
-            chessPage.clearCheckStatusLabel(2);
-        }
-
-        boolean isPlayer1InCheckmate = isCheckmate(true);
-        boolean isPlayer2InCheckmate = isCheckmate(false);
-
-        if (isPlayer1InCheckmate) {
-            chessPage.updateCheckmateStatusLabel(1);
-        } else {
-            chessPage.clearCheckmateStatusLabel(1);
-        }
-
-        if (isPlayer2InCheckmate) {
-            chessPage.updateCheckmateStatusLabel(2);
-        } else {
-            chessPage.clearCheckmateStatusLabel(2);
         }
     }
 }
