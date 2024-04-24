@@ -11,6 +11,7 @@ import javax.swing.*;
 public class AIChessPage {
 	private JFrame frame;
 	static InputAudio clickSound;
+	static InputAudio winChessSound;
 	private AIBoard aiBoard;
 	private JLabel[] timerLabels;
 	private Timer[] timers;
@@ -29,6 +30,7 @@ public class AIChessPage {
 			e.printStackTrace();
 		}
 		clickSound = new InputAudio("src/res/ButtonClick.wav");
+		winChessSound = new InputAudio("src/res/WinChess.wav");
 
 		frame = new JFrame("Catur Mas Putra");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
