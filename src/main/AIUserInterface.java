@@ -1,9 +1,11 @@
 package main;
 
 import java.awt.*;
-import java.awt.event.*;
-import java.net.URL;
-import javax.swing.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 import static main.AIBoard.*;
 
@@ -12,114 +14,13 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 	InputAudio eatSound;
 	InputAudio putSound;
 	InputAudio pickSound;
-	InputAudio clickSound;
-	InputAudio winChessSound;
-	private Timer[] timers;
-	private int[] playerTimeInSeconds;
-	private int currentPlayerIndex;
-	private JLabel[] timerLabels;
 	private static String userPossibleMoves;
-
 	public AIUserInterface() {
 		this.setPreferredSize(new Dimension(500, 500));
 		promotionSound = new InputAudio("src/res/PawnPromotion.wav");
 		eatSound = new InputAudio("src/res/EatPieces.wav");
 		pickSound = new InputAudio("src/res/PickUpPieces.wav");
 		putSound = new InputAudio("src/res/PutPieces.wav");
-
-		clickSound = new InputAudio("src/res/ButtonClick.wav");
-		winChessSound = new InputAudio("src/res/WinChess.wav");
-
-		timerLabels = new JLabel[1];
-		timerLabels[0] = new JLabel("Your Time: 10:00");
-		timerLabels[0].setFont(new Font("Monospaced", Font.BOLD, 16));
-		timerLabels[0].setForeground(Color.BLACK);
-		this.add(timerLabels[0]);
-
-		timers = new Timer[1];
-		playerTimeInSeconds = new int[1];
-		playerTimeInSeconds[0] = 4;
-
-		timers[0] = new Timer(1000, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				playerTimeInSeconds[0]--;
-				updateTimerLabel(0);
-
-				boolean gameEnded = false;
-
-				if (playerTimeInSeconds[0] <= 0 && !gameEnded) {
-					gameEnded = true;
-					timers[0].stop();
-					computerWins();
-				}
-			}
-		});
-		timers[0].setInitialDelay(0);
-
-		startCurrentPlayerTimer();
-	}
-	public ImageIcon createImageIcon(String s) {
-		URL imgUrl = getClass().getResource("/res/pump.png");
-		if (imgUrl != null) {
-			return new ImageIcon(imgUrl);
-		} else {
-			System.err.println("Couldn't find file: " + "/res/pump.png");
-			return null;
-		}
-	}
-	public void computerWins() {
-		JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-		JDialog dialog = new JDialog(frame, "Player 2 Wins", true);
-		dialog.getContentPane().setBackground(Color.WHITE);
-		dialog.setLayout(new BorderLayout());
-		dialog.setResizable(false);
-		winChessSound.WinChessSound();
-
-		ImageIcon icon = createImageIcon("/res/pump.png");
-
-		JLabel messageLabel = new JLabel("<html>You ran out of time!<br/>Computer wins!</html>", icon, JLabel.CENTER);
-		messageLabel.setFont(new Font("Monospaced", Font.PLAIN, 20));
-		messageLabel.setForeground(new Color(255, 134, 58));
-		messageLabel.setHorizontalAlignment(JLabel.CENTER);
-		messageLabel.setVerticalTextPosition(JLabel.BOTTOM);
-		messageLabel.setHorizontalTextPosition(JLabel.CENTER);
-
-		dialog.add(messageLabel, BorderLayout.CENTER);
-
-		JButton retryButton = new JButton("Retry");
-		retryButton.setForeground(new Color(57, 47, 79));
-		retryButton.addActionListener(e -> {
-			clickSound.ButtonClickSound();
-			dialog.dispose();
-			frame.dispose();
-			new HomePage();
-		});
-		retryButton.setPreferredSize(new Dimension(100, 40));
-		retryButton.setFont(new Font("Monospaced", Font.PLAIN, 16));
-
-		JButton exitButton = new JButton("Exit");
-		exitButton.setForeground(new Color(57, 47, 79));
-		exitButton.addActionListener(e -> {
-			clickSound.ButtonClickSound();
-			dialog.dispose();
-			frame.dispose();
-			System.exit(0);
-		});
-		exitButton.setPreferredSize(new Dimension(100, 40));
-		exitButton.setFont(new Font("Monospaced", Font.PLAIN, 16));
-
-		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		buttonPanel.setBackground(Color.WHITE);
-		buttonPanel.add(retryButton);
-		buttonPanel.add(exitButton);
-
-		dialog.add(buttonPanel, BorderLayout.SOUTH);
-
-		dialog.setSize(500, 250);
-		dialog.setLocationRelativeTo(frame);
-
-		dialog.setVisible(true);
 	}
 
 	static int oldMouseX,oldMouseY,newMouseX, newMouseY;
@@ -127,20 +28,20 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		this.addMouseListener(this);
-        this.addMouseMotionListener(this);
+		this.addMouseMotionListener(this);
 		for(int row = 0; row < 8; row++) {
 			for(int col = 0; col < 8; col++) {
 				if((row + col) % 2 == 0) { // Check if it's a white square
-					g.setColor(new Color(210, 81, 66)); // Set color for white square
+					g.setColor(new Color(255, 200, 100)); // Set color for white square
 				} else {
-					g.setColor(new Color(57, 47, 79)); // Set color for black square
+					g.setColor(new Color(150, 50, 30)); // Set color for black square
 				}
 				g.fillRect(col * squareSize, row * squareSize, squareSize, squareSize); // Draw the square
 			}
 		}
 		Image chessPiecesImage;
-        chessPiecesImage=new ImageIcon("src/res/ChessPieces.png").getImage();
-        int x,y,x1=-1,y1=-1;
+		chessPiecesImage=new ImageIcon("src/res/ChessPieces.png").getImage();
+		int x,y,x1=-1,y1=-1;
 
 
       /*  switch (main.AlphaBetaChess.chessBoard[oldMouseX][oldMouseY]) {
@@ -170,38 +71,38 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
             break;
    	}
         g.drawImage(chessPiecesImage, (newMouseX-15), (newMouseY-15), (newMouseX+64), (newMouseY+64), x1*64, y1*64, (x1+1)*64, (y1+1)*64, this);*/
-        for(int i=0;i<64;i++){
-        	x=-1;
-        	y=-1;
-	    	 switch (chessBoard[i/8][i%8]) {
-	    	 case "P": x=5; y=0;
-             	 break;
-	         case "p": x=5; y=1;
-	             break;
-	         case "R": x=2; y=0;
-	             break;
-	         case "r": x=2; y=1;
-	             break;
-	         case "K": x=4; y=0;
-	             break;
-	         case "k": x=4; y=1;
-	             break;
-	         case "B": x=3; y=0;
-	             break;
-	         case "b": x=3; y=1;
-	             break;
-	         case "Q": x=1; y=0;
-	             break;
-	         case "q": x=1; y=1;
-	             break;
-	         case "A": x=0; y=0;
-	             break;
-	         case "a": x=0; y=1;
-	             break;
-	    	}
-	    if(x!=-1 && y!=-1)
-	    	g.drawImage(chessPiecesImage, (i%8)*squareSize, (i/8)*squareSize, (i%8+1)*squareSize, (i/8+1)*squareSize, x*64, y*64, (x+1)*64, (y+1)*64, this);
-        }
+		for(int i=0;i<64;i++){
+			x=-1;
+			y=-1;
+			switch (chessBoard[i/8][i%8]) {
+				case "P": x=5; y=0;
+					break;
+				case "p": x=5; y=1;
+					break;
+				case "R": x=2; y=0;
+					break;
+				case "r": x=2; y=1;
+					break;
+				case "K": x=4; y=0;
+					break;
+				case "k": x=4; y=1;
+					break;
+				case "B": x=3; y=0;
+					break;
+				case "b": x=3; y=1;
+					break;
+				case "Q": x=1; y=0;
+					break;
+				case "q": x=1; y=1;
+					break;
+				case "A": x=0; y=0;
+					break;
+				case "a": x=0; y=1;
+					break;
+			}
+			if(x!=-1 && y!=-1)
+				g.drawImage(chessPiecesImage, (i%8)*squareSize, (i/8)*squareSize, (i%8+1)*squareSize, (i/8+1)*squareSize, x*64, y*64, (x+1)*64, (y+1)*64, this);
+		}
 		/*
 		if (userPossibleMoves != null) {
 			for (int i = 0; i < userPossibleMoves.length(); i += 5) {
@@ -212,19 +113,6 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 			}
 		}
 		 */
-	}
-	private void startCurrentPlayerTimer() {
-		timers[currentPlayerIndex].start();
-	}
-
-	private void stopCurrentPlayerTimer() {
-		timers[currentPlayerIndex].stop();
-	}
-
-	private void updateTimerLabel(int playerIndex) {
-		int minutes = playerTimeInSeconds[playerIndex] / 60;
-		int seconds = playerTimeInSeconds[playerIndex] % 60;
-		timerLabels[playerIndex].setText(String.format("<html><font color=\"white\">%d</font> Your Time: %02d:%02d</html>", playerIndex + 1, minutes, seconds));
 	}
 
 	@Override

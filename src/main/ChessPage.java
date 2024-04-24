@@ -1,10 +1,11 @@
+
 //ChessPage
-package main;
+        package main;
 
 import javax.swing.*;
-import javax.swing.border.Border;
+        import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionEvent;
+        import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -68,8 +69,9 @@ public class ChessPage {
         gbcFrame.gridy = 0;
 
         //this.board = new Board(this);
+        this.board = new Board();
         this.checkScanner = new CheckScanner(board);
-        //frame.add(board, gbcFrame);
+        frame.add(board, gbcFrame);
         frame.setVisible(true);
 
         timerLabels = new JLabel[2];
@@ -245,6 +247,7 @@ public class ChessPage {
             checkStatusLabel.setText("TEST");
         }
     }
+
     public void clearCheckmateStatusLabel(int playerNumber) {
         if (playerNumber == 1) {
             checkmateStatusLabel.setText("TEST");

@@ -1,3 +1,4 @@
+
 //CheckScanner
 package main;
 import pieces.Piece;
@@ -9,17 +10,6 @@ public class CheckScanner {
     public CheckScanner(Board board) {
         this.board = board;
     }
-    /*
-    public boolean isCheck(boolean isWhite) {
-        Piece king = board.findKing(isWhite);
-        if (king != null) {
-            Move kingMove = new Move(board, king, king.col, king.row);
-            return isKingChecked(kingMove);
-        }
-        return false;
-    }
-
-     */
 
     public boolean isKingChecked(Move move) {
         Piece king = board.findKing(move.piece.isWhite);
@@ -134,7 +124,6 @@ public class CheckScanner {
             return false;
         }
     }
-
     public boolean isGameOver(Piece king) {
         for(Piece piece : board.pieceList) {
             if(board.sameTeam(piece, king)) {

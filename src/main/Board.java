@@ -20,11 +20,10 @@ public class Board extends JPanel {
     public int enPassantTile = -1;
     public boolean isWhiteToMove = true;
     public boolean isGameOver = false;
-    //public boolean isWhiteTurn = true;
+    public boolean isWhiteTurn = true;
     InputAudio promotionSound;
     InputAudio eatSound;
     private ChessPage chessPage;
-    /*
     class Position {
         int col;
         int row;
@@ -34,8 +33,6 @@ public class Board extends JPanel {
             this.row = row;
         }
     }
-
-     */
 
     public Board() {
         //this.chessPage = chessPage;
@@ -78,6 +75,17 @@ public class Board extends JPanel {
         isWhiteToMove = !isWhiteToMove;
         updateGameState();
         //chessPage.switchTurn();
+    }
+    private void updateGameState() {
+        Piece king = findKing(isWhiteToMove);
+        if(checkScanner.isGameOver(king)) {
+            if(checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
+                System.out.println(isWhiteToMove ? "Black wins" : "white wins");
+            }
+            else {
+                System.out.println("stalemate");
+            }
+        }
     }
 
     private void moveKing(Move move) {
@@ -124,13 +132,6 @@ public class Board extends JPanel {
     }
 
     public boolean isValidMove(Move move) {
-        if(isGameOver) {
-            return false;
-        }
-        if(move.piece.isWhite != isWhiteToMove) {
-            return false;
-        }
-
         if (sameTeam(move.piece, move.capture)) {
             return false;
         }
@@ -169,7 +170,6 @@ public class Board extends JPanel {
         }
         return null;
     }
-    /*
     public boolean moveValid(Piece piece, int newCol, int newRow) {
         if (sameTeam(piece, getPiece(newCol, newRow))) {
             return false;
@@ -187,18 +187,202 @@ public class Board extends JPanel {
 
         return !checkScanner.isKingChecked(move);
     }
+    private boolean isCheckmate() {
+        Piece king = findKing(isWhiteTurn);
+        if (kingCanMove(king)) {
+            System.out.println("king can move");
+            return false;
+        } else if(!kingCanMove(king)){
+            System.out.println("king cannot move");
+            for (Piece piece : pieceList) {
+                System.out.println("piece di board");
+                if (piece.isWhite == isWhiteTurn) {
+                    System.out.println("same team");
+                    for (int col = 0; col < cols; col++) {
+                        for (int row = 0; row < rows; row++) {
+                            if (moveValid(piece, col, row)) {
+                                System.out.println("move valid");
+                                int prevCol = piece.col;
+                                int prevRow = piece.row;
+                                piece.col = col;
+                                piece.row = row;
+                                if (!checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
+                                    piece.col = prevCol;
+                                    piece.row = prevRow;
+                                    System.out.println("kingnya masih bisa gerak lagi");
+                                    return false;
+                                }
+                                piece.col = prevCol;
+                                piece.row = prevRow;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println("checkmate false");
+        return true;
+    }
+    private boolean kingCanMove(Piece king) {
+        for (int col = king.col - 1; col <= king.col + 1; col++) {
+            for (int row = king.row - 1; row <= king.row + 1; row++) {
+                if (isValidMove(new Move(this, king, col, row)) && !checkScanner.isKingChecked(new Move(this, king, col, row))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
-     */
-    private void updateGameState() {
-        Piece king = findKing(isWhiteToMove);
-        if(checkScanner.isGameOver(king)) {
-            if(checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
-                System.out.println(isWhiteToMove ? "Black wins!" : "White wins!");
+    /*
+        private boolean isCheckmate() {
+            Piece king = getKing(true);
+            if(kingCanMove(king)) {
+                return false;
             }
             else {
-                System.out.println("Stalemate");
+                //check if you can block the attack with your piece
+                //check the position of the checking piece and the king in check
+                int colDiff = Math.abs(checkingP.col-king,col);
+                int rowDiff = Math.abs(checkingP.row-king,row);
+                if(colDiff = 0) {
+                    //the checking piece is attacking vertically
+                    if(checkingP.row < king.row) {
+                        //the checking piece is above the king
+                        for(int row = checkingP.row; row < king.row; row++) {
+                            for(Piece piece : simPieces) {
+                                if(piece != king && piece.color != currentColor && piece.canMove(checkingP.col, row)) {
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                    if(checkingP.row > king.row) {
+                        //the checking piece is above the king
+                        //the checking piece is attacking horizontaly
+                        for(int row = checkingP.row; row > king.row; row--) {
+                            for(Piece piece : simPieces) {
+                                if(piece != king && piece.color != currentColor && piece.canMove(checkingP.col, row)) {
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+                else if(rowDiff == 0) {
+                    //the checking piece is attacking horizontally
+                    if(checkingP.col < king.col) {
+                        //the checking piece is to the left
+                        for(int col = checkingP.col; col < king.col; col++) {
+                            for(Piece piece : simPieces) {
+                                if(piece != king && piece.color != currentColor && piece.canMove(col, checkingP.row)) {
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                    if(checkingP.col > king.col) {
+                        //the checking piece is to the right
+                        if(checkingP.col < king.col) {
+                            for(int col = checkingP.col; col > king.col; col--) {
+                                for(Piece piece : simPieces) {
+                                    if(piece != king && piece.color != currentColor && piece.canMove(col, checkingP.row)) {
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else if(colDiff == rowDiff) {
+                    //the checking piece is attacking diagonally
+                    if(checkingP.row < king.row) {
+                        //the checking piece is above the king
+                        if(checkingP.col < king.col) {
+                            //the checking piece is in the upper left
+                            for(int col = checkingP.col, row = checkingP.row; col < king.col; col++, row++) {
+                                for(Piece piece : simPieces) {
+                                    if(piece != king && piece.color != currentColor && piece.canMove(col, row)) {
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+                        if(checkingP.col > king.col) {
+                            //the checking piece is in the upper left
+                            for(int col = checkingP.col, row = checkingP.row; col > king.col; col--, row++) {
+                                for(Piece piece : simPieces) {
+                                    if(piece != king && piece.color != currentColor && piece.canMove(col, row)) {
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if(checkingP.row > king.row) {
+                        //the checking piece is above the king
+                        if(checkingP.col < king.col) {
+                            //the checking piece is in the lower left
+                            for(int col = checkingP.col, row = checkingP.row; col < king.col; col++, row--) {
+                                for(Piece piece : simPieces) {
+                                    if(piece != king && piece.color != currentColor && piece.canMove(col, row)) {
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+                        if(checkingP.col > king.col) {
+                            //the checking piece is in the lower right
+                            for(int col = checkingP.col, row = checkingP.row; col > king.col; col--, row--) {
+                                for(Piece piece : simPieces) {
+                                    if(piece != king && piece.color != currentColor && piece.canMove(col, row)) {
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
+        }
 
+        private boolean kingCanMove(Piece king) {
+            if(isValidMove(king, -1, -1)) {
+                return true;
+            }
+            if(isValidMove(king, 0, -1)) {
+                return true;
+            }
+            if(isValidMove(king, 1, -1)) {
+                return true;
+            }
+            if(isValidMove(king, -1, 0)) {
+                return true;
+            }
+            if(isValidMove(king, 1, 0)) {
+                return true;
+            }
+            if(isValidMove(king, -1, 1)) {
+                return true;
+            }
+            if(isValidMove(king, 0, 1)) {
+                return true;
+            }
+            if(isValidMove(king, 1, 1)) {
+                return true;
+            }
+            return false;
+        }
+
+
+     */
+    public void CheckmateChecker() {
+        boolean test = isCheckmate();
+        if(test) {
+            System.out.println("Checkmate");
+        }
+        else {
+            System.out.println("No");
         }
     }
 
@@ -242,6 +426,7 @@ public class Board extends JPanel {
             }
         }
 
+        /*
         // Highlight checked king
         Piece king = findKing(isWhiteToMove);
         if (king != null && checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
@@ -249,13 +434,17 @@ public class Board extends JPanel {
             g2d.fillRect(king.col * tileSize, king.row * tileSize, tileSize, tileSize);
         }
 
+         */
+
         // Highlight valid moves for the selected piece
         if (selectedPiece != null) {
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
-                    if (isValidMove(new Move(this, selectedPiece, i, j))) {
+                    Move move = new Move(this, selectedPiece, i, j);
+                    if (isValidMove(move)) {
                         g2d.setColor(new Color(39, 215, 34, 171));
                         g2d.fillRect(i * tileSize, j * tileSize, tileSize, tileSize);
+                        //chessPage.clearCheckStatus();
                     }
                 }
             }
@@ -265,6 +454,5 @@ public class Board extends JPanel {
             Piece piece = pieceList.get(i);
             piece.paint(g2d);
         }
-
     }
 }
