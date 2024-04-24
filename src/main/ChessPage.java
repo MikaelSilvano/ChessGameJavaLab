@@ -67,9 +67,9 @@ public class ChessPage {
         gbcFrame.gridx = 0;
         gbcFrame.gridy = 0;
 
-        this.board = new Board(this);
+        //this.board = new Board(this);
         this.checkScanner = new CheckScanner(board);
-        frame.add(board, gbcFrame);
+        //frame.add(board, gbcFrame);
         frame.setVisible(true);
 
         timerLabels = new JLabel[2];

@@ -20,7 +20,7 @@ public class Input extends MouseAdapter {
         int col = e.getX() / board.tileSize; //untuk dapetin col di mana mouse itu di klik
         int row = e.getY() / board.tileSize;
         Piece pieceXY = board.getPiece(col, row);
-        if (pieceXY != null && pieceXY.isWhite == board.isWhiteTurn) {
+        if (pieceXY != null && pieceXY.isWhite == board.isWhiteToMove) {
             board.selectedPiece = pieceXY;
             pickSound.PickPieceSound();
         }
@@ -37,11 +37,11 @@ public class Input extends MouseAdapter {
     public void mouseReleased(MouseEvent e) {
         int col = e.getX() / board.tileSize;
         int row = e.getY() / board.tileSize;
-        if (board.selectedPiece != null && board.selectedPiece.isWhite == board.isWhiteTurn) {
+        if (board.selectedPiece != null) {
             Move move = new Move(board, board.selectedPiece, col, row);
             if (board.isValidMove(move)) {
                 board.makeMove(move);
-                board.isWhiteTurn = !board.isWhiteTurn;
+                //board.isWhiteToMove = !board.isWhiteToMove;
             } else {
                 board.selectedPiece.xPos = board.selectedPiece.col * board.tileSize; //balik ke posisi semua (tidak bergerak)
                 board.selectedPiece.yPos = board.selectedPiece.row * board.tileSize;

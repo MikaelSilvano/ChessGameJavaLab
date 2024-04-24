@@ -10,7 +10,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 public class Board extends JPanel {
-    public int tileSize = 120;
+    public int tileSize = 80;
     int cols = 8;
     int rows = 8;
     ArrayList<Piece> pieceList = new ArrayList<>();
@@ -18,10 +18,13 @@ public class Board extends JPanel {
     Input input = new Input(this);
     public CheckScanner checkScanner = new CheckScanner(this);
     public int enPassantTile = -1;
-    public boolean isWhiteTurn = true;
+    public boolean isWhiteToMove = true;
+    public boolean isGameOver = false;
+    //public boolean isWhiteTurn = true;
     InputAudio promotionSound;
     InputAudio eatSound;
     private ChessPage chessPage;
+    /*
     class Position {
         int col;
         int row;
@@ -32,8 +35,10 @@ public class Board extends JPanel {
         }
     }
 
-    public Board(ChessPage chessPage) {
-        this.chessPage = chessPage;
+     */
+
+    public Board() {
+        //this.chessPage = chessPage;
         this.setPreferredSize(new Dimension(cols * tileSize, rows * tileSize));
         this.addMouseListener(input);
         this.addMouseMotionListener(input);
@@ -53,10 +58,6 @@ public class Board extends JPanel {
         return null;
     }
 
-    public boolean isCheckmate(boolean isWhite) {
-        return checkScanner.isCheckmate(isWhite);
-    }
-
     public void makeMove(Move move) {
         if (move.piece.name.equals("Pawn")) {
             movePawn(move);
@@ -74,22 +75,9 @@ public class Board extends JPanel {
         }
 
         capture(move.capture);
-        chessPage.switchTurn();
-
-        boolean isPlayer1InCheckmate = isCheckmate(true);
-        boolean isPlayer2InCheckmate = isCheckmate(false);
-
-        if (isPlayer1InCheckmate) {
-            chessPage.updateCheckmateStatusLabel(1);
-        } else {
-            chessPage.clearCheckmateStatusLabel(1);
-        }
-
-        if (isPlayer2InCheckmate) {
-            chessPage.updateCheckmateStatusLabel(2);
-        } else {
-            chessPage.clearCheckmateStatusLabel(2);
-        }
+        isWhiteToMove = !isWhiteToMove;
+        updateGameState();
+        //chessPage.switchTurn();
     }
 
     private void moveKing(Move move) {
@@ -136,6 +124,13 @@ public class Board extends JPanel {
     }
 
     public boolean isValidMove(Move move) {
+        if(isGameOver) {
+            return false;
+        }
+        if(move.piece.isWhite != isWhiteToMove) {
+            return false;
+        }
+
         if (sameTeam(move.piece, move.capture)) {
             return false;
         }
@@ -174,6 +169,7 @@ public class Board extends JPanel {
         }
         return null;
     }
+    /*
     public boolean moveValid(Piece piece, int newCol, int newRow) {
         if (sameTeam(piece, getPiece(newCol, newRow))) {
             return false;
@@ -191,76 +187,20 @@ public class Board extends JPanel {
 
         return !checkScanner.isKingChecked(move);
     }
-/*
-    public boolean isCheck(boolean isWhite) {
-        Piece king = findKing(isWhite);
-        if (king != null) {
-            Move kingMove = new Move(this, king, king.col, king.row);
-            return checkScanner.isKingChecked(kingMove);
+
+     */
+    private void updateGameState() {
+        Piece king = findKing(isWhiteToMove);
+        if(checkScanner.isGameOver(king)) {
+            if(checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
+                System.out.println(isWhiteToMove ? "Black wins!" : "White wins!");
+            }
+            else {
+                System.out.println("Stalemate");
+            }
+
         }
-        return false;
     }
-
-    public boolean isCheckmate(boolean isWhite) {
-        Piece king = findKing(isWhite);
-
-        // Check if the king is in check
-        if (checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
-            // Generate possible moves for the king
-            for (int dx = -1; dx <= 1; dx++) {
-                for (int dy = -1; dy <= 1; dy++) {
-                    int newX = king.col + dx;
-                    int newY = king.row + dy;
-                    if (isValidMove(new Move(this, king, newX, newY))) {
-                        // If the king can escape from check, it's not checkmate
-                        return false;
-                    }
-                }
-            }
-
-            // Check if any piece can block the check
-            for (Piece piece : pieceList) {
-                if (piece.isWhite == isWhite && moveValid(piece, king.col, king.row)) {
-                    // If a piece can block the check, it's not checkmate
-                    return false;
-                }
-            }
-
-            // Check if any piece can capture the attacking piece
-            ArrayList<Piece> attackingPieces = getAttackingPieces(king, isWhite);
-            for (Piece attackingPiece : attackingPieces) {
-                for (Piece piece : pieceList) {
-                    if (piece.isWhite == isWhite && isValidMove(new Move(this, piece, attackingPiece.col, attackingPiece.row))) {
-                        // If a piece can capture the attacking piece, it's not checkmate
-                        return false;
-                    }
-                }
-            }
-
-            // If none of the above conditions are met, it's checkmate
-            return true;
-        }
-
-        // If the king is not in check, it's not checkmate
-        return false;
-    }
- */
-
-    public ArrayList<Piece> getAttackingPieces(Piece targetPiece, boolean isTargetPieceWhite) {
-        ArrayList<Piece> attackingPieces = new ArrayList<>();
-
-        for (Piece piece : pieceList) {
-            if (piece.isWhite != isTargetPieceWhite && piece.isValidMovement(targetPiece.col, targetPiece.row)) {
-                // Check if the piece's movement can capture the target piece
-                if (piece.moveCollidesWithPiece(targetPiece.col, targetPiece.row)) {
-                    attackingPieces.add(piece);
-                }
-            }
-        }
-
-        return attackingPieces;
-    }
-
 
     public void addPieces() {
         pieceList.add(new Rook(this, 0, 0, false));
@@ -303,10 +243,9 @@ public class Board extends JPanel {
         }
 
         // Highlight checked king
-        Piece king = findKing(isWhiteTurn);
+        Piece king = findKing(isWhiteToMove);
         if (king != null && checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
             g2d.setColor(Color.RED);
-            chessPage.updateCheckStatus();
             g2d.fillRect(king.col * tileSize, king.row * tileSize, tileSize, tileSize);
         }
 
@@ -314,11 +253,9 @@ public class Board extends JPanel {
         if (selectedPiece != null) {
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
-                    Move move = new Move(this, selectedPiece, i, j);
-                    if (isValidMove(move)) {
+                    if (isValidMove(new Move(this, selectedPiece, i, j))) {
                         g2d.setColor(new Color(39, 215, 34, 171));
                         g2d.fillRect(i * tileSize, j * tileSize, tileSize, tileSize);
-                        chessPage.clearCheckStatus();
                     }
                 }
             }
@@ -328,5 +265,6 @@ public class Board extends JPanel {
             Piece piece = pieceList.get(i);
             piece.paint(g2d);
         }
+
     }
 }
