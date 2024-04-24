@@ -1,11 +1,9 @@
 package main;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
+import java.awt.event.*;
+import java.net.URL;
+import javax.swing.*;
 
 import static main.AIBoard.*;
 
@@ -14,6 +12,12 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 	InputAudio eatSound;
 	InputAudio putSound;
 	InputAudio pickSound;
+	InputAudio clickSound;
+	InputAudio winChessSound;
+	private Timer[] timers;
+	private int[] playerTimeInSeconds;
+	private int currentPlayerIndex;
+	private JLabel[] timerLabels;
 	private static String userPossibleMoves;
 	public AIUserInterface() {
 		this.setPreferredSize(new Dimension(500, 500));
@@ -21,6 +25,96 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 		eatSound = new InputAudio("src/res/EatPieces.wav");
 		pickSound = new InputAudio("src/res/PickUpPieces.wav");
 		putSound = new InputAudio("src/res/PutPieces.wav");
+		timerLabels = new JLabel[1];
+		timerLabels[0] = new JLabel("Your Time: 10:00");
+		timerLabels[0].setFont(new Font("Monospaced", Font.BOLD, 16));
+		timerLabels[0].setForeground(Color.BLACK);
+		this.add(timerLabels[0]);
+		timers = new Timer[2];
+		playerTimeInSeconds = new int[2];
+		playerTimeInSeconds[0] = 600;
+
+		for (int i = 0; i < 2; i++) {
+			final int playerIndex = i;
+			timers[i] = new Timer(1000, new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					playerTimeInSeconds[playerIndex]--;
+					updateTimerLabel(playerIndex);
+
+					if (playerTimeInSeconds[playerIndex] <= 0) {
+						timers[playerIndex].stop();
+						computerWins();
+					}
+				}
+			});
+			timers[i].setInitialDelay(0);
+		}
+		startCurrentPlayerTimer();
+		clickSound = new InputAudio("src/res/ButtonClick.wav");
+		winChessSound = new InputAudio("src/res/WinChess.wav");
+	}
+	public void computerWins() {
+		JDialog dialog = new JDialog(JOptionPane.getRootFrame(), "Computer Wins", true);
+		dialog.getContentPane().setBackground(Color.WHITE);
+		dialog.setLayout(new BorderLayout());
+		dialog.setResizable(false);
+		winChessSound.WinChessSound();
+
+		ImageIcon icon = createImageIcon("/res/pump.png");
+
+		JLabel messageLabel = new JLabel("<html>You ran out of time!<br/>Computer wins!</html>", icon, JLabel.CENTER);
+		messageLabel.setFont(new Font("Monospaced", Font.PLAIN, 20));
+		messageLabel.setForeground(new Color(255, 134, 58));
+		messageLabel.setHorizontalAlignment(JLabel.CENTER);
+		messageLabel.setVerticalTextPosition(JLabel.BOTTOM);
+		messageLabel.setHorizontalTextPosition(JLabel.CENTER);
+
+		dialog.add(messageLabel, BorderLayout.CENTER);
+
+		JButton retryButton = new JButton("Retry");
+		retryButton.setForeground(new Color(57, 47, 79));
+		retryButton.addActionListener(e -> {
+			clickSound.ButtonClickSound();
+			dialog.dispose();
+			JOptionPane.getRootFrame().dispose();
+			new HomePage();
+		});
+		retryButton.setPreferredSize(new Dimension(100, 40));
+		retryButton.setFont(new Font("Monospaced", Font.PLAIN, 16));
+
+		JButton exitButton = new JButton("Exit");
+		exitButton.setForeground(new Color(57, 47, 79));
+		exitButton.addActionListener(e -> {
+			clickSound.ButtonClickSound();
+			dialog.dispose();
+			JOptionPane.getRootFrame().dispose();
+			System.exit(0);
+		});
+		exitButton.setPreferredSize(new Dimension(100, 40));
+		exitButton.setFont(new Font("Monospaced", Font.PLAIN, 16));
+
+
+		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		buttonPanel.setBackground(Color.WHITE);
+		buttonPanel.add(retryButton);
+		buttonPanel.add(exitButton);
+
+		dialog.add(buttonPanel, BorderLayout.SOUTH);
+
+		dialog.setSize(500, 250);
+		dialog.setLocationRelativeTo(JOptionPane.getRootFrame());
+
+		dialog.setVisible(true);
+	}
+	public ImageIcon createImageIcon(String s) {
+		URL imgUrl = getClass().getResource("/res/pump.png");
+		if (imgUrl != null) {
+			return new ImageIcon(imgUrl);
+		} else {
+			System.err.println("Couldn't find file: " + "/res/pump.png");
+			return null;
+		}
 	}
 
 	static int oldMouseX,oldMouseY,newMouseX, newMouseY;
@@ -32,9 +126,9 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 		for(int row = 0; row < 8; row++) {
 			for(int col = 0; col < 8; col++) {
 				if((row + col) % 2 == 0) { // Check if it's a white square
-					g.setColor(new Color(255, 200, 100)); // Set color for white square
+					g.setColor(new Color(210, 81, 66)); // Set color for white square
 				} else {
-					g.setColor(new Color(150, 50, 30)); // Set color for black square
+					g.setColor(new Color(57, 47, 79)); // Set color for black square
 				}
 				g.fillRect(col * squareSize, row * squareSize, squareSize, squareSize); // Draw the square
 			}
@@ -113,6 +207,19 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 			}
 		}
 		 */
+	}
+	private void startCurrentPlayerTimer() {
+		timers[currentPlayerIndex].start();
+	}
+
+	private void stopCurrentPlayerTimer() {
+		timers[currentPlayerIndex].stop();
+	}
+
+	private void updateTimerLabel(int playerIndex) {
+		int minutes = playerTimeInSeconds[playerIndex] / 60;
+		int seconds = playerTimeInSeconds[playerIndex] % 60;
+		timerLabels[playerIndex].setText(String.format("Player %d Time: %02d:%02d", playerIndex + 1, minutes, seconds));
 	}
 
 	@Override

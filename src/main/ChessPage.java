@@ -1,11 +1,11 @@
 
 //ChessPage
-        package main;
+package main;
 
 import javax.swing.*;
-        import javax.swing.border.Border;
+import javax.swing.border.Border;
 import java.awt.*;
-        import java.awt.event.ActionEvent;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -14,7 +14,6 @@ import java.net.URL;
 public class ChessPage {
     private CheckScanner checkScanner;
     private JFrame frame;
-    private JPanel  displayPanel;
     private JLabel turnLabel;
     private JLabel[] timerLabels;
     private static JLabel checkStatusLabel;

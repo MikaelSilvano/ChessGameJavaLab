@@ -21,8 +21,8 @@ public class HomePage extends JFrame {
         try {
             backgroundImage = new ImageIcon("src/res/Background.png");
             playButtonIcon = new ImageIcon("src/res/PlayButton.png");
-            singlePlayerIcon = new ImageIcon("src/res/singleplayer-Recovered.png");
-            multiPlayerIcon = new ImageIcon("src/res/multiplayerplayer-Recovered.png");
+            singlePlayerIcon = new ImageIcon("src/res/SinglePlayer.png");
+            multiPlayerIcon = new ImageIcon("src/res/MultiplayerOffline.png");
             easyDifficultyIcon = new ImageIcon("src/res/ComputerEasy.png");
             hardDifficultyIcon = new ImageIcon("src/res/ComputerHard.png");
         } catch (Exception e) {
@@ -74,13 +74,24 @@ public class HomePage extends JFrame {
         clickSound = new InputAudio("ButtonClick.wav");
 
         frame.setVisible(true);
+
     }
 
     private void displayOptions() {
 
-        frame.getContentPane().removeAll();
+        JPanel backgroundPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon backgroundImage = new ImageIcon("src/res/BackgroundMultiplayerOffline.png");
+                ImageIcon pumpkinImage = new ImageIcon("src/res/pump.png");
+                Image image = backgroundImage.getImage();
+                g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        backgroundPanel.setLayout(new GridBagLayout());
+        frame.setContentPane(backgroundPanel);
         frame.repaint();
-        frame.add(new JLabel(new ImageIcon(String.valueOf(backgroundImage))));
 
 
         JLabel multiplayerOfflineButton = new JLabel(multiPlayerIcon);
@@ -115,22 +126,7 @@ public class HomePage extends JFrame {
 
             }
         });
-       /* multiplayerOfflineButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                clickSound.ButtonClickSound();
-                startGameMultiplayerOffline();
-            }
-        });*/
 
-        /*JButton singlePlayerButton = new JButton(singlePlayerIcon);
-        singlePlayerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                clickSound.ButtonClickSound();
-                startGameSingleplayerEasy(); // Memulai permainan single player dengan AIChessPageEasy
-            }
-        }); */
         JLabel singlePlayerButton = new JLabel(singlePlayerIcon);
         singlePlayerButton.setBounds (910, 730, 200, 75);
         clickSound = new InputAudio("ButtonClick.wav");
@@ -164,26 +160,12 @@ public class HomePage extends JFrame {
             }
         });
 
-        //JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-       /* buttonPanel.setBackground(Color.BLACK);
-        buttonPanel.add(multiplayerOfflineButton);
-        buttonPanel.add(singlePlayerButton);*/
 
-        frame.add(multiplayerOfflineButton, BorderLayout.CENTER);
-        frame.add(singlePlayerButton, BorderLayout.CENTER);
+        frame.add(multiplayerOfflineButton);
+        frame.add(singlePlayerButton);
 
         frame.revalidate();
     }
-
-   /* private void startGameMultiplayerOffline() {
-        new ChessPage();
-        frame.dispose();
-    } */
-
-    /*private void startGameSingleplayerEasy() {
-        new AIChessPage();
-        frame.dispose();
-    } */
 
     public void paint(Graphics g) {
         super.paint(g);
