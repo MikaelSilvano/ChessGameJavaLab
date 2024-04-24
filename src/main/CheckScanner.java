@@ -3,10 +3,64 @@
 package main;
 import pieces.Piece;
 
+import java.util.ArrayList;
+
 public class CheckScanner {
     Board board;
     public CheckScanner(Board board) {
         this.board = board;
+    }
+    public boolean isCheck(boolean isWhite) {
+        Piece king = board.findKing(isWhite);
+        if (king != null) {
+            Move kingMove = new Move(board, king, king.col, king.row);
+            return isKingChecked(kingMove);
+        }
+        return false;
+    }
+
+    public boolean isCheckmate(boolean isWhite) {
+        Piece king = board.findKing(isWhite);
+
+        // Check if the king is in check
+        if (isCheck(isWhite)) {
+            // Generate possible moves for the king
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dy = -1; dy <= 1; dy++) {
+                    int newX = king.col + dx;
+                    int newY = king.row + dy;
+                    if (board.isValidMove(new Move(board, king, newX, newY))) {
+                        // If the king can escape from check, it's not checkmate
+                        return false;
+                    }
+                }
+            }
+
+            // Check if any piece can block the check
+            for (Piece piece : board.pieceList) {
+                if (piece.isWhite == isWhite && board.moveValid(piece, king.col, king.row)) {
+                    // If a piece can block the check, it's not checkmate
+                    return false;
+                }
+            }
+
+            // Check if any piece can capture the attacking piece
+            ArrayList<Piece> attackingPieces = board.getAttackingPieces(king, isWhite);
+            for (Piece attackingPiece : attackingPieces) {
+                for (Piece piece : board.pieceList) {
+                    if (piece.isWhite == isWhite && board.isValidMove(new Move(board, piece, attackingPiece.col, attackingPiece.row))) {
+                        // If a piece can capture the attacking piece, it's not checkmate
+                        return false;
+                    }
+                }
+            }
+
+            // If none of the above conditions are met, it's checkmate
+            return true;
+        }
+
+        // If the king is not in check, it's not checkmate
+        return false;
     }
 
     public boolean isKingChecked(Move move) {

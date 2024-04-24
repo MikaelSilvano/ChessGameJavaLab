@@ -170,16 +170,28 @@ public class AIChessPage {
 
 	private JFrame frame;
 	static InputAudio clickSound;
+	static InputAudio winChessSound;
 	private AIBoard aiBoard;
 	private JLabel[] timerLabels;
 	private Timer[] timers;
 	private int[] playerTimeInSeconds;
 	private int currentPlayerIndex;
+	private JLabel label;
+	private JLabel turnLabel;
+	ImageIcon menuButtonIcon;
+	ImageIcon exitButtonIcon;
 
 	public AIChessPage() {
+		try {
+			menuButtonIcon = new ImageIcon("src/res/menuButton.png");
+			exitButtonIcon = new ImageIcon("src/res/exitButton.png");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		clickSound = new InputAudio("src/res/ButtonClick.wav");
+		winChessSound = new InputAudio("src/res/WinChess.wav");
 
-		frame = new JFrame("Master Chess");
+		frame = new JFrame("Catur Mas Putra");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//frame.setSize(new Dimension(1080, 720));
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -187,48 +199,88 @@ public class AIChessPage {
 		frame.setLocationRelativeTo(null);
 
 		AIUserInterface ui = new AIUserInterface();
+		aiBoard = new AIBoard();
 		//ui.setPreferredSize(new Dimension(1920, 100));
 		//aiBoard = new AIBoard(); //panggil board ai
 		//JPanel chessBoardPanel = new JPanel(new BorderLayout());
 		//chessBoardPanel.add(ui, BorderLayout.CENTER);
 		//chessBoardPanel.setBackground(Color.BLACK);
 		//frame.add(chessBoardPanel);
-		frame.add(ui);
+		frame.add(ui, BorderLayout.CENTER);
 		ui.setOpaque(false);
-		frame.getContentPane().setBackground(new Color(0,0,0));
+
+		frame.getContentPane().setBackground(new Color(255, 255, 255));
 
 		//button yang dikanan
 		GridBagConstraints gbd = new GridBagConstraints();
 		JPanel buttonPanel = new JPanel(new GridBagLayout());
 		buttonPanel.setOpaque(false);
 
-		gbd.gridx = 2;
+		gbd.gridx = 0;
 		gbd.gridy = 0;
-		gbd.insets = new Insets(5, 5, 5, 5); //untuk merapihkan button yang disebelah kanan
+		gbd.insets = new Insets(5, 5, 5, 5);
 
-		JButton menuButton = new JButton("Menu");
-		menuButton.setPreferredSize(new Dimension(200, 100));
-		JButton exitButton = new JButton("Exit");
-		exitButton.setPreferredSize(new Dimension(200, 100));
+		JLabel menuButton = new JLabel(menuButtonIcon);
+		menuButton.setPreferredSize(new Dimension(250, 100));
+		JLabel exitButton = new JLabel(exitButtonIcon);
+		exitButton.setPreferredSize(new Dimension(250, 100));
 
 		buttonPanel.add(menuButton, gbd);
 		gbd.gridy = 1;
 		buttonPanel.add(exitButton, gbd);
-
-
-		menuButton.addActionListener(new ActionListener() {
+		menuButton.addMouseListener(new MouseListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				clickSound.ButtonClickSound();
 				showMenuConfirmationAI(frame);
 			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+
+			}
 		});
 
-		exitButton.addActionListener(new ActionListener() {
+		exitButton.addMouseListener(new MouseListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				clickSound.ButtonClickSound();
 				showExitConfirmationAI(frame);
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+
 			}
 		});
 		frame.add(buttonPanel, BorderLayout.EAST);

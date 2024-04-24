@@ -69,7 +69,6 @@ public class HomePage extends JFrame {
 
             }
         });
-        frame.setVisible(true);
 
         setTaskbarIcon();
         clickSound = new InputAudio("ButtonClick.wav");
@@ -122,7 +121,6 @@ public class HomePage extends JFrame {
         super.paint(g);
         g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
     }
-
 
     private void setTaskbarIcon() {
         ImageIcon icon = new ImageIcon("src/res/pumpkin.png");
