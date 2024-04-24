@@ -245,13 +245,6 @@ public class ChessPage {
             checkStatusLabel.setText("TEST");
         }
     }
-    public void updateCheckStatusLabel(int playerNumber) {
-        if (playerNumber == 1) {
-            checkStatusLabel.setText("<html>Player 1 is<br/> in check!</html>");
-        } else if (playerNumber == 2) {
-            checkStatusLabel.setText("<html>Player 2 is<br/> in check!</html>");
-        }
-    }
     public void clearCheckmateStatusLabel(int playerNumber) {
         if (playerNumber == 1) {
             checkmateStatusLabel.setText("TEST");
