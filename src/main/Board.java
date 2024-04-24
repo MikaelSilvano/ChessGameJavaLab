@@ -22,15 +22,15 @@ public class Board extends JPanel {
     InputAudio promotionSound;
     InputAudio eatSound;
     private ChessPage chessPage;
-   class Position {
-       int col;
-       int row;
+    class Position {
+        int col;
+        int row;
 
-       Position(int col, int row) {
-           this.col = col;
-           this.row = row;
-       }
-   }
+        Position(int col, int row) {
+            this.col = col;
+            this.row = row;
+        }
+    }
 
     public Board(ChessPage chessPage) {
         this.chessPage = chessPage;

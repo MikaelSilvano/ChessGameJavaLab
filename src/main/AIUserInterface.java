@@ -1,11 +1,8 @@
 package main;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
+import java.awt.event.*;
+import javax.swing.*;
 
 import static main.AIBoard.*;
 
@@ -14,17 +11,47 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 	InputAudio eatSound;
 	InputAudio putSound;
 	InputAudio pickSound;
+	private Timer[] timers;
+	private int[] playerTimeInSeconds;
+	private int currentPlayerIndex;
+	private JLabel[] timerLabels;
 	private static String userPossibleMoves;
-	static int squareSize = 105;
 	public AIUserInterface() {
-		this.setPreferredSize(new Dimension(200, 200));
+		this.setPreferredSize(new Dimension(500, 500));
 		promotionSound = new InputAudio("src/res/PawnPromotion.wav");
 		eatSound = new InputAudio("src/res/EatPieces.wav");
 		pickSound = new InputAudio("src/res/PickUpPieces.wav");
 		putSound = new InputAudio("src/res/PutPieces.wav");
-	}
-	static int oldMouseX,oldMouseY,newMouseX, newMouseY;
+		timerLabels = new JLabel[1];
+		timerLabels[0] = new JLabel("Your Time: 10:00");
+		timerLabels[0].setFont(new Font("Monospaced", Font.BOLD, 16));
+		timerLabels[0].setForeground(Color.BLACK);
+		this.add(timerLabels[0]);
+		timers = new Timer[2];
+		playerTimeInSeconds = new int[2];
+		playerTimeInSeconds[0] = 4;
 
+		for (int i = 0; i < 2; i++) {
+			final int playerIndex = i;
+			timers[i] = new Timer(1000, new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					playerTimeInSeconds[playerIndex]--;
+					updateTimerLabel(playerIndex);
+
+					if (playerTimeInSeconds[playerIndex] <= 0) {
+						timers[playerIndex].stop();
+						JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "<html>You ran out of time!<br/>Computer Wins!</html>");
+					}
+				}
+			});
+			timers[i].setInitialDelay(0);
+		}
+		startCurrentPlayerTimer();
+	}
+
+	static int oldMouseX,oldMouseY,newMouseX, newMouseY;
+	static int squareSize=90;
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		this.addMouseListener(this);
@@ -43,7 +70,7 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
         chessPiecesImage=new ImageIcon("src/res/ChessPieces.png").getImage();
         int x,y,x1=-1,y1=-1;
 
-        
+
       /*  switch (main.AlphaBetaChess.chessBoard[oldMouseX][oldMouseY]) {
    	 	case "P": x1=5; y1=0;
         	 break;
@@ -101,7 +128,7 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 	             break;
 	    	}
 	    if(x!=-1 && y!=-1)
-	    	g.drawImage(chessPiecesImage, (i%8)*squareSize, (i/8)*squareSize, (i%8+1)*squareSize, (i/8+1)*squareSize, x*64, y*64, (x+1)*64, (y+1)*64, this);	    	
+	    	g.drawImage(chessPiecesImage, (i%8)*squareSize, (i/8)*squareSize, (i%8+1)*squareSize, (i/8+1)*squareSize, x*64, y*64, (x+1)*64, (y+1)*64, this);
         }
 		/*
 		if (userPossibleMoves != null) {
@@ -114,6 +141,19 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 		}
 		 */
 	}
+	private void startCurrentPlayerTimer() {
+		timers[currentPlayerIndex].start();
+	}
+
+	private void stopCurrentPlayerTimer() {
+		timers[currentPlayerIndex].stop();
+	}
+
+	private void updateTimerLabel(int playerIndex) {
+		int minutes = playerTimeInSeconds[playerIndex] / 60;
+		int seconds = playerTimeInSeconds[playerIndex] % 60;
+		timerLabels[playerIndex].setText(String.format("Player %d Time: %02d:%02d", playerIndex + 1, minutes, seconds));
+	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
@@ -121,7 +161,7 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 			newMouseX=e.getX();
 			newMouseY=e.getY();
 			repaint();
-		}			
+		}
 	}
 
 	@Override
@@ -142,7 +182,7 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 			oldMouseX=e.getX()/squareSize;
 			oldMouseY=e.getY()/squareSize;
 			//pickSound.PickPieceSound();
-		}		
+		}
 	}
 
 	@Override
