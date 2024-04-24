@@ -5,18 +5,21 @@ import pieces.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 
 public class Board extends JPanel {
-    public int tileSize = 80;
+    public int tileSize = 85;
+
     int cols = 8;
     int rows = 8;
-    ArrayList<Piece> pieceList = new ArrayList<>();
-    public Piece selectedPiece;
+
+    ArrayList<Piece> pieceList = new ArrayList<>(); //buat list semua pieces
+
+    public Piece selectedPiece; //piece yang mau digerakan
+
     Input input = new Input(this);
+
     public CheckScanner checkScanner = new CheckScanner(this);
+
     public int enPassantTile = -1;
     public boolean isWhiteToMove = true;
     public boolean isGameOver = false;
@@ -24,18 +27,9 @@ public class Board extends JPanel {
     InputAudio promotionSound;
     InputAudio eatSound;
     private ChessPage chessPage;
-    class Position {
-        int col;
-        int row;
 
-        Position(int col, int row) {
-            this.col = col;
-            this.row = row;
-        }
-    }
 
     public Board() {
-        //this.chessPage = chessPage;
         this.setPreferredSize(new Dimension(cols * tileSize, rows * tileSize));
         this.addMouseListener(input);
         this.addMouseMotionListener(input);
@@ -46,25 +40,25 @@ public class Board extends JPanel {
     }
 
     public Piece getPiece(int col, int row) {
-        for (int i = 0; i < pieceList.size(); i++) {
-            Piece piece = pieceList.get(i);
-            if (piece.col == col && piece.row == row) {
-                return piece;
+        for(Piece piece: pieceList) {
+            if(piece.col == col && piece.row == row) {
+                return piece; //digunakan untuk dapetin piece di board dan input
             }
         }
         return null;
     }
-
     public void makeMove(Move move) {
-        if (move.piece.name.equals("Pawn")) {
+        if(move.piece.name.equals("Pawn")) {
             movePawn(move);
-        } else if (move.piece.name.equals("King")) {
+        } else if(move.piece.name.equals("King")) {
             moveKing(move);
         }
+
         move.piece.col = move.newCol;
         move.piece.row = move.newRow;
         move.piece.xPos = move.newCol * tileSize;
         move.piece.yPos = move.newRow * tileSize;
+
         move.piece.isFirstMove = false;
 
         if (move.capture != null) {
@@ -72,26 +66,27 @@ public class Board extends JPanel {
         }
 
         capture(move.capture);
+
         isWhiteToMove = !isWhiteToMove;
-        updateGameState();
-        //chessPage.switchTurn();
+        //updateGameState();
+
     }
-    private void updateGameState() {
+    public void updateGameState() {
         Piece king = findKing(isWhiteToMove);
         if(checkScanner.isGameOver(king)) {
             if(checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
-                System.out.println(isWhiteToMove ? "Black wins" : "white wins");
+                System.out.println("win");
             }
             else {
-                System.out.println("stalemate");
+                System.out.println("Stalemate");
             }
         }
     }
 
     private void moveKing(Move move) {
-        if (Math.abs(move.piece.col - move.newCol) == 2) {
+        if(Math.abs(move.piece.col - move.newCol) == 2) {
             Piece rook;
-            if (move.piece.col < move.newCol) {
+            if(move.piece.col < move.newCol) {
                 rook = getPiece(7, move.piece.row);
                 rook.col = 5;
             } else {
@@ -101,24 +96,24 @@ public class Board extends JPanel {
             rook.xPos = rook.col * tileSize;
         }
     }
-
     private void movePawn(Move move) {
         //en passant
+
         int colorIndex = move.piece.isWhite ? 1 : -1;
-        if (getTileNum(move.newCol, move.newRow) == enPassantTile) {
+        if(getTileNum(move.newCol, move.newRow) == enPassantTile) {
             move.capture = getPiece(move.newCol, move.newRow + colorIndex);
         }
-        if (Math.abs(move.piece.row - move.newRow) == 2) {
+        if(Math.abs(move.piece.row - move.newRow) == 2) {
             enPassantTile = getTileNum(move.newCol, move.newRow + colorIndex);
-        } else {
+        }
+        else {
             enPassantTile = -1;
         }
 
-        //promosi
+        //promotions
         colorIndex = move.piece.isWhite ? 0 : 7;
-        if (move.newRow == colorIndex) {
+        if(move.newRow == colorIndex) {
             promotePawn(move);
-            promotionSound.PawnPromotionSound();
         }
     }
 
@@ -130,20 +125,19 @@ public class Board extends JPanel {
     public void capture(Piece piece) {
         pieceList.remove(piece);
     }
-
     public boolean isValidMove(Move move) {
-        if (sameTeam(move.piece, move.capture)) {
+        if(sameTeam(move.piece, move.capture)) {
+            return false; //tidak bisa capture team yang sama
+        }
+
+        if(!move.piece.isValidMovement(move.newCol, move.newRow)) {
             return false;
         }
 
-        if (!move.piece.isValidMovement(move.newCol, move.newRow)) {
+        if(move.piece.moveCollidesWithPiece(move.newCol, move.newRow)) {
             return false;
         }
-
-        if (move.piece.moveCollidesWithPiece(move.newCol, move.newRow)) {
-            return false;
-        }
-        if (checkScanner.isKingChecked(move)) {
+        if(checkScanner.isKingChecked(move)) {
             return false;
         }
 
@@ -151,35 +145,22 @@ public class Board extends JPanel {
     }
 
     public boolean sameTeam(Piece piece1, Piece piece2) {
-        if (piece1 == null || piece2 == null) {
+        if(piece1 == null || piece2 == null) {
             return false;
         }
         return piece1.isWhite == piece2.isWhite;
     }
-
     public int getTileNum(int col, int row) {
         return row * rows + col + cols;
     }
 
     Piece findKing(boolean isWhite) {
-        for (int i = 0; i < pieceList.size(); i++) {
-            Piece piece = pieceList.get(i);
-            if (isWhite == piece.isWhite && piece.name.equals("King")) {
+        for(Piece piece : pieceList) {
+            if(isWhite == piece.isWhite && piece.name.equals("King")) {
                 return piece;
             }
         }
         return null;
-    }
-
-    private boolean kingCanMove(Piece king) {
-        for (int col = king.col - 1; col <= king.col + 1; col++) {
-            for (int row = king.row - 1; row <= king.row + 1; row++) {
-                if (isValidMove(new Move(this, king, col, row)) && !checkScanner.isKingChecked(new Move(this, king, col, row))) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     public void addPieces() {
@@ -191,11 +172,14 @@ public class Board extends JPanel {
         pieceList.add(new Bishop(this, 5, 0, false));
         pieceList.add(new Knight(this, 6, 0, false));
         pieceList.add(new Rook(this, 7, 0, false));
-
-        for (int i = 0; i < 8; i++) {
-            pieceList.add(new Pawn(this, i, 1, false));
-            pieceList.add(new Pawn(this, i, 6, true));
-        }
+        pieceList.add(new Pawn(this, 0, 1, false));
+        pieceList.add(new Pawn(this, 1, 1, false));
+        pieceList.add(new Pawn(this, 2, 1, false));
+        pieceList.add(new Pawn(this, 3, 1, false));
+        pieceList.add(new Pawn(this, 4, 1, false));
+        pieceList.add(new Pawn(this, 5, 1, false));
+        pieceList.add(new Pawn(this, 6, 1, false));
+        pieceList.add(new Pawn(this, 7, 1, false));
 
         pieceList.add(new Rook(this, 0, 7, true));
         pieceList.add(new Knight(this, 1, 7, true));
@@ -205,49 +189,47 @@ public class Board extends JPanel {
         pieceList.add(new Bishop(this, 5, 7, true));
         pieceList.add(new Knight(this, 6, 7, true));
         pieceList.add(new Rook(this, 7, 7, true));
+
+        pieceList.add(new Pawn(this, 0, 6, true));
+        pieceList.add(new Pawn(this, 1, 6, true));
+        pieceList.add(new Pawn(this, 2, 6, true));
+        pieceList.add(new Pawn(this, 3, 6, true));
+        pieceList.add(new Pawn(this, 4, 6, true));
+        pieceList.add(new Pawn(this, 5, 6, true));
+        pieceList.add(new Pawn(this, 6, 6, true));
+        pieceList.add(new Pawn(this, 7, 6, true));
     }
-
     public void paintComponent(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
+        Graphics2D g2d = (Graphics2D) g; //cast g to g2d
 
-        // Draw the chessboard
-        for (int i = 0; i < rows; i++) {
+        for(int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if ((i + j) % 2 == 0) {
                     g2d.setColor(new Color(210, 81, 66));
+                    g2d.fillRect(i * tileSize, j * tileSize, tileSize, tileSize);
                 } else {
                     g2d.setColor(new Color(57, 47, 79));
+                    g2d.fillRect(i * tileSize, j * tileSize, tileSize, tileSize);
                 }
-                g2d.fillRect(i * tileSize, j * tileSize, tileSize, tileSize);
             }
         }
-
-        /*
-        // Highlight checked king
         Piece king = findKing(isWhiteToMove);
         if (king != null && checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
             g2d.setColor(Color.RED);
             g2d.fillRect(king.col * tileSize, king.row * tileSize, tileSize, tileSize);
         }
 
-         */
-
-        // Highlight valid moves for the selected piece
-        if (selectedPiece != null) {
-            for (int i = 0; i < rows; i++) {
+        if(selectedPiece != null)
+            for(int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
-                    Move move = new Move(this, selectedPiece, i, j);
-                    if (isValidMove(move)) {
-                        g2d.setColor(new Color(39, 215, 34, 171));
+                    if (isValidMove(new Move(this, selectedPiece, i, j))) {
+                        g2d.setColor(new Color(39, 215, 34, 171)); //ngecek apakah piece itu bisa bergerak (valid) (di loop)
                         g2d.fillRect(i * tileSize, j * tileSize, tileSize, tileSize);
-                        //chessPage.clearCheckStatus();
                     }
                 }
             }
-        }
 
-        for (int i = 0; i < pieceList.size(); i++) {
-            Piece piece = pieceList.get(i);
+        for(Piece piece : pieceList) { //untuk semua piece yang ada di piece list, kita tambahkan ke board (paint)
             piece.paint(g2d);
         }
     }

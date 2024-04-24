@@ -1,4 +1,3 @@
-//piece
 package pieces;
 
 import main.Board;
@@ -15,12 +14,13 @@ public class Piece {
     public boolean isWhite;
     public String name;
     public int value;
+
     public boolean isFirstMove = true;
 
-    BufferedImage sheet; //dapetin image dari gambar chess
+    BufferedImage sheet;
     {
         try {
-            sheet = ImageIO.read(ClassLoader.getSystemResourceAsStream("PiecesImages2.png"));
+            sheet = ImageIO.read(ClassLoader.getSystemResourceAsStream("PiecesImages.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

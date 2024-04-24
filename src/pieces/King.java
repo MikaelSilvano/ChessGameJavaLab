@@ -1,4 +1,3 @@
-//king
 package pieces;
 
 import main.Board;
@@ -16,21 +15,11 @@ public class King extends Piece {
         this.isWhite = isWhite;
         this.name = "King";
 
-        int yPos;
-        if (isWhite) {
-            yPos = 0;
-        } else {
-            yPos = sheetScale;
-        }
-        this.sprite = sheet.getSubimage(0 * sheetScale, yPos, sheetScale, sheetScale).getScaledInstance(board.tileSize, board.tileSize, BufferedImage.SCALE_SMOOTH);
+        this.sprite = sheet.getSubimage(0 * sheetScale, isWhite ? 0 : sheetScale, sheetScale, sheetScale).getScaledInstance(board.tileSize, board.tileSize, BufferedImage.SCALE_SMOOTH);
     }
 
     public boolean isValidMovement(int col, int row) {
-        if(Math.abs((col - this.col) * (row - this.row)) == 1 || Math.abs(col - this.col) + Math.abs(row - this.row) == 1 || canCastle(col, row)) { //king gerak horizontal, vertical, atau diagonal sebanyak 1
-            return true;
-        } else {
-            return false;
-        }
+        return Math.abs((col - this.col) * (row - this.row)) == 1 || Math.abs(col - this.col) + Math.abs(row - this.row) == 1 || canCastle(col, row);
     }
 
     public boolean canCastle(int col, int row) {
@@ -38,20 +27,12 @@ public class King extends Piece {
             if(col == 6) {
                 Piece rook = board.getPiece(7, row);
                 if(rook != null && rook.isFirstMove && isFirstMove) {
-                    if(board.getPiece(5, row) == null && board.getPiece(6, row) == null && !board.checkScanner.isKingChecked(new Move(board, this, 5, row))) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return board.getPiece(5, row) == null && board.getPiece(6, row) == null && !board.checkScanner.isKingChecked(new Move(board, this, 5, row));
                 }
             } else if (col == 2) {
                 Piece rook = board.getPiece(0, row);
                 if(rook != null && rook.isFirstMove && isFirstMove) {
-                    if(board.getPiece(3, row) == null && board.getPiece(2, row) == null && board.getPiece(1, row) == null && !board.checkScanner.isKingChecked(new Move(board, this, 3, row))) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return board.getPiece(3, row) == null && board.getPiece(2, row) == null && board.getPiece(1, row) == null && !board.checkScanner.isKingChecked(new Move(board, this, 3, row));
                 }
             }
         }

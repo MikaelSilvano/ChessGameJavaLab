@@ -1,9 +1,11 @@
-//input 
 package main;
+
 import pieces.Piece;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 public class Input extends MouseAdapter {
     Board board;
@@ -14,14 +16,17 @@ public class Input extends MouseAdapter {
         pickSound = new InputAudio("src/res/PickUpPieces.wav");
         putSound = new InputAudio("src/res/PutPieces.wav");
     }
+
     @Override
     public void mousePressed(MouseEvent e) {
         int col = e.getX() / board.tileSize; //untuk dapetin col di mana mouse itu di klik
         int row = e.getY() / board.tileSize;
-        Piece pieceXY = board.getPiece(col, row);
-        if (pieceXY != null && pieceXY.isWhite == board.isWhiteToMove) {
-            board.selectedPiece = pieceXY;
+
+        Piece pieceXY = board.getPiece(col, row); //to get piece at that location
+        if(pieceXY != null) {
+            board.selectedPiece = pieceXY; //kita mendapatkan piecenya
             pickSound.PickPieceSound();
+
         }
     }
     @Override
@@ -36,18 +41,17 @@ public class Input extends MouseAdapter {
     public void mouseReleased(MouseEvent e) {
         int col = e.getX() / board.tileSize;
         int row = e.getY() / board.tileSize;
-        if (board.selectedPiece != null) {
+        if(board.selectedPiece != null) {
             Move move = new Move(board, board.selectedPiece, col, row);
-            if (board.isValidMove(move)) {
+            if(board.isValidMove(move)) {
                 board.makeMove(move);
-                //board.isWhiteToMove = !board.isWhiteToMove;
-            } else {
-                board.selectedPiece.xPos = board.selectedPiece.col * board.tileSize; //balik ke posisi semua (tidak bergerak)
+                putSound.PutPieceSound();
+            }
+            else {board.selectedPiece.xPos = board.selectedPiece.col * board.tileSize;
                 board.selectedPiece.yPos = board.selectedPiece.row * board.tileSize;
             }
         }
         board.selectedPiece = null;
         board.repaint();
-        putSound.PutPieceSound();
     }
 }

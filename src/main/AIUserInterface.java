@@ -134,7 +134,7 @@ public class AIUserInterface extends JPanel implements MouseListener, MouseMotio
 			}
 		}
 		Image chessPiecesImage;
-		chessPiecesImage=new ImageIcon("src/res/ChessPieces.png").getImage();
+		chessPiecesImage=new ImageIcon("src/res/PiecesImages2.png").getImage();
 		int x,y,x1=-1,y1=-1;
 
 

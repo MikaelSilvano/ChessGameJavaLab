@@ -1,4 +1,3 @@
-//rook
 package pieces;
 
 import main.Board;
@@ -15,21 +14,11 @@ public class Rook extends Piece {
         this.isWhite = isWhite;
         this.name = "Rook";
 
-        int yPos;
-        if (isWhite) {
-            yPos = 0;
-        } else {
-            yPos = sheetScale;
-        }
-        this.sprite = sheet.getSubimage(4 * sheetScale, yPos, sheetScale, sheetScale).getScaledInstance(board.tileSize, board.tileSize, BufferedImage.SCALE_SMOOTH);
+        this.sprite = sheet.getSubimage(4 * sheetScale, isWhite ? 0 : sheetScale, sheetScale, sheetScale).getScaledInstance(board.tileSize, board.tileSize, BufferedImage.SCALE_SMOOTH);
     }
 
     public boolean isValidMovement(int col, int row) {
-        if(this.col == col || this.row == row) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.col == col || this.row == row;
     }
 
     public boolean moveCollidesWithPiece(int col, int row) {
@@ -50,7 +39,6 @@ public class Rook extends Piece {
                 }
             }
         }
-
         //up
         if(this.row > row) {
             for(int j = this.row - 1; j > row; j--) {
@@ -68,6 +56,7 @@ public class Rook extends Piece {
                 }
             }
         }
+
         return false;
     }
 }
