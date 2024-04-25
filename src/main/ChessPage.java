@@ -12,17 +12,14 @@ import java.awt.event.MouseListener;
 import java.net.URL;
 
 public class ChessPage {
-    private CheckScanner checkScanner;
-    private JFrame frame;
-    private JLabel turnLabel;
-    private JLabel[] timerLabels;
+    private final JFrame frame;
+    private final JLabel turnLabel;
+    private final JLabel[] timerLabels;
     private static JLabel checkStatusLabel;
-    private JLabel checkmateStatusLabel;
-    private JPanel backgroundPanel;
-    private Timer[] timers;
-    private int[] playerTimeInSeconds;
+    private final JLabel checkmateStatusLabel;
+    private final Timer[] timers;
+    private final int[] playerTimeInSeconds;
     private int currentPlayerIndex;
-    private Board board;
     InputAudio clickSound;
     InputAudio winChessSound;
     ImageIcon menuButtonIcon;
@@ -47,7 +44,7 @@ public class ChessPage {
         clickSound = new InputAudio("src/res/ButtonClick.wav");
         playerTimeInSeconds = new int[]{600, 600};
         currentPlayerIndex = 0;
-        backgroundPanel = new JPanel() {
+        JPanel backgroundPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -68,8 +65,8 @@ public class ChessPage {
         gbcFrame.gridy = 0;
 
         //this.board = new Board(this);
-        this.board = new Board();
-        this.checkScanner = new CheckScanner(board);
+        Board board = new Board();
+        CheckScanner checkScanner = new CheckScanner(board);
         frame.add(board, gbcFrame);
         frame.setVisible(true);
 
