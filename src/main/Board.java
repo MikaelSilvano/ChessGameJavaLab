@@ -68,7 +68,7 @@ public class Board extends JPanel {
         capture(move.capture);
 
         isWhiteToMove = !isWhiteToMove;
-        //updateGameState();
+        updateGameState();
 
     }
     public void updateGameState() {
