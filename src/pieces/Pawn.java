@@ -15,12 +15,6 @@ public class Pawn extends Piece {
         this.isWhite = isWhite;
         this.name = "Pawn";
 
-        int yPos;
-        if (isWhite) {
-            yPos = 0;
-        } else {
-            yPos = sheetScale;
-        }
         this.sprite = sheet.getSubimage(5 * sheetScale, yPos, sheetScale, sheetScale).getScaledInstance(board.tileSize, board.tileSize, BufferedImage.SCALE_SMOOTH);
     }
 

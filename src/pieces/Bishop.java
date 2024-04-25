@@ -15,12 +15,6 @@ public class Bishop extends Piece {
         this.isWhite = isWhite;
         this.name = "Bishop";
 
-        int yPos;
-        if (isWhite) {
-            yPos = 0;
-        } else {
-            yPos = sheetScale;
-        }
         this.sprite = sheet.getSubimage(2 * sheetScale, yPos, sheetScale, sheetScale).getScaledInstance(board.tileSize, board.tileSize, BufferedImage.SCALE_SMOOTH);
     }
 
